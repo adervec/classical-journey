@@ -422,28 +422,79 @@ $("#impfile").addEventListener("change", async ev => {
   ev.target.value = "";
 });
 
-/* ---------- sync: private GitHub Gist (site mode) or the artifact's own database (claude.ai) ---------- */
+/* ---------- sync: one JSON file in a folder Google Drive already syncs ---------- */
+// Tachyread's model: write progress into a Drive-for-Desktop folder and let Drive move the
+// file. No OAuth, no API key, no third-party service. We only merge what comes back.
 let syncTimer = null, syncState = "idle", lastSync = 0, CLOUD = null, DL = null;
-function gistCfg(){ try{ return JSON.parse(localStorage.getItem("cj-gist")||"null"); }catch(e){ return null; } }
-const canSync = () => !!CLOUD || (SITE && !!gistCfg());
+let pollTimer = null, seenStamp = 0, seenMtime = 0;
+const SYNC_FILE = "classical-journey-progress.json";
+const canSync = () => !!CLOUD || !!(BK.on && BK.h);
 function setSyncChip(){
   const el = $("#sync"); if(!el) return;
   el.className = "";
-  if(!canSync()){ el.textContent = SITE ? "this device only · sync & backup" : "this device · backup"; return; }
-  const where = CLOUD ? " · claude.ai" : "";
+  if(!canSync()){ el.textContent = BK.supported ? "this device only · sync & backup" : "this device · backup"; return; }
+  const where = CLOUD ? " · claude.ai" : (BK.h ? " · " + BK.h.name : "");
   if(syncState==="busy"){ el.textContent = "syncing…"; el.className = "busy"; }
   else if(syncState==="err"){ el.textContent = "sync failed — tap to fix"; el.className = "err"; }
-  else if(syncState==="dirty"){ el.textContent = "unsaved"; }
-  else el.textContent = "synced ✓"+where;
+  else if(syncState==="dirty"){ el.textContent = "unsaved" + where; }
+  else el.textContent = "synced ✓" + where;
 }
 function queueSync(){
   if(!canSync()) return;
   syncState = "dirty"; setSyncChip();
   clearTimeout(syncTimer); syncTimer = setTimeout(doSync, 4000);
 }
-// Inside the claude.ai viewer: progress lives in this artifact's database, so it survives a
-// browser-data clear and follows the account. ponytail: one document (256 KiB cap) — fine for
-// thousands of heard works; split per era if a power listener ever hits it.
+// The canonical file IS the sync channel; the timestamped snapshots beside it are the backups.
+async function syncWrite(){
+  if(!BK.on || !BK.h) return;
+  const fh = await BK.h.getFileHandle(SYNC_FILE, {create:true});
+  const w = await fh.createWritable();
+  await w.write(JSON.stringify({v:3, exported:new Date().toISOString(), ...ST}));
+  await w.close();
+  seenStamp = ST.updated;
+  try{ seenMtime = (await fh.getFile()).lastModified; }catch(e){}
+}
+// Another device wrote through Drive: union-merge it in, so neither side loses a mark.
+async function syncPull(){
+  if(!BK.on || !BK.h) return false;
+  try{
+    const fh = await BK.h.getFileHandle(SYNC_FILE);
+    const f = await fh.getFile();
+    if(f.lastModified === seenMtime) return false;
+    seenMtime = f.lastModified;
+    const remote = JSON.parse(await f.text());
+    if(!remote || typeof remote !== "object") return false;
+    if((remote.updated||0) <= seenStamp) return false;
+    const before = JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)]);
+    mergeInto(ST, remote);
+    seenStamp = Math.max(seenStamp, remote.updated||0);
+    if(before === JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)])) return false;
+    ST.updated = Date.now();
+    try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){}
+    route();            // the open view is now stale
+    queueSync();        // push the merged result back so the other device converges
+    return true;
+  }catch(e){ return false; }   // no file yet, or permission gone — nothing to merge
+}
+function startPoll(){
+  clearInterval(pollTimer);
+  pollTimer = setInterval(() => { if(!document.hidden) syncPull(); }, 45000);
+}
+async function doSync(){
+  clearTimeout(syncTimer);
+  const ae = document.activeElement;
+  if(ae && (ae.tagName==="TEXTAREA" || ae.tagName==="INPUT")){ syncTimer = setTimeout(doSync, 5000); return; }
+  if(!canSync()){ syncState = "idle"; setSyncChip(); return; }
+  syncState = "busy"; setSyncChip();
+  try{
+    if(CLOUD) await CLOUD.set(JSON.parse(JSON.stringify(ST)));
+    else await syncWrite();
+    syncState = "idle"; lastSync = Date.now();
+  }catch(e){ syncState = "err"; syncTimer = setTimeout(doSync, 30000); }
+  setSyncChip();
+}
+// Inside the claude.ai viewer there is no folder to reach, so progress lives in the artifact's
+// own store instead — it survives a browser clear and follows the account.
 async function initCloud(){
   if(!window.claude || !claude.use) return;
   const [db, dl] = await Promise.all([claude.use("db").catch(() => null), claude.use("downloads").catch(() => null)]);
@@ -462,42 +513,6 @@ async function initCloud(){
   }catch(e){ CLOUD = null; }
   setSyncChip();
 }
-const GIST_FILE = "classical-journey-state.json";
-async function gistReq(method, path, body){
-  const g = gistCfg();
-  const r = await fetch("https://api.github.com/gists"+path, {method, headers:{Authorization:"Bearer "+g.token, Accept:"application/vnd.github+json"}, body: body ? JSON.stringify(body) : undefined});
-  if(!r.ok) throw new Error("gist "+r.status);
-  return r.json();
-}
-async function saveGist(){
-  const g = gistCfg(); const files = {}; files[GIST_FILE] = {content: JSON.stringify(ST)};
-  if(!g.id){ const d = await gistReq("POST", "", {description:"The Classical Journey — listening state", public:false, files}); g.id = d.id; localStorage.setItem("cj-gist", JSON.stringify(g)); }
-  else await gistReq("PATCH", "/"+g.id, {files});
-}
-async function loadGist(){
-  const g = gistCfg(); if(!g || !g.id) return null;
-  const d = await gistReq("GET", "/"+g.id); const f = d.files && d.files[GIST_FILE]; if(!f) return null;
-  return JSON.parse(f.truncated ? await (await fetch(f.raw_url)).text() : f.content);
-}
-async function doSync(){
-  clearTimeout(syncTimer);
-  const ae = document.activeElement;
-  if(ae && (ae.tagName==="TEXTAREA" || ae.tagName==="INPUT")){ syncTimer = setTimeout(doSync, 5000); return; }
-  if(!canSync()){ syncState = "idle"; setSyncChip(); return; }
-  syncState = "busy"; setSyncChip();
-  try{ if(CLOUD) await CLOUD.set(JSON.parse(JSON.stringify(ST))); else await saveGist(); syncState = "idle"; lastSync = Date.now(); }
-  catch(e){ syncState = "err"; syncTimer = setTimeout(doSync, 30000); }
-  setSyncChip();
-}
-async function initSiteSync(){
-  if(!SITE || !gistCfg()) return;
-  try{
-    const remote = await loadGist();
-    if(remote && remote.updated > ST.updated){ mergeInto(ST, remote); ST.updated = remote.updated; try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){} route(); }
-    else if(remote && ST.updated > remote.updated) queueSync();
-    lastSync = Date.now(); setSyncChip();
-  }catch(e){ syncState = "err"; setSyncChip(); }
-}
 if(SITE && "serviceWorker" in navigator && location.protocol==="https:") addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
 
 /* ---------- auto-backup to a folder (File System Access API) ---------- */
@@ -509,7 +524,7 @@ const idb = {
   async del(k){ const d = await this.db(); return new Promise((res,rej) => { const t = d.transaction("kv","readwrite").objectStore("kv").delete(k); t.onsuccess = () => res(); t.onerror = () => rej(t.error); }); }
 };
 const BK = {h:null, on:false, timer:null, last:+localStorage.getItem("cj.baklast")||0, err:"", KEEP:10, supported:"showDirectoryPicker" in window};
-async function bkList(){ const names = []; for await(const n of BK.h.keys()) if(/^classical-journey-.*\.json$/.test(n)) names.push(n); return names.sort(); }
+async function bkList(){ const names = []; for await(const n of BK.h.keys()) if(/^classical-journey-\d{4}-\d{2}-\d{2}-.*\.json$/.test(n)) names.push(n); return names.sort(); }
 async function bkWrite(){
   if(!BK.on || !BK.h) return;
   clearTimeout(BK.timer); BK.timer = null;
@@ -519,14 +534,15 @@ async function bkWrite(){
     const w = await fh.createWritable(); await w.write(JSON.stringify({v:3, exported:new Date().toISOString(), ...ST})); await w.close();
     const names = await bkList();
     for(const n of names.slice(0, Math.max(0, names.length-BK.KEEP))) await BK.h.removeEntry(n).catch(()=>{});
+    await syncWrite();
     BK.last = Date.now(); BK.err = ""; localStorage.setItem("cj.baklast", BK.last);
   }catch(e){ BK.err = e.name || "write failed"; }
   bkStatus();
 }
 function bkQueue(){ if(!BK.on) return; if(Date.now()-BK.last > 300000){ bkWrite(); return; } clearTimeout(BK.timer); BK.timer = setTimeout(bkWrite, 45000); }
-async function bkPick(){ try{ BK.h = await showDirectoryPicker({id:"cjbak", mode:"readwrite"}); await idb.set("dir", BK.h); BK.on = true; await bkWrite(); }catch(e){} bkStatus(); }
-async function bkResume(){ if(!BK.h) return; try{ if(await BK.h.requestPermission({mode:"readwrite"})==="granted"){ BK.on = true; await bkMaybeRestore(); bkWrite(); } }catch(e){ BK.err = e.name; } bkStatus(); }
-async function bkOff(){ BK.on = false; BK.h = null; clearTimeout(BK.timer); await idb.del("dir").catch(()=>{}); bkStatus(); }
+async function bkPick(){ try{ BK.h = await showDirectoryPicker({id:"cjbak", mode:"readwrite"}); await idb.set("dir", BK.h); BK.on = true; await syncPull(); await bkWrite(); startPoll(); }catch(e){} bkStatus(); setSyncChip(); }
+async function bkResume(){ if(!BK.h) return; try{ if(await BK.h.requestPermission({mode:"readwrite"})==="granted"){ BK.on = true; await bkMaybeRestore(); await syncPull(); bkWrite(); startPoll(); } }catch(e){ BK.err = e.name; } bkStatus(); }
+async function bkOff(){ BK.on = false; BK.h = null; clearTimeout(BK.timer); clearInterval(pollTimer); await idb.del("dir").catch(()=>{}); bkStatus(); setSyncChip(); }
 async function bkMaybeRestore(){
   if(Object.keys(ST.works).length || Object.keys(ST.lessons).length) return;
   try{
@@ -541,30 +557,27 @@ function bkStatus(){ const d = $("#dlg"); if(d) toolsDialog(true); }
 async function bkInit(){
   if(!BK.supported) return;
   try{ BK.h = await idb.get("dir"); }catch(e){}
-  if(BK.h){ try{ if(await BK.h.queryPermission({mode:"readwrite"})==="granted"){ BK.on = true; await bkMaybeRestore(); } }catch(e){} }
+  if(BK.h){ try{ if(await BK.h.queryPermission({mode:"readwrite"})==="granted"){ BK.on = true; await bkMaybeRestore(); await syncPull(); startPoll(); } }catch(e){} }
   setSyncChip();
 }
-document.addEventListener("visibilitychange", () => { if(document.hidden){ if(BK.timer) bkWrite(); if(syncState==="dirty") doSync(); } });
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden){ if(BK.timer) bkWrite(); if(syncState==="dirty") doSync(); }
+  else syncPull();   // coming back is when another device is most likely to have written
+});
 
 /* ---------- tools dialog: sync, backup, export/import, reset ---------- */
 function toolsDialog(refresh){
   const old = $("#dlg"); if(old){ old.remove(); if(!refresh) return; }
-  const g = gistCfg() || {};
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
   let bk = "";
-  if(!BK.supported) bk = `<p class="sd-p">Auto-backup to a folder needs Chrome or Edge. Export a file instead.</p>`;
-  else if(!BK.h) bk = `<p class="sd-p">Off — choose a folder and every change is written there as a rolling JSON backup (newest ${BK.KEEP} kept, older deleted automatically). Survives a browser-data clear.</p><div class="sd-row"><button class="obtn" id="bk-pick">🗀 Choose backup folder</button></div>`;
-  else if(!BK.on) bk = `<p class="sd-p">Paused — the browser needs permission for <b>${esc(BK.h.name)}</b> again.</p><div class="sd-row"><button class="obtn" id="bk-resume">Resume auto-backup</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
-  else bk = `<p class="sd-p">On → folder <b>${esc(BK.h.name)}</b> · last backup <b>${BK.last ? new Date(BK.last).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "—"}</b> · keeps newest ${BK.KEEP}${BK.err ? ` · <span style="color:var(--red)">last write failed (${esc(BK.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="bk-now">Backup now</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
+  if(!BK.supported) bk = `<p class="sd-p">Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.</p>`;
+  else if(!BK.h) bk = `<p class="sd-p">Off. Choose a folder inside <b>Google Drive</b> (your Drive is mounted at <b>H:\My Drive</b>) and this page keeps <b>classical-journey-progress.json</b> there. Google Drive for Desktop moves that file between your computers, and each one merges what it finds, so nothing is ever overwritten. Timestamped snapshots are kept alongside it — newest ${BK.KEEP}, older deleted — so a bad merge or a browser-data clear is recoverable.</p><div class="sd-row"><button class="obtn" id="bk-pick">🗀 Choose sync folder</button></div>`;
+  else if(!BK.on) bk = `<p class="sd-p">Paused — the browser needs permission for <b>${esc(BK.h.name)}</b> again. Nothing syncs until you grant it.</p><div class="sd-row"><button class="obtn" id="bk-resume">Resume sync</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
+  else bk = `<p class="sd-p">On → syncing through <b>${esc(BK.h.name)}</b> · last write <b>${BK.last ? new Date(BK.last).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "—"}</b> · checks for other devices every 45s · keeps newest ${BK.KEEP} snapshots${BK.err ? ` · <span style="color:var(--red)">last write failed (${esc(BK.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="bk-now">Sync now</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
   d.innerHTML = `<div class="sd-card">
     <h3>Sync &amp; backup</h3>
-    <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing is sent anywhere unless you set it up below."}</p>
-    <h4>Auto-backup folder</h4>${bk}
-    ${SITE ? `<h4>Sync between devices</h4>
-    <p class="sd-p">Connect a private GitHub Gist: create a <a href="https://github.com/settings/tokens/new?scopes=gist&description=Classical%20Journey%20sync" target="_blank" rel="noopener">token with only the “gist” scope</a> and paste it once on each device.</p>
-    <label class="lbl">GitHub token</label><input type="password" id="sd-token" value="${esc(g.token||"")}" placeholder="ghp_…">
-    <label class="lbl">Gist id (filled automatically on first sync — paste it on your second device)</label><input type="text" id="sd-id" value="${esc(g.id||"")}" placeholder="auto">
-    <div class="sd-row"><button class="obtn" id="sd-save">Connect &amp; sync</button><button class="obtn" id="sd-off">Disconnect</button></div>` : ""}
+    <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing leaves it unless you point the app at a synced folder below."}</p>
+    <h4>Sync folder (Google Drive)</h4>${bk}
     <h4>Files</h4>
     <div class="sd-row"><button class="obtn" id="sd-exp">⬇ Export progress</button><button class="obtn" id="sd-imp">⬆ Import progress</button><button class="obtn danger" id="sd-reset">Reset everything</button></div>
     <p class="sd-p" id="sd-msg"></p>
@@ -578,21 +591,6 @@ function toolsDialog(refresh){
   on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume);
   on("#sd-exp", exportState); on("#sd-imp", () => $("#impfile").click());
   on("#sd-reset", () => { if(confirm("Erase all listening progress, ratings, notes, lessons and history on this device?")){ ["cj-state","cm.v2","cm.heard","cm.lessons"].forEach(k => localStorage.removeItem(k)); location.reload(); } });
-  on("#sd-save", async () => {
-    const token = d.querySelector("#sd-token").value.trim(), id = d.querySelector("#sd-id").value.trim();
-    if(!token){ msg("Paste a token first."); return; }
-    localStorage.setItem("cj-gist", JSON.stringify({token, id:id||undefined}));
-    msg("Connecting…");
-    try{
-      const remote = id ? await loadGist() : null;
-      if(remote) mergeInto(ST, remote);
-      await saveGist();
-      const gg = gistCfg(); d.querySelector("#sd-id").value = gg.id||"";
-      lastSync = Date.now(); syncState = "idle"; setSyncChip();
-      msg("Connected. Gist id: "+(gg.id||"?")+" — paste this id with the token on your other devices.");
-    }catch(e){ msg("Failed: "+e.message+" — check the token has the gist scope."); }
-  });
-  on("#sd-off", () => { localStorage.removeItem("cj-gist"); setSyncChip(); msg("Disconnected — this device only."); });
 }
 
 /* ---------- shell ---------- */
@@ -1028,7 +1026,7 @@ function aboutView(){
     <h3>Significance</h3>
     <p>◆◆◆ marks landmarks that changed what music could do; ◆◆ major works performed and taught everywhere; ◆ works genuinely worth hearing but not pivotal. The tiers are one curator's calibration, meant as a way in, not a verdict.</p>
     <h3>Your data</h3>
-    <p>What you have heard, your ratings, notes and listening time are stored in your browser. Nothing is sent anywhere unless you set up syncing (a private GitHub Gist under your own account) or an auto-backup folder on your own disk. There is no analytics and no tracking. Clearing site data clears progress, so keep the auto-backup on or export a file now and then.</p>
+    <p>What you have heard, your ratings, notes and listening time are stored in your browser. To carry them between computers, point the app at a folder inside Google Drive: it keeps one JSON file there, Drive for Desktop moves the file, and each computer merges what it finds. Nothing goes to any other service, there is no account, no analytics and no tracking. Clearing site data clears the local copy, so keep the sync folder on or export a file now and then.</p>
     <h3>Corrections</h3>
     <p>If an entry is wrong, note the work's id (in the address bar) — the fix belongs in the catalogue data and can be made at the source.</p>
 
@@ -1398,6 +1396,5 @@ try{
   }
 }catch(e){}
 bkInit();
-initSiteSync();
 initCloud();
 </script>
