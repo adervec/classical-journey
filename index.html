@@ -379,6 +379,18 @@ function markHeard(id){   // a play or an outbound listen click: at least "Heard
   const r = rec(id);
   ST.log.push({id, ts:Date.now()}); if(ST.log.length>400) ST.log = ST.log.slice(-400);
   setRec(id, {s:Math.max(r.s,1), p:(r.p||0)+1, h:r.h||Date.now()});
+  portalActivity(byId[id]);
+}
+// The maker's app portal keeps a character sheet from what its apps report. A piece takes
+// about as long as it takes; amount is in units of ten minutes, capped so an hour-long
+// symphony does not swamp a week of listening.
+function portalActivity(w){
+  try{
+    const mins = Math.min(60, (w && w.mins) || 10);
+    const k = "portal-activity", a = JSON.parse(localStorage.getItem(k)||"[]");
+    a.push([Math.round(Date.now()/1000), "classical-journey", "listen", Math.max(0.5, mins/10)]);
+    localStorage.setItem(k, JSON.stringify(a.slice(-2000)));
+  }catch(e){}
 }
 const isHeard = id => rec(id).s>0;
 const compHeard = c => (compWorks[c.id]||[]).some(w => isHeard(w.id));
@@ -891,10 +903,114 @@ function progressView(){
     <div class="pblock"><h3>By region</h3>${REGIONS.map(r => { const ws = all.filter(w => w.region===r); return ws.length ? row(esc(r),ws) : ""; }).join("")}</div>
   </div>
   <div class="legend"><i style="background:var(--star)"></i>loved <i style="background:var(--gold);opacity:.55"></i>heard or studied</div>
+  <div class="pblock ui" style="margin-top:1.5rem"><h3>Ask for a programme</h3>
+    <p class="sub" style="margin:.2rem 0 .7rem">Hand what you have heard and loved to an agent through a
+    folder on this device &mdash; CoworkSyncHub, Claude Desktop, or a person &mdash; and it will suggest what
+    to listen to next. Nothing is uploaded.</p>
+    <div id="coachHost"></div>
+    <div id="coachReply" class="prose" style="display:none;white-space:pre-wrap;margin-top:.7rem"></div>
+  </div>
   ${hist.length ? `<div style="margin-top:1.5rem"><span class="lbl">Recently played</span><ol class="hist">${hist.map(e => { const w = byId[e.id]; return w ? `<li><a href="#/w/${w.id}">${esc(w.title)}</a> — ${esc(cname(w))} <span style="color:var(--mut)">· ${new Date(e.ts).toLocaleDateString(undefined,{month:"short",day:"numeric"})}</span></li>` : ""; }).join("")}</ol></div>` : ""}
   ${loved.length ? `<div style="margin-top:1.5rem"><span class="lbl">Loved</span><div class="gallery" style="margin-top:.6rem">${loved.map(w => cardHTML(w, cname(w))).join("")}</div></div>` : ""}`;
-  app.innerHTML = shellHTML("progress", inner); afterRender();
+  app.innerHTML = shellHTML("progress", inner); afterRender(); mountCoach();
   $("#p-tools").onclick = () => toolsDialog(); $("#p-exp").onclick = exportState; $("#p-imp").onclick = () => $("#impfile").click();
+}
+
+/* ============ folder cowork ============
+   The maker's shared panel (https://adervec.github.io/cowork.js) in fs mode: it drives a folder
+   you pick, we write coach/request.json into it and show whatever an agent writes back to
+   coach/reply.json. Every view rebuilds its DOM, so this re-mounts per render; the script is
+   fetched once. */
+function loadCowork(){
+  if(window.cowork) return Promise.resolve(window.cowork);
+  const head = document.head || document.documentElement;
+  if(!head || typeof head.appendChild !== "function") return Promise.resolve(null);
+  return new Promise(res => {
+    try{
+      const s = document.createElement("script");
+      s.src = "https://adervec.github.io/cowork.js"; s.async = true;
+      s.onload = () => res(window.cowork||null); s.onerror = () => res(null);
+      head.appendChild(s);
+    }catch(e){ res(null); }
+  });
+}
+function coachHash(t){ let h = 5381; for(let i=0;i<t.length;i++) h = ((h*33)^t.charCodeAt(i))>>>0; return h.toString(16); }
+const COACH_INSTRUCTIONS = [
+  "# The Classical Journey - coach channel",
+  "",
+  "A listener is working chronologically through a catalogue of " + DB.works.length + " works by",
+  DB.composers.length + " composers. Read `coach/request.json`:",
+  "",
+  "- `payload.totals` - heard, studied, loved, average rating, plays, hours streamed.",
+  "- `payload.byEra` / `payload.byGenre` - heard and total in each.",
+  "- `payload.loved` - the works rated highest: title, composer, year, era, genre.",
+  "- `payload.recentlyPlayed` - what they actually put on lately, newest first.",
+  "- `payload.notes` - their own notes, in their words.",
+  "- `payload.unheardLandmarks` - major works they have not heard yet.",
+  "- `payload.lessonsDone` / `payload.lessonsLeft` - the theory stops.",
+  "",
+  "Write `coach/reply.json`:",
+  "",
+  "```json",
+  "{ \"requestHash\": \"<copy the request's requestHash verbatim>\",",
+  "  \"reply\": \"<short markdown: what their taste is shaping up to be, the era or genre they",
+  "  are plainly skirting, and three specific works to hear next with one sentence each on why -",
+  "  and what to listen for in each. Curious and concrete, never a lecture.>\" }",
+  "```",
+  "",
+  "Recommend only works that appear in the payload's own lists."
+].join("\n");
+function mountCoach(){
+  const host = document.getElementById("coachHost"), out = document.getElementById("coachReply");
+  if(!host || host.childElementCount) return;
+  const show = t => { out.textContent = t||""; out.style.display = t ? "block" : "none"; };
+  try{ show(localStorage.getItem("cj-coach-reply")||""); }catch(e){}
+  loadCowork().then(cw => {
+    if(!cw || host.childElementCount) return;
+    cw.mount(host, {
+      app:"classical-journey",
+      manifest:{protocol:"cowork-manifest", protocolVersion:1, app:"classical-journey",
+        channels:[{name:"coach", request:["coach/request.json"],
+                   instructions:"coach/INSTRUCTIONS.md", replyPath:"coach/reply.json"}]},
+      files:()=>{
+        const all = chrono, mark = w => rec(w.id);
+        const tally = ws => ({heard:ws.filter(w=>mark(w).s>0).length, total:ws.length});
+        const brief = w => ({title:w.title, composer:cname(w), year:w.year, era:w.era, genre:w.genre});
+        const rated = Object.entries(ST.works).filter(([,r])=>r.r>0)
+          .sort((a,b)=>b[1].r-a[1].r).slice(0,20);
+        const genres = [...new Set(all.map(w=>w.genre).filter(Boolean))];
+        const payload = {
+          totals:{works:all.length, heard:all.filter(w=>mark(w).s>0).length,
+                  studied:all.filter(w=>mark(w).s>1).length,
+                  loved:all.filter(w=>mark(w).s>2).length,
+                  plays:Object.values(ST.works).reduce((a,r)=>a+(r.p||0),0),
+                  hoursStreamed:Math.round((ST.sec||0)/360)/10},
+          byEra:Object.fromEntries(DB.eras.map(e=>[e.name, tally(all.filter(w=>w.era===e.id))])),
+          byGenre:Object.fromEntries(genres.map(g=>[g, tally(all.filter(w=>w.genre===g))])),
+          loved:rated.map(([id,r])=>byId[id]?Object.assign(brief(byId[id]),{rating:r.r}):null).filter(Boolean),
+          recentlyPlayed:(ST.log||[]).slice(-25).reverse()
+            .map(e=>byId[e.id]?{title:byId[e.id].title, composer:cname(byId[e.id])}:null).filter(Boolean),
+          notes:Object.entries(ST.works).filter(([id,r])=>r.n&&byId[id]).slice(-15)
+            .map(([id,r])=>({work:byId[id].title, note:r.n})),
+          unheardLandmarks:all.filter(w=>(w.sig||0)>=3 && !mark(w).s).slice(0,40).map(brief),
+          lessonsDone:(DB.lessons||[]).filter(l=>(ST.lessons||{})[l.id]).length,
+          lessonsLeft:(DB.lessons||[]).filter(l=>!(ST.lessons||{})[l.id]).map(l=>l.title).slice(0,20),
+        };
+        return {
+          "coach/request.json":{protocol:"classical-journey-coach", protocolVersion:1,
+            kind:"coach-request", generatedAt:new Date().toISOString(),
+            requestHash:coachHash(JSON.stringify(payload)), payload:payload},
+          "coach/INSTRUCTIONS.md":COACH_INSTRUCTIONS,
+        };
+      },
+      apply:(ch,reply)=>{
+        const t = typeof reply==="string" ? reply
+          : (reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||JSON.stringify(reply,null,2);
+        try{ localStorage.setItem("cj-coach-reply", t); }catch(e){}
+        show(t);
+      },
+    });
+  });
 }
 
 /* ---------- about ---------- */
@@ -915,6 +1031,9 @@ function aboutView(){
     <p>What you have heard, your ratings, notes and listening time are stored in your browser. Nothing is sent anywhere unless you set up syncing (a private GitHub Gist under your own account) or an auto-backup folder on your own disk. There is no analytics and no tracking. Clearing site data clears progress, so keep the auto-backup on or export a file now and then.</p>
     <h3>Corrections</h3>
     <p>If an entry is wrong, note the work's id (in the address bar) — the fix belongs in the catalogue data and can be made at the source.</p>
+
+    <h3>Elsewhere</h3>
+    <p>More apps by the same maker, all free and local-first, are at <a href="https://adervec.github.io/portal/" target="_blank" rel="noopener">adervec.github.io</a>.</p>
   </div>`;
   app.innerHTML = shellHTML("about", inner); afterRender();
 }
@@ -1269,6 +1388,15 @@ document.addEventListener("keydown", e => {
   if(e.key==="ArrowRight" && chrono[i+1]) location.hash = "#/w/"+chrono[i+1].id;
 });
 route();
+// Let the maker's app portal know (same-origin localStorage) that this app is installed.
+try{
+  const DM = ["standalone","minimal-ui","fullscreen","window-controls-overlay"];
+  if(navigator.standalone || DM.some(m => matchMedia("(display-mode: "+m+")").matches)){
+    const k = "portal-installed", reg = JSON.parse(localStorage.getItem(k)||"{}");
+    reg["classical-journey"] = Date.now();
+    localStorage.setItem(k, JSON.stringify(reg));
+  }
+}catch(e){}
 bkInit();
 initSiteSync();
 initCloud();
