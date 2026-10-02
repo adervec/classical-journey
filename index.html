@@ -1388,6 +1388,10 @@ function loadTrack(k){
 function prevTrack(){ if(P.audio.currentTime>4 || P.ti===0) P.audio.currentTime = 0; else loadTrack(P.ti-1); }
 function nextTrack(){ if(!P.stopAfter && P.ti<P.tracks.length-1) loadTrack(P.ti+1); else nextQueue(); }
 function nextQueue(){ if(P.qi<P.queue.length-1){ P.qi++; loadWork(P.queue[P.qi]); } else status("End of the queue — pick another stop on the timeline."); }
+function popListen(url){   // one named, reused window so the music keeps going while the catalogue is browsed
+  const pw = window.open(url, "cj-listen", "popup,width=560,height=720");
+  if(pw) pw.focus(); else window.open(url, "_blank", "noopener");
+}
 async function loadWork(id){
   const w = byId[id]; if(!w) return;
   dockShow();
@@ -1395,10 +1399,19 @@ async function loadWork(id){
   $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`;
   $("#d-sub").textContent = cname(w)+" · finding a recording…";
   $("#d-yt").href = LINKS(w)[0][1];
+  $("#d-yt").onclick = e => { e.preventDefault(); P.audio.pause(); popListen(LINKS(w)[0][1]); };
   $("#d-tracks").hidden = true; status("");
   try{
     const it = await resolveWork(w);
-    if(!it){ status("No free stream found for this one — use the links on its page."+(P.qi<P.queue.length-1 ? " Skipping ahead…" : "")); $("#d-sub").textContent = cname(w); if(P.qi<P.queue.length-1) setTimeout(nextQueue, 1600); return; }
+    if(!it){   // no free stream: offer a pop-up on YouTube / Spotify (needs the click — browsers block unprompted pop-ups)
+      $("#d-sub").textContent = cname(w);
+      const more = P.qi<P.queue.length-1, L = LINKS(w), st = $("#d-status");
+      st.hidden = false;
+      st.innerHTML = `No free stream for this one. <button class="obtn" data-pop="0">▶ YouTube pop-up</button> <button class="obtn" data-pop="1">▶ Spotify pop-up</button>${more ? ` <span id="d-skip">· skipping ahead in 10 s</span>` : ""}`;
+      const sk = more ? setTimeout(nextQueue, 10000) : 0;
+      st.querySelectorAll("[data-pop]").forEach(b => b.onclick = () => { clearTimeout(sk); popListen(L[+b.dataset.pop][1]); markHeard(id); refreshChip(id); refreshTracker(id);
+        status("Playing in the pop-up window — it stays open while you browse; the next pop-up reuses it."); });
+      return; }
     P.cur.itemTitle = it.title; P.tracks = it.tracks;
     markHeard(id); refreshChip(id); refreshTracker(id);
     if(it.tracks.length>1){ $("#d-tracks").hidden = false; $("#d-list").innerHTML = it.tracks.map(t => `<li>${esc(t.name)}</li>`).join(""); }
