@@ -270,6 +270,14 @@ table.grid td.nw{white-space:nowrap;color:var(--mut)}
 #d-list li:hover{color:var(--ink)}
 #d-list li.on{color:var(--gold)}
 
+/* ---- search everything ---- */
+#gsearch{cursor:pointer}
+.gs-card{max-width:38rem;align-self:flex-start;margin-top:8vh}
+#gsq{font:inherit;font-size:1rem;width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:.6rem .8rem}
+.gs-row{display:block;padding:.45rem .3rem;border-bottom:1px solid var(--line);text-decoration:none}
+.gs-row b{display:block;font-family:Georgia,serif;font-weight:400;font-size:.95rem;color:var(--ink)}
+.gs-row span{font-size:.72rem;color:var(--mut)}
+.gs-row:hover b{color:var(--gold)}
 /* ---- paging, era tabs, filters, bottom tabs ---- */
 .pmw{text-align:center;margin:1rem 0}
 .pmore{border:1px solid var(--line2);border-radius:99px;padding:.6rem 1.2rem;font-size:.82rem;color:var(--mut);background:var(--panel)}
@@ -289,7 +297,7 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
 @media (max-width:760px){
   header.top{position:static;padding:.45rem .8rem;flex-wrap:nowrap}
   .brand{font-size:1.05rem;white-space:nowrap}
-  #sync{font-size:.62rem;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+  #sync{display:none}
   nav.main a{display:none}
   .tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:25;background:rgba(23,19,16,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
   .tabs a{flex:1;text-align:center;text-decoration:none;color:var(--mut);font-size:.68rem;padding:.35rem 0 .45rem;line-height:1.2}
@@ -333,8 +341,8 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
 </div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mvbk93se"</script>
-<script src="db.js?v=cj-mvbk93se"></script>
+<script>window.PROSEQ="?v=cj-mvbkhzp0"</script>
+<script src="db.js?v=cj-mvbkhzp0"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -402,6 +410,7 @@ function mergeInto(dst, src){   // union: never loses a mark
     if(!c.n && x.n) c.n = x.n;
     c.h = (c.h && x.h) ? Math.min(c.h, x.h) : (c.h || x.h || 0);
     c.p = Math.max(c.p||0, x.p||0);
+    if(c.w || x.w) c.w = Math.max(c.w||0, x.w||0);   // "want to hear" — union like every other mark
     dst.works[id] = c;
   }
   for(const [k,v] of Object.entries(src.lessons||{})) if(!(k in dst.lessons)) dst.lessons[k] = v;
@@ -424,9 +433,11 @@ function save(){ ST.updated = Date.now(); try{ localStorage.setItem(SK, JSON.str
 function setRec(id, patch){
   const r = Object.assign({s:0,r:0,n:"",h:0,p:0}, ST.works[id], patch);
   if(r.s>0 && !r.h) r.h = Date.now();
-  if(r.s===0 && r.r===0 && !r.n && !r.p) delete ST.works[id]; else ST.works[id] = r;
+  if(r.s===0 && r.r===0 && !r.n && !r.p && !r.w) delete ST.works[id]; else ST.works[id] = r;
   save();
 }
+const wants = id => { const r = rec(id); return !!r.w && !r.s; };   // on the list until it is heard
+function toggleWant(id){ setRec(id, {w: rec(id).w ? 0 : Date.now()}); }
 function markHeard(id){   // a play or an outbound listen click: at least "Heard", one more play, a log line
   const r = rec(id);
   ST.log.push({id, ts:Date.now()}); if(ST.log.length>400) ST.log = ST.log.slice(-400);
@@ -659,6 +670,7 @@ function shellHTML(view, inner){
       <a href="#/tree" class="${tab("tree")}">Constellation</a>
       <a href="#/table" class="${tab("table")}">Table</a>
       <a href="#/progress" class="${tab("progress")}">Progress</a>
+      <button id="gsearch" class="chip" title="Search everything (press /)">🔍 Search</button>
       <span id="sync" title="Sync & backup"></span>
     </nav>
   </header><main class="fade">${inner}</main>
@@ -671,10 +683,41 @@ function shellHTML(view, inner){
   </nav>
   <footer>A thousand years, one long line. · <a href="#/about">About</a><br><span style="font-size:.85em">Nothing is hosted here: every work links out to the music, and streams are found live in the Internet Archive.</span></footer>`;
 }
-function afterRender(){ setSyncChip(); const s = $("#sync"); if(s) s.onclick = () => toolsDialog(); }
+function afterRender(){ setSyncChip(); const s = $("#sync"); if(s) s.onclick = () => toolsDialog(); const g = $("#gsearch"); if(g) g.onclick = openSearch; }
+
+/* ---------- search everything ---------- */
+let GIDX = null;
+function openSearch(){
+  const old = $("#dlg"); if(old) old.remove();
+  if(!GIDX) GIDX = {
+    w: chrono.map(w => [clean(w.title+" "+cname(w)+" "+(w.cat||"")+" "+(w.movement||"")+" "+w.year), w]),
+    c: DB.composers.map(c => [clean(c.name+" "+(c.origin||"")), c]),
+    l: DB.lessons.map(l => [clean(l.title+" "+(TRADITIONS[l.tradition]||"")), l]) };
+  const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
+  d.innerHTML = `<div class="sd-card gs-card"><input type="search" id="gsq" placeholder="Search works, composers, artists, theory…" autocomplete="off"><div id="gsr"><p class="sd-p">Type at least two letters. Esc closes.</p></div></div>`;
+  d.onclick = e => { if(e.target===d) d.remove(); };
+  document.body.appendChild(d);
+  const q = $("#gsq"), out = $("#gsr"); q.focus(); let t;
+  const hit = (s, toks) => toks.every(k => s.includes(k));
+  const run = () => {
+    const toks = clean(q.value).split(" ").filter(Boolean);
+    if(!toks.length || q.value.trim().length<2){ out.innerHTML = `<p class="sd-p">Type at least two letters. Esc closes.</p>`; return; }
+    const cs = GIDX.c.filter(([s]) => hit(s,toks)).map(x => x[1]).sort((a,b) => (b.sig||0)-(a.sig||0)).slice(0,8);
+    const ws = GIDX.w.filter(([s]) => hit(s,toks)).map(x => x[1]).sort((a,b) => (b.sig||0)-(a.sig||0) || a.sortYear-b.sortYear).slice(0,30);
+    const ls = GIDX.l.filter(([s]) => hit(s,toks)).map(x => x[1]).slice(0,5);
+    const row = (href, t, sub) => `<a class="gs-row" href="${href}"><b>${esc(t)}</b><span>${esc(sub)}</span></a>`;
+    out.innerHTML = (!cs.length && !ws.length && !ls.length) ? `<p class="sd-p">Nothing matches.</p>` :
+      (cs.length ? `<h4>Composers &amp; artists</h4>${cs.map(c => row("#/c/"+c.id, c.name, (c.life||"")+" · "+(c.origin||""))).join("")}` : "") +
+      (ws.length ? `<h4>Works</h4>${ws.map(w => row("#/w/"+w.id, w.title, cname(w)+(w.year ? ", "+w.year : "")+" · "+(TRADITIONS[w.tradition]||""))).join("")}` : "") +
+      (ls.length ? `<h4>Theory stops</h4>${ls.map(l => row("#/theory", l.title, TRADITIONS[l.tradition]||"Classical")).join("")}` : "");
+  };
+  q.oninput = () => { clearTimeout(t); t = setTimeout(run, 120); };
+  q.onkeydown = e => { if(e.key==="Enter"){ const a = out.querySelector(".gs-row"); if(a){ location.hash = a.getAttribute("href"); d.remove(); } } };
+  out.onclick = e => { if(e.target.closest(".gs-row")) d.remove(); };
+}
 function badge(id){
-  const r = rec(id); if(!r.s && !r.r) return "";
-  return `<span class="badge">${MARKS[r.s]||""}${r.r ? ` <span class="st">${"★".repeat(r.r)}</span>` : ""}</span>`;
+  const r = rec(id); if(!r.s && !r.r && !r.w) return "";
+  return `<span class="badge">${MARKS[r.s]||""}${!r.s && r.w ? `<span title="Want to hear">☆</span>` : ""}${r.r ? ` <span class="st">${"★".repeat(r.r)}</span>` : ""}</span>`;
 }
 function cardHTML(w, sub){
   const e = ERA[w.era];
@@ -703,13 +746,64 @@ function pager(key, items, render){   // items: {h:headerHTML} | {w:item}; a hea
 let JQ = "", JE = ""; try{ JE = sessionStorage.getItem("cj-era")||""; }catch(e){}
 const nextStop = () => spineComposers.find(c => !compHeard(c)) || spineComposers[0];
 function setEra(id){ JE = id; try{ sessionStorage.setItem("cj-era", id); }catch(e){} }
+/* ---------- a journey for every genre ---------- */
+// Classical keeps its eras and composer stops; every other genre walks decade by decade
+// (centuries before 1900, where the traditions are sparse), artists in order of first appearance.
+let JT = "classical"; try{ JT = sessionStorage.getItem("cj-jt") || "classical"; }catch(e){}
+if(!TRADITIONS[JT]) JT = "classical";
+const JD = {};
+const bucket = y => y < 1900 ? Math.floor(y/100)*100 : Math.floor(y/10)*10;
+function journeyPicker(){
+  return `<select class="chip" id="jtrad" aria-label="Journey through">${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===JT ? " selected" : ""}>${k==="classical" ? "Classical journey" : v + " journey"}</option>`).join("")}</select>`;
+}
+function wirePicker(){ $("#jtrad").onchange = e => { JT = e.target.value; JQ = ""; try{ sessionStorage.setItem("cj-jt", JT); }catch(err){} journeyView(); scrollTo(0,0); }; }
+function genreJourneyView(){
+  const name = TRADITIONS[JT], ws = chrono.filter(w => w.tradition===JT);
+  const buckets = [...new Set(ws.map(w => bucket(w.sortYear)))].sort((a,b) => a-b);
+  const next = ws.find(w => !isHeard(w.id)) || ws[0];
+  const cur = buckets.includes(JD[JT]) ? JD[JT] : bucket(next.sortYear);
+  const groups = [], gi = {};
+  for(const w of ws.filter(w => bucket(w.sortYear)===cur)){
+    const k = w.composer || "~" + (w.culture||"");
+    if(!(k in gi)){ gi[k] = groups.length; groups.push({k, c: w.composer && comp[w.composer], culture: w.culture, ws: []}); }
+    groups[gi[k]].ws.push(w);
+  }
+  const nW = ws.filter(w => isHeard(w.id)).length, nA = new Set(ws.map(w => w.composer || w.culture)).size;
+  const lessons = DB.lessons.filter(l => l.tradition===JT);
+  const k = buckets.indexOf(cur), p = buckets[k-1], n = buckets[k+1];
+  let inner = `<div class="hero"><h1>The ${esc(name)} journey</h1><span class="sub">${ws.length.toLocaleString()} works · ${nA} artists · ${lessons.length} theory stops</span></div>
+  <div class="tools ui" style="position:static;border:0;padding:0">${journeyPicker()}<button class="gbtn" id="go">▶ Continue the journey</button></div>
+  <div id="jbar"><div class="pfill"><i style="width:${100*nW/(ws.length||1)}%"></i></div>
+    <div id="jstats"><b>${nW}</b>/<b>${ws.length}</b> works heard · one ${cur<1900 ? "century" : "decade"} at a time</div>
+    <nav id="eranav" aria-label="Decades" class="ui">${buckets.map(b => { const bw = ws.filter(w => bucket(w.sortYear)===b);
+      return `<button class="chip${b===cur ? " on" : ""}" data-b="${b}">${b}s <b>${bw.filter(w => isHeard(w.id)).length}/${bw.length}</b></button>`; }).join("")}</nav></div>
+  ${lessons.length ? `<details class="howto" style="margin-top:1rem"><summary>Theory stops for ${esc(name.toLowerCase())} (${lessons.length})</summary><div class="lessons">${lessons.map(lessonCard).join("")}</div></details>` : ""}
+  <section class="era" style="--ac:var(--gold)"><div class="era-mark" aria-hidden="true">${cur}s</div>
+    <div class="composers">${groups.map(g => `<article class="comp" data-c="${esc(g.k)}">
+      <div class="c-head"><h3>${g.c ? `<a href="#/c/${g.c.id}">${esc(g.c.name)}</a>` : esc(g.culture||"Traditional")}</h3>${g.c ? `<span class="c-meta">${esc(g.c.life||"")}${g.c.origin ? " · "+esc(g.c.origin) : ""}</span>` : ""}
+        <button class="radio" data-jfrom="${g.ws[0].id}" title="Play the ${esc(name.toLowerCase())} journey onward from here">⏵ Play from here</button></div>
+      ${g.c && g.c.bio ? `<p class="c-bio">${esc(g.c.bio)}</p>` : ""}
+      <div class="c-works">${g.ws.map(workChip).join("")}${g.ws.length>6 ? `<button class="more">+${g.ws.length-6} more</button>` : ""}</div></article>`).join("")}</div></section>
+  <div class="eranext">${p!==undefined ? `<button data-b="${p}">← ${p}s</button>` : "<span></span>"}${n!==undefined ? `<button data-b="${n}">${n}s →</button>` : ""}</div>`;
+  app.innerHTML = shellHTML("journey", inner); afterRender(); wirePicker();
+  document.querySelectorAll("#eranav .chip, .eranext button").forEach(b => b.onclick = () => { JD[JT] = +b.dataset.b; genreJourneyView(); const s = $(".era"); if(s) s.scrollIntoView(); });
+  document.querySelectorAll(".c-bio").forEach(x => x.onclick = () => x.classList.toggle("open"));
+  $("#go").onclick = () => {
+    JD[JT] = bucket(next.sortYear); genreJourneyView();
+    const el = document.querySelector(`.work[data-w="${next.id}"]`); if(!el) return;
+    const c = el.closest(".comp"); if(c && [...c.querySelectorAll(".work")].indexOf(el) >= 6) c.classList.add("expanded");
+    el.scrollIntoView({behavior:"smooth", block:"center"}); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  };
+}
 function journeyView(){
+  if(JT !== "classical") return genreJourneyView();
   const showEra = ERA[JE] ? JE : nextStop().era;
   const nW = journey.filter(w => isHeard(w.id)).length, nL = Object.keys(ST.lessons).length;
   const nC = spineComposers.filter(compHeard).length;
-  let inner = `<div class="hero"><h1>The Classical Journey</h1><span class="sub">${journey.length.toLocaleString()} classical works · ${spineComposers.length} composers · ${DB.lessons.length} theory stops · ${(chrono.length-journey.length).toLocaleString()} more in Works</span></div>
+  let inner = `<div class="hero"><h1>The Classical Journey</h1><span class="sub">${journey.length.toLocaleString()} classical works · ${spineComposers.length} composers · ${DB.lessons.filter(l => l.tradition==="classical").length} theory stops · ${(chrono.length-journey.length).toLocaleString()} more in Works — pick another genre from the menu</span></div>
   <details class="howto"><summary>How the journey works</summary>Walk the timeline from top to bottom. Every work opens to its own page — what you are hearing, the world it came from, what to listen for — with links to hear it on <b>YouTube</b>, <b>Spotify</b>, <b>Apple Music</b> and the <b>Internet Archive</b>, and a <b>▶</b> that streams a free recording right here. <b>⏵ Radio</b> on any composer plays the journey onward from that stop. Gold <b>theory stops</b> teach you what to listen <i>for</i>, right when history invented it. This timeline is the classical spine; jazz, rock, folk and the rest are in <b>Works</b>, filtered by genre. Mark works <b>heard</b>, <b>studied</b> or <b>loved</b>; everything is tracked under <b>Progress</b>. One era shows at a time — pick it from the row of eras.</details>
   <div class="tools ui" style="position:static;border:0;padding:0">
+    ${journeyPicker()}
     <input type="search" id="jq" placeholder="Search composers, works, countries…" value="${esc(JQ)}">
     <button class="gbtn" id="go">▶ Continue the journey</button>
   </div>
@@ -738,7 +832,7 @@ function journeyView(){
   if(!JQ){ const k = ERAS.findIndex(e => e.id===showEra), p = ERAS[k-1], n = ERAS[k+1];
     inner += `<div class="eranext">${p ? `<button data-era="${p.id}">← ${esc(p.name)}</button>` : "<span></span>"}${n ? `<button data-era="${n.id}">${esc(n.name)} →</button>` : ""}</div>`; }
   app.innerHTML = shellHTML("journey", inner);
-  afterRender();
+  afterRender(); wirePicker();
   const jq = $("#jq"); let t;
   if(JQ){ const v = clean(JQ);
     document.querySelectorAll(".comp").forEach(el => { el.style.display = clean(el.textContent).includes(v) ? "" : "none"; });
@@ -756,7 +850,7 @@ function journeyView(){
 }
 function workChip(w){
   const r = rec(w.id);
-  return `<span class="work h${r.s}" data-w="${w.id}"><button class="pl" data-play="${w.id}" title="Stream a free recording here">▶</button><a href="#/w/${w.id}">${r.s ? `<span class="mk">${MARKS[r.s]}</span>` : ""}${esc(w.title)}</a></span>`;
+  return `<span class="work h${r.s}" data-w="${w.id}"><button class="pl" data-play="${w.id}" title="Stream a free recording here">▶</button><a href="#/w/${w.id}">${r.s ? `<span class="mk">${MARKS[r.s]}</span>` : r.w ? `<span class="mk">☆</span>` : ""}${esc(w.title)}</a></span>`;
 }
 function lessonCard(l){
   const d = l.title in ST.lessons;
@@ -787,7 +881,7 @@ function worksView(){
   const match = w => (!F.era || w.era===F.era) && (!F.trad || w.tradition===F.trad) && (!F.gen || w.genre===F.gen)
     && (!F.sig || w.sig>=+F.sig) && (!F.mov || w.movement===F.mov)
     && (!F.reg || w.region===F.reg) && (!F.th || (w.themes||[]).includes(F.th))
-    && (!F.st || (F.st==="unheard" ? rec(w.id).s===0 : rec(w.id).s>=+F.st))
+    && (!F.st || (F.st==="unheard" ? rec(w.id).s===0 : F.st==="want" ? wants(w.id) : rec(w.id).s>=+F.st))
     && (!qq || clean(w.title+" "+cname(w)+" "+w.year+" "+(w.movement||"")+" "+(w.cat||"")+" "+(GENRES[w.genre]||"")+" "+(TRADITIONS[w.tradition]||"")).includes(qq));
   const sel = (id,label,opts,cur) => `<select class="chip" id="${id}"><option value="">${label}</option>${opts.map(o => { const [v,t] = Array.isArray(o) ? o : [o,o]; return `<option value="${esc(v)}"${cur===v ? " selected" : ""}>${esc(t)}</option>`; }).join("")}</select>`;
   let inner = `<div class="hero"><h1>Works</h1><span class="sub">${chrono.length.toLocaleString()} works · ${heard} heard</span></div>
@@ -802,7 +896,7 @@ function worksView(){
     ${sel("fmov","All movements",MOVEMENTS,F.mov)}
     ${sel("freg","All regions",REGIONS,F.reg)}
     ${sel("fth","All themes",THEMES,F.th)}
-    ${sel("fst","Any status",[["unheard","Not heard"],["1","Heard +"],["2","Studied +"],["3","Loved"]],F.st)}
+    ${sel("fst","Any status",[["want","☆ Want to hear"],["unheard","Not heard"],["1","Heard +"],["2","Studied +"],["3","Loved"]],F.st)}
     ${sel("fsort","Chronological",[["sig","By significance"],["rating","By my rating"],["short","Shortest first"]],F.sort==="chrono" ? "" : F.sort)}
   </div></div><div class="gallery" id="wgal">`;
   const matched = chrono.filter(match), items = [], cards = ws => ws.forEach(w => items.push({w}));
@@ -878,7 +972,8 @@ function workView(id){
     </div>
     <div class="tracker ui">
       <div class="row"><span class="lbl">My listening</span>
-        <div class="seg" id="seg">${STATUS.map((s,ix) => `<button data-s="${ix}" class="${r.s===ix ? "on" : ""}">${s}</button>`).join("")}</div></div>
+        <div class="seg" id="seg">${STATUS.map((s,ix) => `<button data-s="${ix}" class="${r.s===ix ? "on" : ""}">${s}</button>`).join("")}</div>
+        <button class="obtn" id="want" title="Keep it on your To hear list until you have heard it">${r.w ? "★ On your list" : "☆ Want to hear"}</button></div>
       <div class="row"><span class="lbl">Rating</span>
         <div class="stars" id="stars">${[1,2,3,4,5].map(n => `<button data-r="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${n} star">★</button>`).join("")}</div>
         <span class="facts" id="facts">${r.h ? "first heard "+new Date(r.h).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : ""}${r.p ? " · "+r.p+" play"+(r.p>1 ? "s" : "") : ""}</span></div>
@@ -910,6 +1005,7 @@ function workView(id){
     location.hash = "#/works";
   });
   $("#seg").onclick = e => { const b = e.target.closest("button"); if(!b) return; const s = +b.dataset.s; setRec(id, {s}); [...e.currentTarget.children].forEach(x => x.classList.toggle("on", +x.dataset.s===s)); };
+  $("#want").onclick = e => { toggleWant(id); e.currentTarget.textContent = rec(id).w ? "★ On your list" : "☆ Want to hear"; };
   $("#stars").onclick = e => { const b = e.target.closest("button"); if(!b) return; let n = +b.dataset.r; if(rec(id).r===n) n = 0; setRec(id, {r:n}); [...e.currentTarget.children].forEach(x => x.classList.toggle("on", +x.dataset.r<=n && n>0)); };
   const notes = $("#notes"); notes.addEventListener("change", () => setRec(id, {n:notes.value.trim()}));
 }
@@ -988,6 +1084,18 @@ function theoryView(){
 }
 
 /* ---------- progress ---------- */
+// "Because you loved…": walk the link graph out from everything marked, weight by how much you liked it,
+// keep only works not yet heard. ponytail: one pass over your marks; fine to a few thousand marked works.
+function suggestions(n){
+  const score = {}, why = {};
+  for(const [id,r] of Object.entries(ST.works)){
+    const w = byId[id]; if(!w || !r.s) continue;
+    const wt = Math.min(r.s,3) + (r.r||0)/2;
+    for(const [k,f] of [["sim",1.2],["succ",1],["pre",1],["con",.5]]) for(const o of w.links[k]){
+      if(rec(o).s) continue; const v = wt*f; score[o] = (score[o]||0)+v; if(!why[o] || v>why[o][1]) why[o] = [id,v]; }
+  }
+  return Object.keys(score).sort((a,b) => score[b]-score[a] || (byId[b].sig||0)-(byId[a].sig||0)).slice(0,n).map(id => ({w:byId[id], from:byId[why[id][0]]}));
+}
 function progressView(){
   const all = chrono;
   const heard = all.filter(w => rec(w.id).s>0), studied = all.filter(w => rec(w.id).s>1), loved = all.filter(w => rec(w.id).s>2);
@@ -999,6 +1107,7 @@ function progressView(){
   const row = (label,ws,col) => `<div class="prow" style="--ec:${col||"var(--gold)"}"><div class="pt"><span>${label}</span><span class="n">${ws.filter(w => rec(w.id).s>0).length}/${ws.length} · ♥ ${ws.filter(w => rec(w.id).s>2).length}</span></div>${bar(ws)}</div>`;
   const nDone = DB.composers.filter(compDone).length, nStarted = DB.composers.filter(compHeard).length;
   const hist = ST.log.slice(-12).reverse();
+  const toHear = chrono.filter(w => wants(w.id)).sort((a,b) => rec(b.id).w - rec(a.id).w), sugg = suggestions(12);
   const inner = `<div class="hero"><h1>Progress</h1><span class="sub">your way through a thousand years</span></div>
   <div class="bignums ui">
     <div><b>${heard.length}<small style="font-size:1rem;color:var(--mut)">/${all.length}</small></b><span>heard</span></div>
@@ -1013,6 +1122,10 @@ function progressView(){
     <div><b>${Object.keys(ST.lessons).length}<small style="font-size:1rem;color:var(--mut)">/${DB.lessons.length}</small></b><span>theory stops</span></div>
   </div>
   <div class="tools ui" style="position:static;border:0"><button class="obtn" id="p-tools">Sync &amp; backup…</button><button class="obtn" id="p-exp">⬇ Export progress</button><button class="obtn" id="p-imp">⬆ Import progress</button></div>
+  ${toHear.length ? `<div style="margin-top:1.2rem"><span class="lbl">☆ To hear · ${toHear.length}</span><div class="gallery" style="margin-top:.6rem">${toHear.slice(0,24).map(w => cardHTML(w, cname(w))).join("")}</div>${toHear.length>24 ? `<p class="sub ui"><a href="#/works" id="p-allwant">All ${toHear.length} on your list →</a></p>` : ""}</div>` : ""}
+  <div style="margin-top:1.2rem"><span class="lbl">${sugg.length ? "Because you liked…" : "Start here — landmarks you have not heard"}</span><div class="gallery" style="margin-top:.6rem">${
+    (sugg.length ? sugg : chrono.filter(w => w.sig===3 && !isHeard(w.id)).sort((a,b) => (a.id.length*7+a.sortYear)%13 - (b.id.length*7+b.sortYear)%13).slice(0,12).map(w => ({w})))
+      .map(({w,from}) => cardHTML(w, from ? "↳ from " + from.title : cname(w))).join("")}</div></div>
   <div class="prog-grid ui">
     <div class="pblock"><h3>By era</h3>${ERAS.map(e => row(esc(e.name), all.filter(w => w.era===e.id), e.color)).join("")}</div>
     <div class="pblock"><h3>By genre</h3>${Object.entries(TRADITIONS).map(([k,v]) => { const ws = all.filter(w => w.tradition===k); return ws.length ? row(v,ws) : ""; }).join("")}</div>
@@ -1031,6 +1144,7 @@ function progressView(){
   ${hist.length ? `<div style="margin-top:1.5rem"><span class="lbl">Recently played</span><ol class="hist">${hist.map(e => { const w = byId[e.id]; return w ? `<li><a href="#/w/${w.id}">${esc(w.title)}</a> — ${esc(cname(w))} <span style="color:var(--mut)">· ${new Date(e.ts).toLocaleDateString(undefined,{month:"short",day:"numeric"})}</span></li>` : ""; }).join("")}</ol></div>` : ""}
   ${loved.length ? `<div style="margin-top:1.5rem"><span class="lbl">Loved</span><div class="gallery" style="margin-top:.6rem">${loved.map(w => cardHTML(w, cname(w))).join("")}</div></div>` : ""}`;
   app.innerHTML = shellHTML("progress", inner); afterRender(); mountCoach();
+  const aw = $("#p-allwant"); if(aw) aw.onclick = () => { F.st = "want"; LIM.works = 0; try{ sessionStorage.setItem("cj-filter", JSON.stringify(F)); }catch(e){} };
   $("#p-tools").onclick = () => toolsDialog(); $("#p-exp").onclick = exportState; $("#p-imp").onclick = () => $("#impfile").click();
 }
 
@@ -1467,6 +1581,8 @@ $("#d-list").addEventListener("click", e => { const li = e.target.closest("li");
 document.addEventListener("click", ev => {
   const play = ev.target.closest("[data-play]");
   if(play){ ev.preventDefault(); playQueue([play.dataset.play], 0); return; }
+  const jf = ev.target.closest("[data-jfrom]");
+  if(jf){ const all = chrono.filter(w => w.tradition===JT).map(w => w.id); playQueue(all, Math.max(0, all.indexOf(jf.dataset.jfrom))); return; }
   const radio = ev.target.closest("[data-radio]");
   if(radio){ const cid = radio.dataset.radio;
     if(radio.dataset.only){ playQueue((compWorks[cid]||[]).map(w => w.id), 0); return; }
@@ -1513,7 +1629,9 @@ function route(){
 }
 window.addEventListener("hashchange", route);
 document.addEventListener("keydown", e => {
-  if(e.target.tagName==="TEXTAREA" || e.target.tagName==="INPUT") return;
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); openSearch(); return; }
+  if(e.target.tagName==="TEXTAREA" || e.target.tagName==="INPUT" || e.target.tagName==="SELECT") { if(e.key==="Escape"){ const d = $("#dlg"); if(d) d.remove(); } return; }
+  if(e.key==="/"){ e.preventDefault(); openSearch(); return; }
   if(e.key==="Escape"){ const d = $("#dlg"); if(d) d.remove(); return; }
   const m = location.hash.match(/^#\/w\/(.+)$/); if(!m) return;
   const i = chrono.indexOf(byId[decodeURIComponent(m[1])]);
