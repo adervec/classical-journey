@@ -353,8 +353,8 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
 </div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mvlldvo5"</script>
-<script src="db.js?v=cj-mvlldvo5"></script>
+<script>window.PROSEQ="?v=cj-mvllffca"</script>
+<script src="db.js?v=cj-mvllffca"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -713,6 +713,7 @@ function exportList(list, title){
 async function cacheAll(btn){
   const n = Math.max(...DB.works.map(w => w.pc||0)) + 1; let done = 0;
   btn.disabled = true;
+  try{ await fetch("./"); await fetch("db.js" + (window.PROSEQ||"")); }catch(e){}   // the page and index too, in case they loaded before the service worker took over
   for(let k = 0; k < n; k++){ try{ await loadProse(k); }catch(e){} done++; btn.textContent = `Downloading… ${done}/${n}`; }
   DB.works.forEach(proseReady);
   btn.textContent = "✓ Everything is saved for offline"; 
