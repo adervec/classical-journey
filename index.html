@@ -333,13 +333,42 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
   .gallery,.alist{grid-template-columns:1fr}
   #treewrap{height:calc(100dvh - 3rem - 56px)}
 }
+/* ---- gym mode ---- */
+#gym{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;gap:14px;padding:calc(10px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));overflow-y:auto;font:16px 'Segoe UI',system-ui,sans-serif}
+#gym[hidden]{display:none}
+#gym>*{width:100%;max-width:520px;margin:0 auto}
+body.gymon{overflow:hidden}
+.g-top{display:flex;align-items:center;gap:10px}
+#g-x{font-size:22px;color:var(--ink);padding:8px 12px}
+.g-sync{flex:1;text-align:left;color:var(--mut);font-size:13px;padding:8px 0}
+.g-wake{color:var(--mut);font-size:13px;display:flex;gap:6px;align-items:center}
+.g-now{text-align:center;padding:6px 0}
+.g-t{font:600 1.45rem Georgia,serif;color:var(--ink);line-height:1.2}
+.g-s{color:var(--mut);margin-top:6px}
+.g-st{color:var(--mut);font-size:13px;margin-top:6px;min-height:1.2em}
+.g-ctl{display:flex;justify-content:center;gap:18px;align-items:center}
+.g-ctl button{width:72px;height:72px;border-radius:50%;border:1px solid var(--line2);color:var(--ink);font-size:26px;background:var(--panel)}
+.g-ctl .g-play{width:96px;height:96px;background:var(--gold);color:#1a1508;font-size:34px;border:0}
+.g-skip,.g-marks button,.g-start button,.g-pop button{min-height:62px;border-radius:14px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);font-size:15px}
+.g-skip{font-size:18px}
+.g-marks,.g-pop{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.g-pop{grid-template-columns:1fr 1fr}
+.g-marks button.on{background:var(--gold);color:#1a1508;border-color:var(--gold)}
+.g-stars{display:flex}
+.g-stars button{flex:1;font-size:34px;color:var(--line2);padding:4px 0}
+.g-stars button.on{color:var(--gold)}
+.g-up{color:var(--mut);font-size:13px;text-align:center}
+.g-start{display:flex;flex-direction:column;gap:8px}
+.g-start small{color:var(--mut)}
+#d-gym{font-size:15px}
+@media (max-width:760px){ #sync.err{display:inline-block;font-size:.7rem} }
 </style>
 <div id="app"></div>
 <div id="dock" hidden>
   <div class="d-main">
     <button id="d-play" title="Play / pause">▶</button>
     <div class="d-info"><div id="d-title">—</div><div id="d-sub">—</div></div>
-    <div class="d-ctrl"><button id="d-prev" title="Previous track">⏮</button><button id="d-next" title="Next track">⏭</button></div>
+    <div class="d-ctrl"><button id="d-prev" title="Previous track">⏮</button><button id="d-next" title="Next track">⏭</button><button id="d-gym" title="Gym mode: big buttons, one screen">⛶</button></div>
     <span id="d-cur">0:00</span>
     <input id="d-seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
     <span id="d-dur">0:00</span>
@@ -351,10 +380,11 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
   <details id="d-tracks" hidden><summary>Tracks in this recording</summary><ol id="d-list"></ol></details>
   <details id="d-upnext" hidden><summary>Up next</summary><ol id="d-uq"></ol><button class="obtn" id="d-uqclear">Clear queue</button></details>
 </div>
+<div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mvllffca"</script>
-<script src="db.js?v=cj-mvllffca"></script>
+<script>window.PROSEQ="?v=cj-mw7banb4"</script>
+<script src="db.js?v=cj-mw7banb4"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -503,16 +533,17 @@ $("#impfile").addEventListener("change", async ev => {
 let syncTimer = null, syncState = "idle", lastSync = 0, CLOUD = null, DL = null;
 let pollTimer = null, seenStamp = 0, seenMtime = 0;
 const SYNC_FILE = "classical-journey-progress.json";
-const canSync = () => !!CLOUD || !!(BK.on && BK.h);
+const canSync = () => !!CLOUD || !!(BK.on && BK.h) || GD.on;
 function setSyncChip(){
   const el = $("#sync"); if(!el) return;
   el.className = "";
   if(!canSync()){ el.textContent = BK.supported ? "this device only · sync & backup" : "this device · backup"; return; }
-  const where = CLOUD ? " · claude.ai" : (BK.h ? " · " + BK.h.name : "");
+  const where = CLOUD ? " · claude.ai" : GD.on ? " · Drive" : (BK.h ? " · " + BK.h.name : "");
   if(syncState==="busy"){ el.textContent = "syncing…"; el.className = "busy"; }
-  else if(syncState==="err"){ el.textContent = "sync failed — tap to fix"; el.className = "err"; }
+  else if(syncState==="err"){ el.textContent = "sync paused — tap"; el.className = "err"; }
   else if(syncState==="dirty"){ el.textContent = "unsaved" + where; }
   else el.textContent = "synced ✓" + where;
+  const gs = $("#g-sync"); if(gs) gs.textContent = gymSync();
 }
 function queueSync(){
   if(!canSync()) return;
@@ -540,20 +571,92 @@ async function syncPull(){
     const remote = JSON.parse(await f.text());
     if(!remote || typeof remote !== "object") return false;
     if((remote.updated||0) <= seenStamp) return false;
-    const before = JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)]);
-    mergeInto(ST, remote);
-    seenStamp = Math.max(seenStamp, remote.updated||0);
-    if(before === JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)])) return false;
-    ST.updated = Date.now();
-    try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){}
-    route();            // the open view is now stale
-    queueSync();        // push the merged result back so the other device converges
-    return true;
+    return mergeRemote(remote);
   }catch(e){ return false; }   // no file yet, or permission gone — nothing to merge
 }
+function mergeRemote(remote){
+  if(!remote || typeof remote !== "object") return false;
+  const before = JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)]);
+  mergeInto(ST, remote);
+  seenStamp = Math.max(seenStamp, remote.updated||0);
+  if(before === JSON.stringify([ST.works, ST.lessons, Math.round(ST.sec)])) return false;
+  ST.updated = Date.now();
+  try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){}
+  if($("#gym").hidden) route(); else gymRender();   // the open view is now stale
+  queueSync();        // push the merged result back so the other device converges
+  return true;
+}
+/* ---------- Google Drive sync, phones included: Tachyread's shared client, private appDataFolder ---------- */
+// One public client id across Adam's apps (an identifier, not a secret); its authorized origin is
+// https://adervec.github.io, so this works there and on localhost only. Token lives in memory.
+const GD_CLIENT = "547617739897-br6dj2facmsc34qnkjb5u4dbfhju39pu.apps.googleusercontent.com";
+const GD_SCOPE = "openid email profile https://www.googleapis.com/auth/drive.appdata";   // identical to Tachyread's, so its grant is reused
+const GD = {ok: SITE && (location.origin==="https://adervec.github.io" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)),
+  on: localStorage.getItem("cj.gd")==="1", tok:"", exp:0, id:"", seen:0, err:"", email:"", busy:null};
+if(!GD.ok) GD.on = false;
+let gisP = null;
+const loadGis = () => gisP || (gisP = new Promise((res, rej) => {
+  if(window.google && google.accounts && google.accounts.oauth2) return res();
+  const sc = document.createElement("script"); sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
+  sc.onload = () => res(); sc.onerror = () => { gisP = null; rej(new Error("Google sign-in didn't load")); }; document.head.appendChild(sc); }));
+const gdToken = prompt => new Promise((res, rej) => google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT, scope:GD_SCOPE,
+  callback: r => { if(r && r.access_token){ GD.tok = r.access_token; GD.exp = Date.now() + (r.expires_in||3600)*1000; res(); } else rej(new Error((r && r.error) || "sign-in failed")); },
+  error_callback: e => rej(new Error((e && (e.message || e.type)) || "sign-in dismissed"))}).requestAccessToken({prompt}));
+async function gdAuth(interactive){
+  if(GD.tok && GD.exp > Date.now() + 60000) return;
+  if(GD.busy) return GD.busy;
+  GD.busy = (async () => {
+    await loadGis();
+    try{ await gdToken(""); }catch(e){ if(!interactive) throw e; await gdToken("consent"); }
+    if(!GD.email) fetch("https://www.googleapis.com/oauth2/v3/userinfo", {headers:{Authorization:"Bearer "+GD.tok}}).then(r => r.json()).then(j => { GD.email = j.email||""; }).catch(()=>{});
+  })().finally(() => { GD.busy = null; });
+  return GD.busy;
+}
+async function gdApi(url, opt){
+  opt = opt || {};
+  const r = await fetch(url, {...opt, headers:{...(opt.headers||{}), Authorization:"Bearer "+GD.tok}});
+  if(r.status===401) GD.tok = "";
+  if(!r.ok) throw new Error("Drive " + r.status);
+  return r;
+}
+async function gdFind(){
+  const q = encodeURIComponent("name='" + SYNC_FILE + "' and trashed=false");
+  const j = await (await gdApi("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=" + q + "&fields=files(id,modifiedTime)")).json();
+  const f = j.files && j.files[0]; if(f) GD.id = f.id; return f || null;
+}
+async function gdPush(){
+  await gdAuth(false);
+  if(!GD.id) await gdFind();
+  const form = new FormData();
+  form.append("metadata", new Blob([JSON.stringify(GD.id ? {} : {name:SYNC_FILE, parents:["appDataFolder"]})], {type:"application/json"}));
+  form.append("file", new Blob([JSON.stringify({v:3, exported:new Date().toISOString(), ...ST})], {type:"application/json"}));
+  const f = await (await gdApi("https://www.googleapis.com/upload/drive/v3/files" + (GD.id ? "/" + GD.id : "") + "?uploadType=multipart&fields=id,modifiedTime", {method: GD.id ? "PATCH" : "POST", body:form})).json();
+  GD.id = f.id; GD.seen = Date.parse(f.modifiedTime) || GD.seen; GD.err = "";
+}
+async function gdPull(){
+  if(!GD.on) return false;
+  try{
+    await gdAuth(false);
+    const f = await gdFind(); if(!f) return false;
+    const m = Date.parse(f.modifiedTime); if(m === GD.seen) return false;
+    GD.seen = m;   // a changed modifiedTime is the signal — no clock comparison across devices
+    const remote = await (await gdApi("https://www.googleapis.com/drive/v3/files/" + f.id + "?alt=media")).json();
+    GD.err = ""; return mergeRemote(remote);
+  }catch(e){ GD.err = e.message; syncState = "err"; setSyncChip(); return false; }
+}
+async function gdConnect(){   // from a tap, so Google may show its account / consent window once
+  try{ await gdAuth(true); GD.on = true; localStorage.setItem("cj.gd", "1"); await gdPull(); await gdPush(); syncState = "idle"; lastSync = Date.now(); startPoll(); }
+  catch(e){ GD.err = e.message; syncState = "err"; }
+  bkStatus(); setSyncChip();
+}
+function gdOff(){ GD.on = false; GD.tok = ""; localStorage.removeItem("cj.gd"); bkStatus(); setSyncChip(); }
+async function gdInit(){ if(GD.on){ await gdPull(); startPoll(); } setSyncChip(); }
+// The silent token refresh opens a brief Google window, which browsers only allow right after a tap —
+// so refresh on the tap itself when the hour-long token is near its end.
+document.addEventListener("pointerdown", () => { if(GD.on && !GD.busy && GD.exp < Date.now() + 300000) gdAuth(false).then(() => { if(syncState==="err") doSync(); }).catch(()=>{}); }, true);
 function startPoll(){
   clearInterval(pollTimer);
-  pollTimer = setInterval(() => { if(!document.hidden) syncPull(); }, 45000);
+  pollTimer = setInterval(() => { if(!document.hidden){ syncPull(); gdPull(); } }, 45000);
 }
 async function doSync(){
   clearTimeout(syncTimer);
@@ -563,9 +666,9 @@ async function doSync(){
   syncState = "busy"; setSyncChip();
   try{
     if(CLOUD) await CLOUD.set(JSON.parse(JSON.stringify(ST)));
-    else await syncWrite();
+    else { if(BK.on && BK.h) await syncWrite(); if(GD.on) await gdPush(); }
     syncState = "idle"; lastSync = Date.now();
-  }catch(e){ syncState = "err"; syncTimer = setTimeout(doSync, 30000); }
+  }catch(e){ syncState = "err"; if(GD.on) GD.err = e.message; syncTimer = setTimeout(doSync, 30000); }
   setSyncChip();
 }
 // Inside the claude.ai viewer there is no folder to reach, so progress lives in the artifact's
@@ -637,7 +740,7 @@ async function bkInit(){
 }
 document.addEventListener("visibilitychange", () => {
   if(document.hidden){ if(BK.timer) bkWrite(); if(syncState==="dirty") doSync(); }
-  else syncPull();   // coming back is when another device is most likely to have written
+  else { syncPull(); gdPull(); }   // coming back is when another device is most likely to have written
 });
 
 /* ---------- tools dialog: sync, backup, export/import, reset ---------- */
@@ -645,14 +748,17 @@ function toolsDialog(refresh){
   const old = $("#dlg"); if(old){ old.remove(); if(!refresh) return; }
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
   let bk = "";
-  if(!BK.supported) bk = `<p class="sd-p">Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.</p>`;
+  const gd = !GD.ok ? "" : `<h4>Google Drive — phone and computer</h4>` + (GD.on
+    ? `<p class="sd-p">On${GD.email ? " as <b>" + esc(GD.email) + "</b>" : ""} — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.${GD.err ? ` <span style="color:var(--red)">Last attempt failed (${esc(GD.err)}) — tap Reconnect.</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Sync now</button><button class="obtn danger" id="gd-off">Turn off</button></div>`
+    : `<p class="sd-p">Off. Sign in with Google once on each device, phone included, and every mark syncs through a private app folder in your Drive.${GD.err ? ` <span style="color:var(--red)">(${esc(GD.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Connect Google Drive</button></div>`);
+  if(!BK.supported) bk = GD.ok ? "" : `<p class="sd-p">Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.</p>`;
   else if(!BK.h) bk = `<p class="sd-p">Off. Choose a folder inside <b>Google Drive</b> (your Drive is mounted at <b>H:\My Drive</b>) and this page keeps <b>classical-journey-progress.json</b> there. Google Drive for Desktop moves that file between your computers, and each one merges what it finds, so nothing is ever overwritten. Timestamped snapshots are kept alongside it — newest ${BK.KEEP}, older deleted — so a bad merge or a browser-data clear is recoverable.</p><div class="sd-row"><button class="obtn" id="bk-pick">🗀 Choose sync folder</button></div>`;
   else if(!BK.on) bk = `<p class="sd-p">Paused — the browser needs permission for <b>${esc(BK.h.name)}</b> again. Nothing syncs until you grant it.</p><div class="sd-row"><button class="obtn" id="bk-resume">Resume sync</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
   else bk = `<p class="sd-p">On → syncing through <b>${esc(BK.h.name)}</b> · last write <b>${BK.last ? new Date(BK.last).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "—"}</b> · checks for other devices every 45s · keeps newest ${BK.KEEP} snapshots${BK.err ? ` · <span style="color:var(--red)">last write failed (${esc(BK.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="bk-now">Sync now</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
   d.innerHTML = `<div class="sd-card">
     <h3>Sync &amp; backup</h3>
-    <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing leaves it unless you point the app at a synced folder below."}</p>
-    <h4>Sync folder (Google Drive)</h4>${bk}
+    <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing leaves it unless you turn on sync below."}</p>
+    ${gd}${bk ? `<h4>Sync folder (Drive for Desktop)</h4>${bk}` : ""}
     <h4>Files</h4>
     <div class="sd-row"><button class="obtn" id="sd-exp">⬇ Export progress</button><button class="obtn" id="sd-imp">⬆ Import progress</button><button class="obtn danger" id="sd-reset">Reset everything</button></div>
     <p class="sd-p" id="sd-msg"></p>
@@ -663,7 +769,7 @@ function toolsDialog(refresh){
   d.querySelector("#sd-close").onclick = () => d.remove();
   d.onclick = e => { if(e.target===d) d.remove(); };
   const on = (id, fn) => { const el = d.querySelector(id); if(el) el.onclick = fn; };
-  on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume);
+  on("#gd-con", gdConnect); on("#gd-off", gdOff); on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume);
   on("#sd-exp", exportState); on("#sd-imp", () => $("#impfile").click());
   on("#sd-reset", () => { if(confirm("Erase all listening progress, ratings, notes, lessons and history on this device?")){ ["cj-state","cm.v2","cm.heard","cm.lessons"].forEach(k => localStorage.removeItem(k)); location.reload(); } });
 }
@@ -1107,6 +1213,7 @@ function composerView(id){
 function moreView(){
   const row = (h,t,d) => `<a class="mrow" href="${h}"><b>${t}</b><span>${d}</span></a>`;
   app.innerHTML = shellHTML("more", `<div class="hero"><h1>More</h1></div><div class="mlist">
+    ${row("#/gym","Gym mode","One screen, big buttons: play and mark progress between sets")}
     ${row("#/progress","Progress","What you have heard, studied and loved")}
     ${row("#/tree","Constellation","Every work as a star map of influence")}
     ${row("#/table","Table","Sort and search everything at once")}
@@ -1497,7 +1604,7 @@ function tableView(){
 const IACACHE = (() => { try{ return JSON.parse(localStorage.getItem("cj.ia")||"{}"); }catch(e){ return {}; } })();
 const P = {queue:[], qi:-1, tracks:[], ti:-1, cur:null, lt:null, dirty:false, audio:new Audio()};
 P.audio.preload = "none";
-function status(msg){ const el = $("#d-status"); el.hidden = !msg; el.textContent = msg||""; }
+function status(msg){ const el = $("#d-status"); el.hidden = !msg; el.textContent = msg||""; gymRender(); }
 async function iaQuery(qs, fulltext){
   const p = new URLSearchParams();
   p.append("q", (fulltext ? qs : `title:(${qs})`)+" AND mediatype:(audio)");
@@ -1560,6 +1667,7 @@ function loadTrack(k){
   $("#d-sub").textContent = cname(w)+" · "+P.cur.itemTitle+(P.tracks.length>1 ? ` · track ${k+1}/${P.tracks.length}` : "");
   document.querySelectorAll("#d-list li").forEach((li,n) => li.classList.toggle("on", n===k));
   setMediaSession(w, P.tracks.length>1 ? w.title+" — "+t.name : w.title);
+  gymRender();
 }
 function prevTrack(){ if(P.audio.currentTime>4 || P.ti===0) P.audio.currentTime = 0; else loadTrack(P.ti-1); }
 function nextTrack(){ if(!P.stopAfter && P.ti<P.tracks.length-1) loadTrack(P.ti+1); else nextQueue(); }
@@ -1592,6 +1700,7 @@ function popListen(url){   // one named, reused window so the music keeps going 
 async function loadWork(id){
   const w = byId[id]; if(!w) return;
   dockShow();
+  clearTimeout(P.sk);   // a manual skip cancels the no-stream countdown
   P.cur = {w, itemTitle:""}; P.tracks = []; P.ti = -1; P.stopAfter = false;
   $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`;
   $("#d-sub").textContent = cname(w)+" · finding a recording…";
@@ -1605,8 +1714,9 @@ async function loadWork(id){
       const more = hasNext(), L = LINKS(w), st = $("#d-status");
       st.hidden = false;
       st.innerHTML = `No free stream for this one. <button class="obtn" data-pop="0">▶ YouTube pop-up</button> <button class="obtn" data-pop="1">▶ Spotify pop-up</button>${more ? ` <span id="d-skip">· skipping ahead in 10 s</span>` : ""}`;
-      const sk = more ? setTimeout(nextQueue, 10000) : 0;
-      st.querySelectorAll("[data-pop]").forEach(b => b.onclick = () => { clearTimeout(sk); popListen(L[+b.dataset.pop][1]); markHeard(id); refreshChip(id); refreshTracker(id);
+      P.sk = more ? setTimeout(nextQueue, 10000) : 0;
+      gymRender();
+      st.querySelectorAll("[data-pop]").forEach(b => b.onclick = () => { clearTimeout(P.sk); popListen(L[+b.dataset.pop][1]); markHeard(id); refreshChip(id); refreshTracker(id);
         status("Playing in the pop-up window — it stays open while you browse; the next pop-up reuses it."); });
       return; }
     P.cur.itemTitle = it.title; P.tracks = it.tracks;
@@ -1623,7 +1733,8 @@ async function loadWork(id){
 function playQueue(list, start){ P.queue = list; P.qi = start; loadWork(P.queue[P.qi]); }
 P.audio.addEventListener("playing", () => { clearTimeout(P.watch); status(""); $("#d-play").textContent = "⏸"; });
 P.audio.addEventListener("loadeddata", () => clearTimeout(P.watch));
-P.audio.addEventListener("pause", () => { $("#d-play").textContent = "▶"; });
+P.audio.addEventListener("pause", () => { $("#d-play").textContent = "▶"; gymRender(); });
+P.audio.addEventListener("play", gymRender);
 P.audio.addEventListener("ended", nextTrack);
 P.audio.addEventListener("error", () => { if(P.curTrack){ P.srcIdx++; trySrc(P.curTrack); } });
 P.audio.addEventListener("loadedmetadata", () => { $("#d-dur").textContent = fmt(P.audio.duration); });
@@ -1644,7 +1755,72 @@ $("#d-next").addEventListener("click", nextTrack);
 $("#d-uq").addEventListener("click", e => { const b = e.target.closest("[data-uqx]"); if(!b) return; e.preventDefault(); UQ.splice(+b.dataset.uqx, 1); saveUQ(); });
 $("#d-uqclear").addEventListener("click", () => { UQ = []; saveUQ(); });
 $("#d-close").addEventListener("click", () => { P.audio.pause(); $("#dock").hidden = true; document.body.classList.remove("playing"); });
+$("#d-gym").addEventListener("click", openGym);
 $("#d-list").addEventListener("click", e => { const li = e.target.closest("li"); if(li) loadTrack([...li.parentNode.children].indexOf(li)); });
+
+/* ---------- gym mode: one screen, thumb-sized buttons, for marking progress between sets ---------- */
+let WL = null;
+async function wakeOn(on){
+  try{
+    if(on && "wakeLock" in navigator && !WL && !document.hidden){ WL = await navigator.wakeLock.request("screen"); WL.addEventListener("release", () => { WL = null; }); }
+    else if(!on && WL){ await WL.release(); WL = null; }
+  }catch(e){}
+}
+const wakePref = () => { try{ return localStorage.getItem("cj.wake")==="1"; }catch(e){ return false; } };
+document.addEventListener("visibilitychange", () => { if(!document.hidden && !$("#gym").hidden && wakePref()) wakeOn(true); });
+const gymSync = () => !canSync() ? "this device only — tap to sync" : syncState==="err" ? "⚠ sync paused — tap" : syncState==="idle" ? "✓ synced" + (GD.on ? " to Drive" : "") : "… saving";
+let GSTARTS = [];
+function gymStarts(){
+  const un = l => l.filter(w => !isHeard(w.id)).map(w => w.id);
+  const c = nextStop(), ji = Math.max(0, journey.findIndex(w => w.composer===c.id));
+  const out = [["Classical journey, from " + c.name, un(journey.slice(ji))]];
+  if(JT!=="classical") out.push([TRADITIONS[JT] + " journey", un(chrono.filter(w => w.tradition===JT))]);
+  const want = DB.works.filter(w => wants(w.id)).sort((a,b) => rec(a.id).w - rec(b.id).w).map(w => w.id);
+  if(want.length) out.push(["My want-to-hear list", want]);
+  const sug = suggestions(40).map(x => x.w.id);
+  if(sug.length) out.push(["Because you liked…", sug]);
+  out.push(["Shuffle unheard landmarks", un(DB.works.filter(w => w.sig===3)).sort(() => Math.random() - .5)]);
+  return out.filter(x => x[1].length);
+}
+function gymRender(){
+  const g = $("#gym"); if(!g || g.hidden) return;
+  const w = P.cur && P.cur.w, r = w ? rec(w.id) : null;
+  const nid = UQ[0] || P.queue[P.qi+1], nostream = w && !P.tracks.length && !!$("#d-status [data-pop]");
+  const st = $("#d-status").hidden ? $("#d-sub").textContent : (nostream ? "No free stream — play it in a pop-up, or skip." : $("#d-status").textContent);
+  GSTARTS = gymStarts();
+  g.innerHTML = `<div class="g-top"><button id="g-x" aria-label="Close gym mode">✕</button><button id="g-sync" class="g-sync">${esc(gymSync())}</button>${"wakeLock" in navigator ? `<label class="g-wake"><input type="checkbox" id="g-wake"${wakePref() ? " checked" : ""}> keep screen on</label>` : ""}</div>`
+  + (w ? `<div class="g-now"><div class="g-t">${esc(w.title)}</div><div class="g-s">${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""}</div><div class="g-st">${esc(st)}</div></div>
+    ${nostream ? `<div class="g-pop"><button data-gpop="0">▶ YouTube pop-up</button><button data-gpop="1">▶ Spotify pop-up</button></div>` : `<div class="g-ctl"><button data-g="prev" aria-label="Previous track">⏮</button><button data-g="play" class="g-play" aria-label="Play or pause">${P.audio.paused ? "▶" : "⏸"}</button><button data-g="next" aria-label="Next track">⏭</button></div>`}
+    <button data-g="skip" class="g-skip">Next piece ⏩</button>
+    <div class="g-marks">${[[1,"✓ Heard"],[2,"✎ Studied"],[3,"♥ Loved"]].map(([n,l]) => `<button data-gs="${n}" class="${r.s>=n ? "on" : ""}">${l}</button>`).join("")}<button data-g="want" class="${r.w && !r.s ? "on" : ""}">☆ Want</button></div>
+    <div class="g-stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-gr="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${n} stars">★</button>`).join("")}</div>
+    <div class="g-up">${nid && byId[nid] ? "Up next: " + esc(byId[nid].title) + " — " + esc(cname(byId[nid])) : ""}</div>` : "")
+  + `<div class="g-start"><span class="lbl">${w ? "Switch to" : "Start listening"}</span>${GSTARTS.map((x,i) => `<button data-gq="${i}">${esc(x[0])} <small>· ${x[1].length} unheard</small></button>`).join("")}</div>`;
+}
+function openGym(){
+  const g = $("#gym"); g.hidden = false; document.body.classList.add("gymon");
+  gymRender(); if(wakePref()) wakeOn(true);
+}
+function closeGym(){
+  $("#gym").hidden = true; document.body.classList.remove("gymon"); wakeOn(false);
+  if(location.hash==="#/gym") location.hash = "#/"; else route();   // marks made in the gym show up in the view below
+}
+$("#gym").addEventListener("change", e => { if(e.target.id==="g-wake"){ try{ localStorage.setItem("cj.wake", e.target.checked ? "1" : "0"); }catch(x){} wakeOn(e.target.checked); } });
+$("#gym").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  const w = P.cur && P.cur.w;
+  if(b.id==="g-x") return closeGym();
+  if(b.id==="g-sync") return toolsDialog();
+  if(b.dataset.gq){ playQueue(GSTARTS[+b.dataset.gq][1], 0); return; }
+  if(b.dataset.gpop && w){ clearTimeout(P.sk); popListen(LINKS(w)[+b.dataset.gpop][1]); markHeard(w.id); gymRender(); return; }
+  const g = b.dataset.g;
+  if(g==="prev") prevTrack(); else if(g==="next") nextTrack(); else if(g==="skip") nextQueue();
+  else if(g==="play"){ P.audio.paused ? P.audio.play().catch(()=>{}) : P.audio.pause(); }
+  else if(g==="want" && w) toggleWant(w.id);
+  else if(b.dataset.gs && w){ const n = +b.dataset.gs, cur = rec(w.id).s; setRec(w.id, {s: cur===n ? n-1 : n}); }
+  else if(b.dataset.gr && w){ const n = +b.dataset.gr; setRec(w.id, {r: rec(w.id).r===n ? 0 : n}); }
+  gymRender();
+});
 
 /* ---------- delegated clicks: play, radio, listen links, lessons, expanders ---------- */
 document.addEventListener("click", ev => {
@@ -1693,6 +1869,7 @@ function route(){
   else if(h==="#/table") tableView();
   else if(h==="#/about") aboutView();
   else if(h==="#/more") moreView();
+  else if(h==="#/gym"){ journeyView(); openGym(); }
   else journeyView();
   const back = lastHash!==h && SCROLL[h]!==undefined && (h==="#/" || h==="#/works" || h==="#/composers" || h==="#/theory");
   lastHash = h;
@@ -1729,6 +1906,7 @@ try{
   }
 }catch(e){}
 bkInit();
+gdInit();
 renderUQ();
 initCloud();
 </script>
