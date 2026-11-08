@@ -342,6 +342,25 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:'Segoe UI',sy
 .hi-list label{display:flex;gap:.5rem;padding:.25rem 0;border-bottom:1px solid var(--line)}
 .hi-list small{color:var(--mut)}
 .sd-card input[type=text]{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:.35rem .5rem;font:inherit;min-width:9rem}
+/* ---- lifetimes / quiz / year in review ---- */
+.lv-ctl{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin:.6rem 0}
+.lv-ctl input[type=range]{flex:1;min-width:12rem;accent-color:var(--gold)}
+.lv-ctl b{font:600 1.6rem Georgia,serif;color:var(--gold);min-width:4ch}
+.lv-row{display:grid;grid-template-columns:minmax(8rem,13rem) 1fr;gap:.6rem;align-items:center;font-size:.82rem;padding:.12rem 0}
+.lv-row a{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none}
+.lv-bar{position:relative;height:14px;background:var(--panel2);border-radius:7px}
+.lv-bar i{position:absolute;top:0;bottom:0;border-radius:7px;background:var(--ac,var(--gold));opacity:.75}
+.lv-bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.lv-bar span{position:absolute;right:6px;top:-1px;font-size:.7rem;color:var(--mut)}
+.qz{max-width:34rem;margin:0 auto;text-align:center}
+.qz .q-opts{display:grid;gap:.6rem;margin:1rem 0}
+.qz .q-opts button{min-height:56px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);color:var(--ink);font-size:1rem}
+.qz .q-opts button.ok{background:#2f5a35;border-color:#4c8a55}
+.qz .q-opts button.bad{background:#5a2f2f;border-color:#8a4c4c}
+.qz .q-ans{font:600 1.15rem Georgia,serif;margin:.6rem 0}
+.rv-card{border:1px solid var(--gold);border-radius:16px;padding:1.2rem;background:var(--panel);margin:1rem 0}
+.rv-card h2{margin:.2rem 0 1rem}
+.rv-card ol{margin:.3rem 0 0 1.2rem;padding:0}
 /* ---- gym mode ---- */
 #gym{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;gap:14px;padding:calc(10px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));overflow-y:auto;font:16px 'Segoe UI',system-ui,sans-serif}
 #gym[hidden]{display:none}
@@ -392,8 +411,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mw85hkow"</script>
-<script src="db.js?v=cj-mw85hkow"></script>
+<script>window.PROSEQ="?v=cj-mw85lni2"</script>
+<script src="db.js?v=cj-mw85lni2"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -467,6 +486,7 @@ function mergeInto(dst, src){   // union: never loses a mark
   for(const [k,v] of Object.entries(src.lessons||{})) if(!(k in dst.lessons)) dst.lessons[k] = v;
   dst.sec = Math.max(dst.sec||0, src.sec||0);
   // smaller value wins a tie, so two devices that picked offline still converge on the same answer
+  if(src.quiz && (!dst.quiz || src.quiz.n > dst.quiz.n)) dst.quiz = src.quiz;   // ponytail: max, not sum; two offline devices undercount
   if(src.day){ dst.day = dst.day || {}; for(const [k,v] of Object.entries(src.day)) if(byId[v] && (!dst.day[k] || v < dst.day[k])) dst.day[k] = v; }
   if(src.mix && src.mix.wk && (!dst.mix || src.mix.wk > dst.mix.wk || (src.mix.wk===dst.mix.wk && JSON.stringify(src.mix.ids) < JSON.stringify(dst.mix.ids)))) dst.mix = src.mix;
   const seen = new Set(dst.log.map(e => e.id+e.ts));
@@ -512,6 +532,131 @@ function portalActivity(w){
 const isHeard = id => rec(id).s>0;
 const compHeard = c => (compWorks[c.id]||[]).some(w => isHeard(w.id));
 const compDone = c => (compWorks[c.id]||[]).length>0 && compWorks[c.id].every(w => isHeard(w.id));
+/* ---------- who was alive at the same time ---------- */
+const NOWY = new Date().getFullYear();
+let LIVES = null;
+function lives(){   // people only: "1685–1750", "c. 1450–1521", "b. 1974"; bands and "fl." dates are left out
+  if(LIVES) return LIVES;
+  LIVES = [];
+  for(const c of DB.composers){
+    const l = c.life || "", m = l.match(/^(?:c\.\s*)?(\d{3,4})\s*[–-]\s*(?:c\.\s*)?(\d{3,4})\b/), b = l.match(/^b\.\s*(\d{4})/);
+    const ws = compWorks[c.id]; if(!ws || !(m || b)) continue;
+    LIVES.push({c, b: +(m ? m[1] : b[1]), d: m ? +m[2] : NOWY, alive: !m, t: ws[0].tradition});
+  }
+  LIVES.sort((x,y) => x.b - y.b);
+  return LIVES;
+}
+let LV = {y: 1790, t: "classical"};
+function livesView(y){
+  if(y) LV.y = Math.max(900, Math.min(NOWY, y));
+  const yr = LV.y, lo = yr - 90, hi = yr + 90, X = v => (100*(Math.max(lo, Math.min(hi, v)) - lo)/(hi - lo)).toFixed(2);
+  const ppl = lives().filter(p => p.b <= yr && p.d >= yr && (LV.t==="all" || p.t===LV.t));
+  const ws = chrono.filter(w => w.sortYear===yr && (LV.t==="all" || w.tradition===LV.t));
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Who was alive</h1><span class="sub">pick a year: everyone in the catalogue living then, and how old they were</span></div>
+  <div class="lv-ctl ui"><button class="obtn" data-ly="-10">−10</button><input type="range" id="lv-y" min="900" max="${NOWY}" value="${yr}" aria-label="Year"><button class="obtn" data-ly="10">+10</button><b id="lv-b">${yr}</b>
+    <select id="lv-t"><option value="all">All music</option>${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===LV.t ? " selected" : ""}>${v}</option>`).join("")}</select></div>
+  <p class="sub ui">${ppl.length} alive in ${yr}${ws.length ? " · written or released that year: " + ws.slice(0,6).map(w => `<a href="#/w/${w.id}">${esc(w.title)}</a>`).join(", ") + (ws.length>6 ? " …" : "") : ""}</p>
+  <div class="ui">${ppl.slice(0,150).map(p => `<div class="lv-row"><a href="#/c/${p.c.id}" title="${esc(p.c.life)}">${esc(p.c.name)}</a><div class="lv-bar" style="--ac:${(ERA[p.c.era]||{}).color||"var(--gold)"}"><i style="left:${X(p.b)}%;right:${100 - X(p.d)}%"></i><em style="left:50%"></em><span>${yr - p.b}</span></div></div>`).join("")}${ppl.length>150 ? `<p class="sub">…and ${ppl.length-150} more — narrow the genre.</p>` : ""}</div>`);
+  afterRender();
+  const go = v => { LV.y = v; history.replaceState(null, "", "#/lives/" + v); livesView(); };
+  const r = $("#lv-y"); r.oninput = () => { $("#lv-b").textContent = r.value; }; r.onchange = () => go(+r.value);
+  document.querySelectorAll("[data-ly]").forEach(b => b.onclick = () => go(Math.max(900, Math.min(NOWY, LV.y + +b.dataset.ly))));
+  $("#lv-t").onchange = e => { LV.t = e.target.value; livesView(); };
+}
+
+/* ---------- blind listening quiz ---------- */
+// A free stream from a random point, title hidden; guess the composer, the era or the genre.
+const QZ = {mode: "composer", t: "classical", a: new Audio(), w: null, opts: [], done: false, busy: false};
+QZ.a.preload = "none";
+["play","pause"].forEach(ev => QZ.a.addEventListener(ev, () => { const b = $("#qz-pp"); if(b) b.textContent = QZ.a.paused ? "▶ Play" : "⏸ Pause"; }));
+const shuf = a => { for(let i = a.length-1; i>0; i--){ const j = Math.random()*(i+1)|0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function quizAnswer(w){ return QZ.mode==="era" ? w.era : QZ.mode==="genre" ? w.tradition : w.composer; }
+const quizLabel = v => QZ.mode==="era" ? (ERA[v]||{}).name : QZ.mode==="genre" ? TRADITIONS[v] : (comp[v]||{}).name;
+function quizOptions(w){
+  const right = quizAnswer(w);
+  let pool = QZ.mode==="era" ? ERAS.map(e => e.id) : QZ.mode==="genre" ? Object.keys(TRADITIONS)
+    : [...new Set(chrono.filter(x => x.tradition===w.tradition && x.composer && x.composer!==right && Math.abs(x.sortYear - w.sortYear) < 120 && (x.sig||0)>=2).map(x => x.composer))];
+  return shuf([right, ...shuf(pool.filter(v => v!==right)).slice(0,3)]);
+}
+async function quizNext(){
+  if(QZ.busy) return; QZ.busy = true; QZ.done = false; QZ.a.pause();
+  const box = $("#qz-box"); if(box) box.innerHTML = `<p class="sub">Finding a recording…</p>`;
+  const scope = chrono.filter(w => (QZ.mode==="genre" || w.tradition===(QZ.mode==="era" ? "classical" : QZ.t)) && (w.sig||0)>=2 && w.composer);
+  const known = scope.filter(w => IACACHE[w.id]);   // works already found on the Archive come up first: faster
+  for(let tries = 0; tries<6; tries++){
+    const from = known.length && Math.random()<.6 ? known : scope, w = from[Math.random()*from.length|0];
+    if(!w) break;
+    try{
+      const it = await resolveWork(w); if(!it || !it.tracks.length) continue;
+      const toks = clean(w.title).split(" ").filter(t => t.length>2 || /^\d+$/.test(t));
+      let bi = 0, bs = -1; it.tracks.forEach((t,k) => { const tn = clean(t.name); const sc = toks.filter(x => tn.includes(x)).length; if(sc>bs){ bs = sc; bi = k; } });
+      QZ.w = w; QZ.opts = quizOptions(w); QZ.src = it.tracks[bi].urls; QZ.si = 0;
+      QZ.a.src = QZ.src[0];
+      QZ.a.onloadedmetadata = () => { if(QZ.a.duration > 90) QZ.a.currentTime = QZ.a.duration * (.15 + Math.random()*.4); };   // skip the intro, start somewhere inside
+      QZ.a.onerror = () => { if(++QZ.si < QZ.src.length) QZ.a.src = QZ.src[QZ.si], QZ.a.play().catch(()=>{}); };
+      P.audio.pause(); QZ.a.play().catch(()=>{});
+      QZ.busy = false; quizRender(); return;
+    }catch(e){}
+  }
+  QZ.busy = false; if(box) box.innerHTML = `<p class="sub">Couldn't find a free recording just now. <button class="obtn" id="qz-go">Try again</button></p>`; const g = $("#qz-go"); if(g) g.onclick = quizNext;
+}
+function quizRender(){
+  const box = $("#qz-box"); if(!box || !QZ.w) return;
+  const w = QZ.w, right = quizAnswer(w), q = ST.quiz || {n:0, ok:0};
+  box.innerHTML = `<p class="sub">${QZ.mode==="era" ? "Which era?" : QZ.mode==="genre" ? "Which genre?" : "Who wrote or made this?"}</p>
+    <div class="sd-row" style="justify-content:center"><button class="obtn" id="qz-pp">${QZ.a.paused ? "▶ Play" : "⏸ Pause"}</button><button class="obtn" id="qz-jump">↷ Another spot</button></div>
+    <div class="q-opts">${QZ.opts.map(v => `<button data-qa="${esc(v)}" class="${QZ.done ? (v===right ? "ok" : v===QZ.pick ? "bad" : "") : ""}">${esc(quizLabel(v)||v)}</button>`).join("")}</div>
+    ${QZ.done ? `<div class="q-ans">${QZ.pick===right ? "✓ Right" : "✗ Not quite"} — <a href="#/w/${w.id}">${esc(w.title)}</a></div><p class="sub">${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""} · ${esc((ERA[w.era]||{}).name||"")} · ${esc(TRADITIONS[w.tradition]||"")}</p>
+      <div class="sd-row" style="justify-content:center"><button class="gbtn" id="qz-next">Next ⏭</button><button class="obtn" data-play="${w.id}">▶ Hear it all</button><button class="obtn" id="qz-want">${rec(w.id).w ? "★ On your list" : "☆ Want to hear"}</button></div>` : ""}
+    <p class="sub">Score: ${q.ok}/${q.n}${q.n ? " · " + Math.round(100*q.ok/q.n) + "%" : ""}</p>`;
+  box.querySelector("#qz-pp").onclick = () => { QZ.a.paused ? QZ.a.play().catch(()=>{}) : QZ.a.pause(); };
+  box.querySelector("#qz-jump").onclick = () => { if(QZ.a.duration) QZ.a.currentTime = QZ.a.duration * Math.random() * .85; };
+  box.querySelectorAll("[data-qa]").forEach(b => b.onclick = () => { if(QZ.done) return;
+    QZ.done = true; QZ.pick = b.dataset.qa; ST.quiz = {n: q.n+1, ok: q.ok + (QZ.pick===right ? 1 : 0)}; save(); quizRender(); });
+  const n = box.querySelector("#qz-next"); if(n) n.onclick = quizNext;
+  const wt = box.querySelector("#qz-want"); if(wt) wt.onclick = () => { toggleWant(w.id); quizRender(); };
+}
+function quizView(){
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Blind listening</h1><span class="sub">a free recording from somewhere in the middle, title hidden: guess, then see what it was</span></div>
+  <div class="qz ui"><div class="sd-row" style="justify-content:center">
+    <select id="qz-m"><option value="composer">Guess the composer / artist</option><option value="era">Guess the era (classical)</option><option value="genre">Guess the genre (all music)</option></select>
+    <select id="qz-t"${QZ.mode==="composer" ? "" : " hidden"}>${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===QZ.t ? " selected" : ""}>${v}</option>`).join("")}</select></div>
+  <div id="qz-box"><button class="gbtn" id="qz-start" style="margin-top:1rem">▶ Start</button></div></div>`);
+  afterRender();
+  $("#qz-m").value = QZ.mode;
+  $("#qz-m").onchange = e => { QZ.mode = e.target.value; $("#qz-t").hidden = QZ.mode!=="composer"; QZ.w = null; quizNext(); };
+  $("#qz-t").onchange = e => { QZ.t = e.target.value; QZ.w = null; quizNext(); };
+  $("#qz-start").onclick = quizNext;
+  if(QZ.w) quizRender();
+}
+addEventListener("hashchange", () => { if(location.hash!=="#/quiz") QZ.a.pause(); });
+
+/* ---------- year in review ---------- */
+function reviewView(y){
+  const years = [...new Set(Object.values(ST.works).filter(r => r.h).map(r => new Date(r.h).getFullYear()))].sort((a,b) => b-a);
+  const yr = y || years[0] || NOWY;
+  const inY = Object.entries(ST.works).filter(([id,r]) => byId[id] && r.s && r.h && new Date(r.h).getFullYear()===yr).map(([id,r]) => ({w: byId[id], r}));
+  const first = {};   // the year each genre was first opened
+  Object.entries(ST.works).forEach(([id,r]) => { const w = byId[id]; if(w && r.s && r.h){ const t = w.tradition; if(!first[t] || r.h < first[t]) first[t] = r.h; } });
+  const opened = Object.keys(first).filter(t => new Date(first[t]).getFullYear()===yr);
+  const cnt = f => { const o = {}; inY.forEach(x => { const k = f(x.w); if(k) o[k] = (o[k]||0) + 1; }); return Object.entries(o).sort((a,b) => b[1]-a[1]); };
+  const byT = cnt(w => w.tradition), byE = cnt(w => w.tradition==="classical" ? w.era : ""), byC = cnt(w => w.composer).slice(0,5);
+  const fav = Object.keys(TRADITIONS).map(t => inY.filter(x => x.w.tradition===t).sort((a,b) => (b.r.s*10 + b.r.r) - (a.r.s*10 + a.r.r))[0]).filter(x => x && (x.r.s>=3 || x.r.r>=4));
+  const plays = ST.log.filter(e => new Date(e.ts).getFullYear()===yr).length;
+  const li = (a, lab) => a.map(([k,n]) => `<li>${esc(lab(k))} <small style="color:var(--mut)">· ${n}</small></li>`).join("");
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Year in review</h1><span class="sub">from the date each work was first marked</span></div>
+  ${years.length>1 ? `<div class="sd-row ui">${years.map(v => `<a class="chip${v===yr ? " on" : ""}" href="#/review/${v}">${v}</a>`).join("")}</div>` : ""}
+  ${!inY.length ? `<p class="howto">Nothing marked in ${yr} yet. Every work you hear lands here.</p>` : `<div class="rv-card ui"><h2>${yr}</h2>
+    <div class="bignums"><div><b>${inY.length}</b><span>works heard</span></div><div><b>${inY.filter(x => x.r.s>=3).length}</b><span>loved</span></div><div><b>${byT.length}</b><span>genres</span></div><div><b>${new Set(inY.map(x => x.w.composer)).size}</b><span>composers &amp; artists</span></div>${plays ? `<div><b>${plays}</b><span>plays here (recent)</span></div>` : ""}</div>
+    ${opened.length ? `<p><b>New ground:</b> your first ${opened.map(t => TRADITIONS[t]).join(", ")}.</p>` : ""}
+    <div class="prog-grid"><div><h3>Genres</h3><ol>${li(byT, k => TRADITIONS[k])}</ol></div>${byE.length ? `<div><h3>Classical eras</h3><ol>${li(byE, k => (ERA[k]||{}).name)}</ol></div>` : ""}
+      <div><h3>Most heard</h3><ol>${li(byC, k => (comp[k]||{}).name)}</ol></div></div>
+    ${fav.length ? `<h3>Favourites</h3><div class="gallery">${fav.map(x => cardHTML(x.w, TRADITIONS[x.w.tradition] + (x.r.r ? " · " + "★".repeat(x.r.r) : ""))).join("")}</div>` : ""}
+    <div class="sd-row"><button class="obtn" id="rv-exp">⬇ Save as a page</button></div></div>`}`);
+  afterRender();
+  const ex = $("#rv-exp"); if(ex) ex.onclick = () => exportList(inY.sort((a,b) => a.r.h - b.r.h).map(x => x.w), "My " + yr + " in music — The Classical Journey");
+}
+
 /* ---------- piece of the day, weekly mix, loved-piece re-listens ---------- */
 const hashS = t => { let h = 0; for(const ch of t) h = (h*31 + ch.charCodeAt(0))|0; return Math.abs(h); };
 const today = () => new Date().toLocaleDateString("sv");   // YYYY-MM-DD, local
@@ -1376,6 +1521,7 @@ function composerView(id){
   <div class="tools ui" style="position:static;border:0">
     ${ws.length ? `<button class="gbtn" data-radio="${c.id}" data-only="1">⏵ Play all ${ws.length} works</button><button class="obtn" data-radio="${c.id}">⏵ Radio: journey onward from here</button>` : ""}
     ${e ? `<span class="chip" style="--dc:${e.color}">${esc(e.name)}</span>` : ""}
+    ${c.born ? `<a class="obtn" href="#/lives/${c.born + 35}" title="Everyone alive when ${esc(c.name)} was 35">Who else was alive ↗</a>` : ""}
     <a class="obtn" href="https://en.wikipedia.org/w/index.php?search=${enc(c.name)}&go=Go" target="_blank" rel="noopener">Wikipedia ↗</a>
   </div>
   <span class="lbl">Works, in order of composition</span>
@@ -1389,6 +1535,9 @@ function moreView(){
   app.innerHTML = shellHTML("more", `<div class="hero"><h1>More</h1></div><div class="mlist">
     ${row("#/gym","Gym mode","One screen, big buttons: play and mark progress between sets")}
     ${row("#/progress","Progress","What you have heard, studied and loved")}
+    ${row("#/quiz","Blind listening","Hear a clip, guess the composer, era or genre")}
+    ${row("#/lives","Who was alive","Pick a year: everyone living then, and their ages")}
+    ${row("#/review","Year in review","Your year in music: genres, favourites, new ground")}
     ${row("#/tree","Constellation","Every work as a star map of influence")}
     ${row("#/table","Table","Sort and search everything at once")}
     ${row("#/about","About","How it works, sync and backup")}</div>
@@ -2051,6 +2200,9 @@ function route(){
   else if(h==="#/about") aboutView();
   else if(h==="#/more") moreView();
   else if(h==="#/gym"){ journeyView(); openGym(); }
+  else if(h==="#/quiz") quizView();
+  else if((m = h.match(/^#\/lives(?:\/(\d+))?$/))) livesView(m[1] ? +m[1] : 0);
+  else if((m = h.match(/^#\/review(?:\/(\d+))?$/))) reviewView(m[1] ? +m[1] : 0);
   else journeyView();
   const back = lastHash!==h && SCROLL[h]!==undefined && (h==="#/" || h==="#/works" || h==="#/composers" || h==="#/theory");
   lastHash = h;
