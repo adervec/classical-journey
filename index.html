@@ -411,8 +411,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mw85lni2"</script>
-<script src="db.js?v=cj-mw85lni2"></script>
+<script>window.PROSEQ="?v=cj-mw8f8ik9"</script>
+<script src="db.js?v=cj-mw8f8ik9"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -503,7 +503,7 @@ if(!ST || ST.v !== 3){
   try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){}
 }
 function rec(id){ return ST.works[id] || {s:0,r:0,n:"",h:0,p:0}; }
-function save(){ ST.updated = Date.now(); try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){} queueSync(); bkQueue(); }
+function save(){ ST.updated = Date.now(); try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){} queueSync(); bkQueue(); cwQueue(); }
 function setRec(id, patch){
   const r = Object.assign({s:0,r:0,n:"",h:0,p:0}, ST.works[id], patch);
   if(r.s>0 && !r.h) r.h = Date.now();
@@ -899,7 +899,7 @@ function mergeRemote(remote){
   ST.updated = Date.now();
   try{ localStorage.setItem(SK, JSON.stringify(ST)); }catch(e){}
   if($("#gym").hidden) route(); else gymRender();   // the open view is now stale
-  queueSync();        // push the merged result back so the other device converges
+  cwQueue(); queueSync();        // push the merged result back so the other device converges
   return true;
 }
 /* ---------- Google Drive sync, phones included: Tachyread's shared client, private appDataFolder ---------- */
@@ -1055,9 +1055,90 @@ async function bkInit(){
   setSyncChip();
 }
 document.addEventListener("visibilitychange", () => {
-  if(document.hidden){ if(BK.timer) bkWrite(); if(syncState==="dirty") doSync(); }
+  if(document.hidden){ if(BK.timer) bkWrite(); if(CW.timer) cwWrite(); if(syncState==="dirty") doSync(); }
   else { syncPull(); gdPull(); }   // coming back is when another device is most likely to have written
 });
+
+/* ---------- Cowork folder: precomputed data for the morning / weekly brief ---------- */
+// Same shape as GymTracker315's: BRIEF.md to read first, brief.json for the numbers, both rewritten on every change.
+function briefData(){
+  const now = Date.now(), D = 864e5, ago = d => now - d*D, day = t => new Date(t).toLocaleDateString("sv");
+  const marked = Object.entries(ST.works).filter(([id,r]) => byId[id] && r.s>0).map(([id,r]) => ({w: byId[id], r}));
+  const row = x => ({id: x.w.id, title: x.w.title, by: cname(x.w), genre: TRADITIONS[x.w.tradition]||x.w.tradition, era: x.w.tradition==="classical" ? (ERA[x.w.era]||{}).name||"" : "", year: x.w.year||"", status: STATUS[x.r.s], stars: x.r.r||0, first: x.r.h ? day(x.r.h) : ""});
+  const inWin = (a, b) => marked.filter(x => x.r.h && x.r.h >= ago(a) && x.r.h < ago(b));
+  const plays = (a, b) => ST.log.filter(e => e.ts >= ago(a) && e.ts < ago(b)).length;
+  const tally = l => Object.entries(l.reduce((o,x) => (o[TRADITIONS[x.w.tradition]] = (o[TRADITIONS[x.w.tradition]]||0) + 1, o), {})).sort((a,b) => b[1]-a[1]);
+  const last = Math.max(0, ...marked.map(x => x.r.h||0), ...ST.log.map(e => e.ts));
+  const tp = byId[(ST.day||{})[day(now)]], ns = nextStop(), mix = ST.mix && ST.mix.wk===isoWeek() ? ST.mix.ids.filter(id => byId[id]) : [];
+  const w7 = inWin(7, 0), w30 = inWin(30, 0);
+  return {
+    generatedAt: new Date().toISOString(), progressUpdatedAt: ST.updated ? new Date(ST.updated).toISOString() : null,
+    lastActivity: last ? day(last) : null, daysSinceLastActivity: last ? Math.floor((now - last)/D) : null,
+    syncedFromPhone: GD.on, streakDays: streak(),
+    totals: {catalogue: DB.works.length, heard: marked.length, studied: marked.filter(x => x.r.s===2).length, loved: marked.filter(x => x.r.s>=3).length,
+      wantList: Object.keys(ST.works).filter(wants).length, lessons: Object.keys(ST.lessons||{}).length, listeningHours: Math.round((ST.sec||0)/360)/10,
+      genresOpened: new Set(marked.map(x => x.w.tradition)).size, quiz: ST.quiz ? ST.quiz.ok + "/" + ST.quiz.n : null},
+    last7: {heard: w7.length, loved: w7.filter(x => x.r.s>=3).length, plays: plays(7,0), genres: tally(w7)},
+    prior7: {heard: inWin(14,7).length, plays: plays(14,7)},
+    last30: {heard: w30.length, plays: plays(30,0), genres: tally(w30)},
+    today: tp ? {...row({w: tp, r: rec(tp.id)}), heard: isHeard(tp.id)} : null,
+    weekMix: mix.length ? {week: ST.mix.wk, size: mix.length, heard: mix.filter(isHeard).length} : null,
+    journeyNext: ns ? {composer: ns.name, unheardInJourney: journey.filter(w => !isHeard(w.id)).length, journeyLength: journey.length} : null,
+    relistensDue: dueRelistens().slice(0, 5).map(id => byId[id].title + " — " + cname(byId[id])),
+    recent: marked.filter(x => x.r.h).sort((a,b) => b.r.h - a.r.h).slice(0, 15).map(row)
+  };
+}
+function briefMD(d){
+  const t = d.totals, g = l => l.map(([k,n]) => k + " " + n).join(", ") || "none";
+  return `# The Classical Journey — morning brief data
+
+Generated ${d.generatedAt} · progress last changed ${d.progressUpdatedAt||"never"}${d.syncedFromPhone ? " (includes phone listening via Google Drive sync)" : " (this computer only — Google Drive sync is off, phone listening is missing)"}.
+
+Every number was computed by the app. Use them as given; \`brief.json\` has the same data as fields.
+
+## At a glance
+
+- **Last activity:** ${d.lastActivity ? d.lastActivity + " (" + d.daysSinceLastActivity + " days ago)" : "none yet"}${d.streakDays ? " · 🔥 " + d.streakDays + "-day streak" : ""}
+- **Last 7 days:** ${d.last7.heard} new works heard (${d.last7.loved} loved), ${d.last7.plays} plays — genres: ${g(d.last7.genres)} (prior 7 days: ${d.prior7.heard} new, ${d.prior7.plays} plays)
+- **Last 30 days:** ${d.last30.heard} new works, ${d.last30.plays} plays — ${g(d.last30.genres)}
+- **All time:** ${t.heard} of ${t.catalogue} works heard, ${t.loved} loved, ${t.studied} studied · ${t.genresOpened} of 12 genres opened · ${t.wantList} on the want list · ${t.lessons} theory lessons · ${t.listeningHours} h played in the app${t.quiz ? " · blind-quiz score " + t.quiz : ""}
+- **Today's piece:** ${d.today ? d.today.title + " — " + d.today.by + " (" + d.today.genre + ")" + (d.today.heard ? " ✓ heard" : " — not heard yet") : "not picked yet (picked when the app opens today)"}
+- **This week's mix:** ${d.weekMix ? d.weekMix.heard + " of " + d.weekMix.size + " heard (" + d.weekMix.week + ")" : "not built yet this week"}
+- **Classical journey:** next composer ${d.journeyNext ? d.journeyNext.composer + " · " + d.journeyNext.unheardInJourney + " of " + d.journeyNext.journeyLength + " stops left" : "—"}
+- **Loved pieces due a re-listen:** ${d.relistensDue.length ? d.relistensDue.join("; ") : "none"}
+
+## Recently heard (newest first)
+
+| First heard | Work | By | Genre | Status |
+|---|---|---|---|---|
+${d.recent.map(r => "| " + r.first + " | " + r.title + " | " + r.by + " | " + r.genre + (r.era ? " · " + r.era : "") + " | " + r.status + (r.stars ? " " + "★".repeat(r.stars) : "") + " |").join("\n") || "| — | nothing yet | | | |"}
+
+## Writing the brief
+
+- One line is plenty: what was heard this week, today's piece, and the next step (mix, journey stop or a re-listen).
+- If the last activity is old, say the habit has lapsed in one calm clause — never nag.
+- "Plays" counts only playback inside the app; works marked heard elsewhere count under "new works heard".
+- If this file's Generated date is more than a day old, the app hasn't been opened on this computer since; say the data is stale.
+`;
+}
+const CW = {h:null, on:false, timer:null};
+async function cwWrite(){
+  clearTimeout(CW.timer); CW.timer = null;
+  if(!CW.on || !CW.h) return;
+  try{
+    const d = briefData(), put = async (n, txt) => { const w = await (await CW.h.getFileHandle(n, {create:true})).createWritable(); await w.write(txt); await w.close(); };
+    await put("BRIEF.md", briefMD(d));
+    await put("brief.json", JSON.stringify({protocol:"classical-journey-cowork", protocolVersion:1, kind:"morning-brief", payload:d}, null, 1));
+  }catch(e){ CW.on = false; }   // permission lapsed; the tools dialog offers Resume
+}
+function cwQueue(){ if(CW.on && !CW.timer) CW.timer = setTimeout(cwWrite, 20000); }
+async function cwPick(){ try{ CW.h = await showDirectoryPicker({id:"cjcw", mode:"readwrite"}); await idb.set("cw", CW.h); CW.on = true; await cwWrite(); }catch(e){} bkStatus(); }
+async function cwResume(){ try{ CW.on = await CW.h.requestPermission({mode:"readwrite"})==="granted"; if(CW.on) await cwWrite(); }catch(e){} bkStatus(); }
+async function cwInit(){
+  if(!BK.supported) return;
+  try{ CW.h = await idb.get("cw"); if(CW.h && await CW.h.queryPermission({mode:"readwrite"})==="granted"){ CW.on = true; cwWrite(); } }catch(e){}
+}
+// ponytail: refreshed whenever this computer's app is open; a day it stays closed, the brief sees a stale Generated date
 
 /* ---------- tools dialog: sync, backup, export/import, reset ---------- */
 function toolsDialog(refresh){
@@ -1075,6 +1156,7 @@ function toolsDialog(refresh){
     <h3>Sync &amp; backup</h3>
     <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing leaves it unless you turn on sync below."}</p>
     ${gd}${bk ? `<h4>Sync folder (Drive for Desktop)</h4>${bk}` : ""}
+    ${BK.supported ? `<h4>Cowork folder — morning brief</h4><p class="sd-p">${!CW.h ? "Off. Choose <b>Documents\\Cowork\\Cowork Link Folders\\ClassicalJourney</b> and this computer keeps <b>BRIEF.md</b> + <b>brief.json</b> there — this week's listening, today's piece, the mix and journey progress — for the daily and weekly brief." : CW.on ? "On → writing BRIEF.md + brief.json to <b>" + esc(CW.h.name) + "</b> after every change." : "Paused — the browser needs permission for <b>" + esc(CW.h.name) + "</b> again."}</p><div class="sd-row">${CW.h && !CW.on ? '<button class="obtn" id="cw-resume">Resume</button>' : ""}<button class="obtn" id="cw-pick">${CW.h ? "Change folder" : "🗀 Choose Cowork folder"}</button>${CW.on ? '<button class="obtn" id="cw-now">Write now</button>' : ""}</div>` : ""}
     <h4>Listening history</h4><div class="sd-row"><button class="obtn" id="sd-hist">⇣ Import from Spotify, YouTube, Last.fm or ListenBrainz…</button></div>
     <h4>Files</h4>
     <div class="sd-row"><button class="obtn" id="sd-exp">⬇ Export progress</button><button class="obtn" id="sd-imp">⬆ Import progress</button><button class="obtn danger" id="sd-reset">Reset everything</button></div>
@@ -1086,7 +1168,7 @@ function toolsDialog(refresh){
   d.querySelector("#sd-close").onclick = () => d.remove();
   d.onclick = e => { if(e.target===d) d.remove(); };
   const on = (id, fn) => { const el = d.querySelector(id); if(el) el.onclick = fn; };
-  on("#gd-con", gdConnect); on("#gd-off", gdOff); on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume);
+  on("#gd-con", gdConnect); on("#gd-off", gdOff); on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume); on("#cw-pick", cwPick); on("#cw-resume", cwResume); on("#cw-now", cwWrite);
   on("#sd-hist", historyDialog); on("#sd-exp", exportState); on("#sd-imp", () => $("#impfile").click());
   on("#sd-reset", () => { if(confirm("Erase all listening progress, ratings, notes, lessons and history on this device?")){ ["cj-state","cm.v2","cm.heard","cm.lessons"].forEach(k => localStorage.removeItem(k)); location.reload(); } });
 }
@@ -2238,7 +2320,7 @@ try{
     localStorage.setItem(k, JSON.stringify(reg));
   }
 }catch(e){}
-bkInit();
+bkInit(); cwInit();
 gdInit();
 renderUQ();
 initCloud();
