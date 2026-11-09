@@ -412,8 +412,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mw8l6oyh"</script>
-<script src="db.js?v=cj-mw8l6oyh"></script>
+<script>window.PROSEQ="?v=cj-mw8lg7h4"</script>
+<script src="db.js?v=cj-mw8lg7h4"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -1615,7 +1615,7 @@ function composerView(id){
 /* ---------- Autoplay: a hands-free run through a journey, marking each piece as it plays ---------- */
 // Settings per device (cj-play). Rides the normal player: each piece is marked Heard when its recording starts;
 // "taste" mode moves on after N minutes so a long journey keeps moving.
-const PLAY0 = {j:"classical", st:"unheard", sig:"", order:"journey", pace:"whole", mins:5, last:""};
+const PLAY0 = {j:"classical", st:"unheard", sig:"", order:"journey", pace:"whole", mins:5, say:"notes", theory:true, last:""};
 let PS = (() => { try{ return Object.assign({}, PLAY0, JSON.parse(localStorage.getItem("cj-play")||"{}")); }catch(e){ return Object.assign({}, PLAY0); } })();
 const psave = () => { try{ localStorage.setItem("cj-play", JSON.stringify(PS)); }catch(e){} };
 function autoQueue(){
@@ -1628,7 +1628,49 @@ function autoQueue(){
 function startAuto(resume){
   const q = autoQueue(); if(!q.length) return;
   const i = resume ? Math.max(0, q.indexOf(PS.last)) : 0;
-  playQueue(q, i); P.auto = true; P.cap = PS.pace==="taste" ? PS.mins*60 : 0; PS.last = q[i]; psave();
+  if(SS && PS.say!=="off"){ SS.cancel(); SS.speak(new SpeechSynthesisUtterance("")); }
+  P.prevW = null; playQueue(q, i); P.auto = true; P.cap = PS.pace==="taste" ? PS.mins*60 : 0; PS.last = q[i]; psave();
+}
+// Spoken before each piece: what it is, who made it (when the composer changes), the notes, and the
+// next unread theory stop for that era and genre — which then counts as done.
+const SS = "speechSynthesis" in window ? speechSynthesis : null;
+function sentences(t){
+  const raw = t.match(/[^.!?…]+[.!?…]+["'”’)]*\s*|[^.!?…]+$/g) || [], out = [];
+  // keep "c. 1025", "St. Matthew", "J. S. Bach" in one piece; Chrome cuts off long utterances, so short pieces matter
+  for(const p of raw){ if(out.length && /(?:^|[\s(])(?:c|ca|fl|b|d|St|Op|No|op|no|vol|[A-Z])\.\s*$/.test(out[out.length-1])) out[out.length-1] += p; else out.push(p); }
+  return out.map(x => x.trim()).filter(Boolean);
+}
+function speak(parts, gen){
+  return new Promise(res => {
+    if(!SS || !parts.length) return res();
+    let k = 0;
+    const next = () => {
+      if(gen!==P.gen || k>=parts.length){ status(""); return res(); }
+      const txt = parts[k++], u = new SpeechSynthesisUtterance(txt);
+      const v = SS.getVoices().find(x => { try{ return x.name===localStorage.getItem("cj-voice"); }catch(e){ return false; } }); if(v){ u.voice = v; u.lang = v.lang; }
+      u.rate = PS.rate || 1;
+      const t = setTimeout(next, 4000 + txt.length*120);   // ponytail: some voices never fire onend; time out instead of hanging the queue
+      u.onend = u.onerror = () => { clearTimeout(t); next(); };
+      status("🗣 " + txt); SS.speak(u);
+    };
+    next();
+  });
+}
+function narration(w, theoryOnly){
+  const c = w.composer && comp[w.composer], prev = P.prevW, out = [];
+  const by = c ? c.name : (w.culture || "traditional");
+  if(PS.theory){
+    const l = DB.lessons.find(l => l.tradition===w.tradition && l.era===w.era && !(l.title in ST.lessons));
+    if(l){ out.push("Theory stop: " + l.title + ".", l.body); ST.lessons[l.title] = Date.now(); save(); }
+  }
+  if(theoryOnly) return out.flatMap(sentences);   // no recording to play: keep the lesson, skip the notes
+  if(PS.say==="full" && w.tradition==="classical" && ERA[w.era] && (!prev || prev.era!==w.era)) out.push("The " + ERA[w.era].name + " era, " + ERA[w.era].years + ".", ERA[w.era].intro);
+  if(PS.say!=="brief" && c && (!prev || prev.composer!==w.composer)) out.push(c.name + (c.life ? ", " + c.life.replace(/–/g, " to ") : "") + ".", c.bio);
+  out.push("Now: " + w.title + ", by " + by + (w.year ? ", " + w.year : "") + ".");
+  if(PS.say!=="brief") out.push(w.about);
+  if(PS.say==="full") out.push(w.context, w.enjoy);
+  P.prevW = w;
+  return out.filter(Boolean).flatMap(sentences);
 }
 function playView(){
   const q = autoQueue(), n = q.length, resumable = PS.last && byId[PS.last] && q.includes(PS.last) && q.indexOf(PS.last)>0;
@@ -1640,6 +1682,9 @@ function playView(){
     <fieldset><legend>Order</legend>${radio("order","journey","Journey order")}${radio("order","sig","Most significant first")}${radio("order","random","Shuffle")}</fieldset>
     <fieldset><legend>Pace</legend>${radio("pace","whole","Whole piece")}${radio("pace","taste","A taste of each:")} <label class="pk"><input type="range" min="1" max="20" id="pmins" value="${PS.mins}"> <span id="pmv">${PS.mins}</span> min</label>
       <p class="sd-p">Pieces with no free recording are skipped after 10 s and stay unheard.</p></fieldset>
+    <fieldset><legend>Narration — spoken before each piece</legend>${SS ? `${radio("say","off","Off")}${radio("say","brief","Just the title")}${radio("say","notes","Title, composer and the notes")}${radio("say","full","Everything: era, composer, notes, context, what to listen for")}<br>
+      <label class="pk"><input type="checkbox" id="pth"${PS.theory ? " checked" : ""}> Theory stops — read the next one for that era and genre, then mark it done</label><br>
+      <label class="pk">Voice <select id="pvoice"><option value="">Default</option></select></label><label class="pk">Speed <input type="range" min="0.7" max="1.6" step="0.1" id="prate" value="${PS.rate||1}"> <span id="prv">${PS.rate||1}</span>×</label>` : "This browser can't speak."}</fieldset>
     <div class="sd-row"><button class="gbtn" id="pgo"${n ? "" : " disabled"}>▶ Play ${n.toLocaleString()} works</button>${resumable ? `<button class="obtn" id="pres">Resume at “${esc(byId[PS.last].title)}”</button>` : ""}<a class="obtn" href="#/gym">⛶ Gym mode</a></div>
   </div>`);
   afterRender();
@@ -1647,6 +1692,15 @@ function playView(){
   const set = $(".play-set");
   set.onchange = e => { const t = e.target; if(t.id==="pj") PS.j = t.value; else if(t.type==="radio") PS[t.name] = t.value; psave(); playView(); };
   const sl = $("#pmins"); sl.oninput = () => { PS.mins = +sl.value; $("#pmv").textContent = sl.value; psave(); };
+  if(SS){
+    const vs = $("#pvoice"), fill = () => { const cur = (() => { try{ return localStorage.getItem("cj-voice")||""; }catch(e){ return ""; } })();
+      vs.innerHTML = '<option value="">Default</option>' + SS.getVoices().filter(v => /^en/i.test(v.lang)).map(v => `<option${v.name===cur ? " selected" : ""}>${esc(v.name)}</option>`).join(""); };
+    fill(); SS.onvoiceschanged = fill;
+    vs.onchange = e => { e.stopPropagation(); try{ localStorage.setItem("cj-voice", vs.value); }catch(err){} speak(["This is how I sound."], P.gen = (P.gen||0)+1); };
+    const pr = $("#prate"); pr.oninput = () => { PS.rate = +pr.value; $("#prv").textContent = pr.value; psave(); };
+    pr.onchange = e => e.stopPropagation();
+    $("#pth").onchange = e => { e.stopPropagation(); PS.theory = e.target.checked; psave(); };
+  }
   $("#pgo").onclick = () => startAuto(false);
   const r = $("#pres"); if(r) r.onclick = () => startAuto(true);
 }
@@ -2150,6 +2204,7 @@ async function loadWork(id){
   dockShow();
   clearTimeout(P.sk);   // a manual skip cancels the no-stream countdown
   P.cur = {w, itemTitle:""}; P.tracks = []; P.ti = -1; P.stopAfter = false; P.wsec = 0;
+  const gen = P.gen = (P.gen||0) + 1; if(SS) SS.cancel(); P.audio.pause();
   if(P.auto){ PS.last = id; psave(); }
   $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`;
   $("#d-sub").textContent = cname(w)+" · finding a recording…";
@@ -2158,6 +2213,9 @@ async function loadWork(id){
   $("#d-tracks").hidden = true; status("");
   try{
     const it = await resolveWork(w);
+    if(gen!==P.gen) return;   // skipped while it was being looked up
+    // a piece with no free stream still gets its theory stop, not its notes
+    if(P.auto && PS.say!=="off" && SS){ if(!proseReady(w)) await loadProse(w.pc).then(() => proseReady(w), () => {}); await speak(narration(w, !it), gen); if(gen!==P.gen) return; }
     if(!it){   // no free stream: offer a pop-up on YouTube / Spotify (needs the click — browsers block unprompted pop-ups)
       $("#d-sub").textContent = cname(w);
       const more = hasNext(), L = LINKS(w), st = $("#d-status");
