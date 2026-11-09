@@ -46,6 +46,7 @@ main{max-width:1180px;margin:0 auto;padding:1rem 1rem 4rem}
 .tools input[type=search],.tbar input[type=search]{font:inherit;font-family:'Segoe UI',system-ui,sans-serif;font-size:.85rem;background:var(--panel);color:var(--ink);border:1px solid var(--line2);border-radius:99px;padding:.35rem .8rem;min-width:9rem;flex:1 1 9rem;max-width:18rem}
 .chip{font-family:'Segoe UI',system-ui,sans-serif;font-size:.74rem;font-weight:500;border:1px solid var(--line2);border-radius:99px;padding:.22rem .7rem;color:var(--mut);background:var(--panel);text-decoration:none;display:inline-flex;align-items:center;gap:.35rem}
 .chip:hover{border-color:var(--gold);color:var(--ink)}
+.play-set fieldset{border:1px solid var(--line);border-radius:8px;margin:0 0 .8rem;padding:.5rem .8rem}.play-set legend{color:var(--gold);font-size:.8rem}.play-set .pk{display:inline-flex;gap:.3rem;align-items:center;margin:.2rem .9rem .2rem 0;font-size:.9rem}
 .chip.on{color:var(--bg);background:var(--gold);border-color:var(--gold)}
 select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .gbtn{background:var(--gold);color:#1a1508;border-radius:99px;font:600 .82rem 'Segoe UI',system-ui,sans-serif;padding:.45rem 1rem}
@@ -411,8 +412,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mw8f8ik9"</script>
-<script src="db.js?v=cj-mw8f8ik9"></script>
+<script>window.PROSEQ="?v=cj-mw8l6oyh"</script>
+<script src="db.js?v=cj-mw8l6oyh"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -1313,7 +1314,7 @@ function genreJourneyView(){
   const lessons = DB.lessons.filter(l => l.tradition===JT);
   const k = buckets.indexOf(cur), p = buckets[k-1], n = buckets[k+1];
   let inner = `<div class="hero"><h1>The ${esc(name)} journey</h1><span class="sub">${ws.length.toLocaleString()} works · ${nA} artists · ${lessons.length} theory stops</span></div>
-  <div class="tools ui" style="position:static;border:0;padding:0">${journeyPicker()}<button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button></div>
+  <div class="tools ui" style="position:static;border:0;padding:0">${journeyPicker()}<button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a></div>
   ${JQ ? "" : todayHTML()}
   <div id="jbar"><div class="pfill"><i style="width:${100*nW/(ws.length||1)}%"></i></div>
     <div id="jstats"><b>${nW}</b>/<b>${ws.length}</b> works heard · one ${cur<1900 ? "century" : "decade"} at a time</div>
@@ -1348,7 +1349,7 @@ function journeyView(){
   <div class="tools ui" style="position:static;border:0;padding:0">
     ${journeyPicker()}
     <input type="search" id="jq" placeholder="Search composers, works, countries…" value="${esc(JQ)}">
-    <button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button>
+    <button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a>
   </div>
   ${JQ ? "" : todayHTML()}
   <div id="jbar"><div class="pfill"><i style="width:${100*nW/journey.length}%"></i></div>
@@ -1443,7 +1444,7 @@ function worksView(){
     ${sel("fth","All themes",THEMES,F.th)}
     ${sel("fst","Any status",[["want","☆ Want to hear"],["unheard","Not heard"],["1","Heard +"],["2","Studied +"],["3","Loved"]],F.st)}
     ${sel("fsort","Chronological",[["sig","By significance"],["rating","By my rating"],["short","Shortest first"]],F.sort==="chrono" ? "" : F.sort)}
-  </div></div><div class="wacts ui"><button class="obtn" id="wsur" title="A random unheard work from this list">🎲 Surprise me</button><button class="obtn" id="wplay" title="Queue this list, in order">▶ Play these</button><button class="obtn" id="wexp" title="Save this list as a page with listening links">⬇ Export list</button></div><div class="gallery" id="wgal">`;
+  </div></div><div class="wacts ui"><button class="obtn" id="wsur" title="A random unheard work from this list">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a><button class="obtn" id="wplay" title="Queue this list, in order">▶ Play these</button><button class="obtn" id="wexp" title="Save this list as a page with listening links">⬇ Export list</button></div><div class="gallery" id="wgal">`;
   const matched = chrono.filter(match), items = [], cards = ws => ws.forEach(w => items.push({w}));
   if(!matched.length) inner += `<p class="empty">Nothing matches — clear a filter.</p>`;
   else if(F.sort==="sig"){
@@ -1611,11 +1612,51 @@ function composerView(id){
   app.innerHTML = shellHTML("composers", inner); afterRender();
 }
 
+/* ---------- Autoplay: a hands-free run through a journey, marking each piece as it plays ---------- */
+// Settings per device (cj-play). Rides the normal player: each piece is marked Heard when its recording starts;
+// "taste" mode moves on after N minutes so a long journey keeps moving.
+const PLAY0 = {j:"classical", st:"unheard", sig:"", order:"journey", pace:"whole", mins:5, last:""};
+let PS = (() => { try{ return Object.assign({}, PLAY0, JSON.parse(localStorage.getItem("cj-play")||"{}")); }catch(e){ return Object.assign({}, PLAY0); } })();
+const psave = () => { try{ localStorage.setItem("cj-play", JSON.stringify(PS)); }catch(e){} };
+function autoQueue(){
+  let ws = PS.j==="classical" ? journey : PS.j==="landmarks" ? chrono.filter(w => w.sig===3) : PS.j==="all" ? chrono : chrono.filter(w => w.tradition===PS.j);
+  ws = ws.filter(w => (PS.st==="all" || (PS.st==="unheard" ? !isHeard(w.id) : rec(w.id).s>=3)) && (!PS.sig || (w.sig||0) >= +PS.sig));
+  if(PS.order==="sig") ws = ws.slice().sort((a,b) => (b.sig||0)-(a.sig||0));
+  else if(PS.order==="random"){ ws = ws.slice(); for(let i = ws.length-1; i>0; i--){ const j = Math.random()*(i+1)|0; [ws[i],ws[j]] = [ws[j],ws[i]]; } }
+  return ws.map(w => w.id);
+}
+function startAuto(resume){
+  const q = autoQueue(); if(!q.length) return;
+  const i = resume ? Math.max(0, q.indexOf(PS.last)) : 0;
+  playQueue(q, i); P.auto = true; P.cap = PS.pace==="taste" ? PS.mins*60 : 0; PS.last = q[i]; psave();
+}
+function playView(){
+  const q = autoQueue(), n = q.length, resumable = PS.last && byId[PS.last] && q.includes(PS.last) && q.indexOf(PS.last)>0;
+  const radio = (k,v,t) => `<label class="pk"><input type="radio" name="${k}" value="${v}"${PS[k]===v ? " checked" : ""}> ${t}</label>`;
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Autoplay</h1><span class="sub">a hands-free run through a journey — every piece that plays is marked heard</span></div>
+  <div class="play-set ui">
+    <fieldset><legend>Journey</legend><select id="pj"><option value="classical">Classical journey (composer by composer)</option>${Object.entries(TRADITIONS).filter(([k]) => k!=="classical").map(([k,v]) => `<option value="${k}">${v} journey</option>`).join("")}<option value="all">All music, oldest first</option><option value="landmarks">Landmarks, every genre</option></select></fieldset>
+    <fieldset><legend>Which works</legend>${radio("st","unheard","Not heard yet")}${radio("st","loved","Loved — re-listen")}${radio("st","all","Everything")}<br>${radio("sig","","Any significance")}${radio("sig","2","◆◆ Major and up")}${radio("sig","3","◆◆◆ Landmarks only")}</fieldset>
+    <fieldset><legend>Order</legend>${radio("order","journey","Journey order")}${radio("order","sig","Most significant first")}${radio("order","random","Shuffle")}</fieldset>
+    <fieldset><legend>Pace</legend>${radio("pace","whole","Whole piece")}${radio("pace","taste","A taste of each:")} <label class="pk"><input type="range" min="1" max="20" id="pmins" value="${PS.mins}"> <span id="pmv">${PS.mins}</span> min</label>
+      <p class="sd-p">Pieces with no free recording are skipped after 10 s and stay unheard.</p></fieldset>
+    <div class="sd-row"><button class="gbtn" id="pgo"${n ? "" : " disabled"}>▶ Play ${n.toLocaleString()} works</button>${resumable ? `<button class="obtn" id="pres">Resume at “${esc(byId[PS.last].title)}”</button>` : ""}<a class="obtn" href="#/gym">⛶ Gym mode</a></div>
+  </div>`);
+  afterRender();
+  $("#pj").value = PS.j;
+  const set = $(".play-set");
+  set.onchange = e => { const t = e.target; if(t.id==="pj") PS.j = t.value; else if(t.type==="radio") PS[t.name] = t.value; psave(); playView(); };
+  const sl = $("#pmins"); sl.oninput = () => { PS.mins = +sl.value; $("#pmv").textContent = sl.value; psave(); };
+  $("#pgo").onclick = () => startAuto(false);
+  const r = $("#pres"); if(r) r.onclick = () => startAuto(true);
+}
+
 /* ---------- more (the phone tab bar's overflow) ---------- */
 function moreView(){
   const row = (h,t,d) => `<a class="mrow" href="${h}"><b>${t}</b><span>${d}</span></a>`;
   app.innerHTML = shellHTML("more", `<div class="hero"><h1>More</h1></div><div class="mlist">
     ${row("#/gym","Gym mode","One screen, big buttons: play and mark progress between sets")}
+    ${row("#/play","Autoplay","Hands-free through a journey, marking each piece as it plays")}
     ${row("#/progress","Progress","What you have heard, studied and loved")}
     ${row("#/quiz","Blind listening","Hear a clip, guess the composer, era or genre")}
     ${row("#/lives","Who was alive","Pick a year: everyone living then, and their ages")}
@@ -2108,7 +2149,8 @@ async function loadWork(id){
   const w = byId[id]; if(!w) return;
   dockShow();
   clearTimeout(P.sk);   // a manual skip cancels the no-stream countdown
-  P.cur = {w, itemTitle:""}; P.tracks = []; P.ti = -1; P.stopAfter = false;
+  P.cur = {w, itemTitle:""}; P.tracks = []; P.ti = -1; P.stopAfter = false; P.wsec = 0;
+  if(P.auto){ PS.last = id; psave(); }
   $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`;
   $("#d-sub").textContent = cname(w)+" · finding a recording…";
   $("#d-yt").href = LINKS(w)[0][1];
@@ -2137,7 +2179,7 @@ async function loadWork(id){
     loadTrack(bs>=0.4 ? bi : 0);
   }catch(e){ status("Couldn't reach the Internet Archive from here — use the links on the work's page to listen."); $("#d-sub").textContent = cname(w); }
 }
-function playQueue(list, start){ P.queue = list; P.qi = start; loadWork(P.queue[P.qi]); }
+function playQueue(list, start){ P.auto = false; P.cap = 0; P.queue = list; P.qi = start; loadWork(P.queue[P.qi]); }
 P.audio.addEventListener("playing", () => { clearTimeout(P.watch); status(""); $("#d-play").textContent = "⏸"; });
 P.audio.addEventListener("loadeddata", () => clearTimeout(P.watch));
 P.audio.addEventListener("pause", () => { $("#d-play").textContent = "▶"; gymRender(); });
@@ -2149,7 +2191,7 @@ let seeking = false;
 P.audio.addEventListener("timeupdate", () => {
   const t = P.audio.currentTime, d = P.audio.duration||1;
   $("#d-cur").textContent = fmt(t); if(!seeking) $("#d-seek").value = 1000*t/d;
-  if(!P.audio.paused && P.lt!=null){ const dd = t-P.lt; if(dd>0 && dd<2){ ST.sec += dd; P.dirty = true; } }
+  if(!P.audio.paused && P.lt!=null){ const dd = t-P.lt; if(dd>0 && dd<2){ ST.sec += dd; P.dirty = true; P.wsec += dd; if(P.cap && P.wsec >= P.cap){ P.wsec = -1e9; nextQueue(); } } }
   P.lt = t;
 });
 setInterval(() => { if(P.dirty){ save(); P.dirty = false; } }, 8000);
@@ -2182,6 +2224,7 @@ function gymStarts(){
   const c = nextStop(), ji = Math.max(0, journey.findIndex(w => w.composer===c.id));
   const dw = dailyPick(), out = [];
   if(dw) out.push(["Today's piece: " + dw.title, [dw.id]]);
+  const aq = autoQueue(); if(aq.length) out.push(["Autoplay" + (PS.last && aq.indexOf(PS.last)>0 ? " (resume)" : ""), aq, true]);
   out.push(["This week's mix", weeklyMix()]);
   out.push(["Classical journey, from " + c.name, un(journey.slice(ji))]);
   if(JT!=="classical") out.push([TRADITIONS[JT] + " journey", un(chrono.filter(w => w.tradition===JT))]);
@@ -2221,7 +2264,7 @@ $("#gym").addEventListener("click", e => {
   const w = P.cur && P.cur.w;
   if(b.id==="g-x") return closeGym();
   if(b.id==="g-sync") return toolsDialog();
-  if(b.dataset.gq){ playQueue(GSTARTS[+b.dataset.gq][1], 0); return; }
+  if(b.dataset.gq){ const g = GSTARTS[+b.dataset.gq]; if(g[2]) startAuto(true); else playQueue(g[1], 0); return; }
   if(b.dataset.gpop && w){ clearTimeout(P.sk); popListen(LINKS(w)[+b.dataset.gpop][1]); markHeard(w.id); gymRender(); return; }
   const g = b.dataset.g;
   if(g==="prev") prevTrack(); else if(g==="next") nextTrack(); else if(g==="skip") nextQueue();
@@ -2283,6 +2326,7 @@ function route(){
   else if(h==="#/more") moreView();
   else if(h==="#/gym"){ journeyView(); openGym(); }
   else if(h==="#/quiz") quizView();
+  else if(h==="#/play") playView();
   else if((m = h.match(/^#\/lives(?:\/(\d+))?$/))) livesView(m[1] ? +m[1] : 0);
   else if((m = h.match(/^#\/review(?:\/(\d+))?$/))) reviewView(m[1] ? +m[1] : 0);
   else journeyView();
