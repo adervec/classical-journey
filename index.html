@@ -36,6 +36,7 @@ nav.main a.on{color:var(--ink);border-bottom:2px solid var(--gold)}
 #sync{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.7rem;color:var(--mut);border:1px solid var(--line2);border-radius:99px;padding:.15rem .6rem;white-space:nowrap;cursor:pointer}
 #sync.busy{color:var(--gold);border-color:var(--gold)}
 #sync.err{color:var(--red);border-color:var(--red)}
+.gav{width:1.25rem;height:1.25rem;border-radius:99px;vertical-align:middle;margin:-.2rem .35rem -.1rem -.35rem;object-fit:cover}
 
 main{max-width:1180px;margin:0 auto;padding:1rem 1rem 4rem}
 .fade{animation:fade .25s ease}
@@ -414,8 +415,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mwa4r3ds"</script>
-<script src="db.js?v=cj-mwa4r3ds"></script>
+<script>window.PROSEQ="?v=cj-mwaoga86"</script>
+<script src="db.js?v=cj-mwaoga86"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -862,6 +863,8 @@ function setSyncChip(){
   else if(syncState==="err"){ el.textContent = "sync paused — tap"; el.className = "err"; }
   else if(syncState==="dirty"){ el.textContent = "unsaved" + where; }
   else el.textContent = "synced ✓" + where;
+  // the Google account picture shows whose Drive this is
+  if(GD.on && GD.pic){ const i = document.createElement("img"); i.className = "gav"; i.src = GD.pic; i.alt = ""; i.referrerPolicy = "no-referrer"; el.prepend(i); }
   const gs = $("#g-sync"); if(gs) gs.textContent = gymSync();
 }
 function queueSync(){
@@ -911,7 +914,7 @@ function mergeRemote(remote){
 const GD_CLIENT = "547617739897-br6dj2facmsc34qnkjb5u4dbfhju39pu.apps.googleusercontent.com";
 const GD_SCOPE = "openid email profile https://www.googleapis.com/auth/drive.appdata";   // identical to Tachyread's, so its grant is reused
 const GD = {ok: SITE && (location.origin==="https://adervec.github.io" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)),
-  on: localStorage.getItem("cj.gd")==="1", tok:"", exp:0, id:"", seen:0, err:"", email:"", busy:null};
+  on: localStorage.getItem("cj.gd")==="1", tok:"", exp:0, id:"", seen:0, err:"", email:"", pic: localStorage.getItem("cj.gpic")||"", busy:null};   // pic is remembered so it shows before the silent reconnect finishes
 if(!GD.ok) GD.on = false;
 let gisP = null;
 const loadGis = () => gisP || (gisP = new Promise((res, rej) => {
@@ -927,7 +930,7 @@ async function gdAuth(interactive){
   GD.busy = (async () => {
     await loadGis();
     try{ await gdToken(""); }catch(e){ if(!interactive) throw e; await gdToken("consent"); }
-    if(!GD.email) fetch("https://www.googleapis.com/oauth2/v3/userinfo", {headers:{Authorization:"Bearer "+GD.tok}}).then(r => r.json()).then(j => { GD.email = j.email||""; }).catch(()=>{});
+    if(!GD.email) fetch("https://www.googleapis.com/oauth2/v3/userinfo", {headers:{Authorization:"Bearer "+GD.tok}}).then(r => r.json()).then(j => { GD.email = j.email||""; GD.pic = j.picture||""; try{ GD.pic ? localStorage.setItem("cj.gpic", GD.pic) : localStorage.removeItem("cj.gpic"); }catch(e){} setSyncChip(); }).catch(()=>{});
   })().finally(() => { GD.busy = null; });
   return GD.busy;
 }
@@ -968,7 +971,7 @@ async function gdConnect(){   // from a tap, so Google may show its account / co
   catch(e){ GD.err = e.message; syncState = "err"; }
   bkStatus(); setSyncChip();
 }
-function gdOff(){ GD.on = false; GD.tok = ""; localStorage.removeItem("cj.gd"); bkStatus(); setSyncChip(); }
+function gdOff(){ GD.on = false; GD.tok = ""; GD.email = ""; GD.pic = ""; localStorage.removeItem("cj.gd"); localStorage.removeItem("cj.gpic"); bkStatus(); setSyncChip(); }
 async function gdInit(){ if(GD.on){ await gdPull(); startPoll(); } setSyncChip(); }
 // The silent token refresh opens a brief Google window, which browsers only allow right after a tap —
 // so refresh on the tap itself when the hour-long token is near its end.
@@ -1149,7 +1152,7 @@ function toolsDialog(refresh){
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
   let bk = "";
   const gd = !GD.ok ? "" : `<h4>Google Drive — phone and computer</h4>` + (GD.on
-    ? `<p class="sd-p">On${GD.email ? " as <b>" + esc(GD.email) + "</b>" : ""} — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.${GD.err ? ` <span style="color:var(--red)">Last attempt failed (${esc(GD.err)}) — tap Reconnect.</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Sync now</button><button class="obtn danger" id="gd-off">Turn off</button></div>`
+    ? `<p class="sd-p">${GD.pic ? `<img class="gav" style="margin-left:0" src="${esc(GD.pic)}" alt="" referrerpolicy="no-referrer">` : ""}On${GD.email ? " as <b>" + esc(GD.email) + "</b>" : ""} — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.${GD.err ? ` <span style="color:var(--red)">Last attempt failed (${esc(GD.err)}) — tap Reconnect.</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Sync now</button><button class="obtn danger" id="gd-off">Turn off</button></div>`
     : `<p class="sd-p">Off. Sign in with Google once on each device, phone included, and every mark syncs through a private app folder in your Drive.${GD.err ? ` <span style="color:var(--red)">(${esc(GD.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Connect Google Drive</button></div>`);
   if(!BK.supported) bk = GD.ok ? "" : `<p class="sd-p">Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.</p>`;
   else if(!BK.h) bk = `<p class="sd-p">Off. Choose a folder inside <b>Google Drive</b> (your Drive is mounted at <b>H:\My Drive</b>) and this page keeps <b>classical-journey-progress.json</b> there. Google Drive for Desktop moves that file between your computers, and each one merges what it finds, so nothing is ever overwritten. Timestamped snapshots are kept alongside it — newest ${BK.KEEP}, older deleted — so a bad merge or a browser-data clear is recoverable.</p><div class="sd-row"><button class="obtn" id="bk-pick">🗀 Choose sync folder</button></div>`;
