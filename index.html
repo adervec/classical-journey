@@ -416,8 +416,8 @@ body.gymon{overflow:hidden}
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mwb1pe2q"</script>
-<script src="db.js?v=cj-mwb1pe2q"></script>
+<script>window.PROSEQ="?v=cj-mwbi28fm"</script>
+<script src="db.js?v=cj-mwbi28fm"></script>
 <script>
 "use strict";
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
@@ -1905,6 +1905,21 @@ function mountCoach(){
           : (reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||JSON.stringify(reply,null,2);
         try{ localStorage.setItem("cj-coach-reply", t); }catch(e){}
         show(t);
+      },
+      // cowork v2 (house standard): review the reply before it replaces the current one; undo from the history
+      channels:{
+        coach:{
+          label:"Programme coach",
+          preview:(reply)=>{ const t=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||""; return [{ id:"reply", label:"Show this advice in The Classical Journey (replaces the current one)", detail:t.slice(0,400) }]; },
+          apply:(reply)=>{
+            let prev=""; try{ prev=localStorage.getItem("cj-coach-reply")||""; }catch(e){}
+            const t=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||JSON.stringify(reply,null,2);
+            try{ localStorage.setItem("cj-coach-reply", t); }catch(e){}
+            show(t);
+            return { summary:"new advice shown", undo:{ prev } };
+          },
+          undo:(d)=>{ try{ localStorage.setItem("cj-coach-reply", d.prev||""); }catch(e){} show(d.prev||""); },
+        },
       },
     });
   });
