@@ -8,6 +8,7 @@
 <title>The Classical Journey</title>
 <!-- house font: Atkinson Hyperlegible by default, reader-changeable on the You page -->
 <meta name="app-whatsnew" content="whatsnew.json">
+<meta name="app-locales" content="locales/">
 <script src="https://adervec.github.io/font.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
@@ -31,7 +32,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;pad
 header.top{position:sticky;top:0;z-index:20;background:rgba(23,19,16,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.55rem 1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .brand{font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-size:1.3rem;color:var(--ink);text-decoration:none;letter-spacing:.01em}
 .brand:hover{color:var(--gold)}
-nav.main{display:flex;gap:.85rem;margin-left:auto;align-items:center;flex-wrap:wrap}
+nav.main{display:flex;gap:.85rem;margin-inline-start:auto;align-items:center;flex-wrap:wrap}
 nav.main a{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.82rem;font-weight:500;color:var(--mut);text-decoration:none;padding-bottom:2px}
 nav.main a.on{color:var(--ink);border-bottom:2px solid var(--gold)}
 #sync{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.7rem;color:var(--mut);border:1px solid var(--line2);border-radius:99px;padding:.15rem .6rem;white-space:nowrap;cursor:pointer}
@@ -59,12 +60,12 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .obtn:hover{border-color:var(--gold)}
 .obtn.danger:hover{border-color:var(--red);color:var(--red)}
 .sigdots{color:var(--star);font-size:.62em;letter-spacing:.1em;vertical-align:.12em}
-.badge{margin-left:auto;font-size:.75rem;color:var(--gold);white-space:nowrap}
+.badge{margin-inline-start:auto;font-size:.75rem;color:var(--gold);white-space:nowrap}
 .badge .st{color:var(--star)}
 .empty{color:var(--mut);font-style:italic;margin:2rem 0;text-align:center;grid-column:1/-1}
 
 /* ---- journey ---- */
-.howto{color:var(--mut);font-size:.95rem;max-width:64ch;border-left:2px solid var(--line2);padding-left:14px;margin:.4rem 0 1rem}
+.howto{color:var(--mut);font-size:.95rem;max-width:64ch;border-inline-start:2px solid var(--line2);padding-inline-start:14px;margin:.4rem 0 1rem}
 .howto b{color:var(--ink)}
 #jbar{position:sticky;top:3.1rem;z-index:15;background:rgba(23,19,16,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin:0 -1rem;padding:0 1rem}
 .pfill{height:3px;background:var(--line);border-radius:2px;margin:8px 0 6px;overflow:hidden}
@@ -84,17 +85,17 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .era-prog{width:120px;height:5px;background:var(--line);border-radius:3px;overflow:hidden;align-self:center}
 .era-prog i{display:block;height:100%;background:var(--ac)}
 .ep-txt{font:11px var(--app-font,'Segoe UI',system-ui,sans-serif);color:var(--mut)}
-.era-intro{color:var(--mut);font-size:15.5px;max-width:66ch;border-left:2px solid var(--ac);padding-left:16px;margin:16px 0 6px}
+.era-intro{color:var(--mut);font-size:15.5px;max-width:66ch;border-inline-start:2px solid var(--ac);padding-inline-start:16px;margin:16px 0 6px}
 .lessons{margin-top:16px}
-.lesson{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:2px 16px 8px;margin:10px 0}
+.lesson{background:var(--panel2);border:1px solid var(--line);border-inline-start:3px solid var(--gold);border-radius:6px;padding:2px 16px 8px;margin:10px 0}
 .lesson summary{cursor:pointer;font:600 15px var(--app-font,'Segoe UI',system-ui,sans-serif);color:var(--gold);padding:10px 0}
-.lesson summary .lb{color:var(--mut);font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:11px;margin-right:8px}
+.lesson summary .lb{color:var(--mut);font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:11px;margin-inline-end:8px}
 .lesson.done summary::after{content:" ✓";color:var(--gold)}
 .lesson p{margin:4px 0 12px;font-size:15px}
 .l-hear{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .l-hear a{font:13px var(--app-font,'Segoe UI',system-ui,sans-serif);color:var(--gold);text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:4px 11px}
 .l-hear a:hover{border-color:var(--gold)}
-.composers{border-left:1px solid var(--line);padding-left:26px;display:flex;flex-direction:column;gap:24px;margin-top:24px}
+.composers{border-inline-start:1px solid var(--line);padding-inline-start:26px;display:flex;flex-direction:column;gap:24px;margin-top:24px}
 .comp{position:relative}
 .comp::before{content:"";position:absolute;left:-31px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--ac)}
 .comp.done::before{background:var(--gold);box-shadow:0 0 0 3px rgba(201,162,51,.25)}
@@ -104,7 +105,7 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .c-head h3 a{text-decoration:none}
 .comp.done h3::after{content:" ✓";color:var(--gold);font-size:16px}
 .c-meta{font:13px var(--app-font,'Segoe UI',system-ui,sans-serif);color:var(--mut)}
-.radio{border:1px solid var(--line2);border-radius:999px;color:var(--mut);font:11px var(--app-font,'Segoe UI',system-ui,sans-serif);padding:3px 10px;margin-left:auto}
+.radio{border:1px solid var(--line2);border-radius:999px;color:var(--mut);font:11px var(--app-font,'Segoe UI',system-ui,sans-serif);padding:3px 10px;margin-inline-start:auto}
 .radio:hover{border-color:var(--ac);color:var(--ink)}
 .c-bio{margin:6px 0 0;font-size:15px}
 .c-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -113,7 +114,7 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .work .pl{padding:5px 6px 5px 12px;color:var(--mut);font-size:11px}
 .work .pl:hover{color:var(--gold)}
 .work a{padding:5px 12px 5px 2px;text-decoration:none;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.work .mk{color:var(--gold);margin-right:6px;font-size:11px}
+.work .mk{color:var(--gold);margin-inline-end:6px;font-size:11px}
 .work.h1{border-color:var(--ac)}
 .work.h3{border-color:var(--star)}
 .work:hover{border-color:var(--gold)}
@@ -127,8 +128,8 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .gh{grid-column:1/-1;margin:1.4rem 0 .3rem;display:flex;align-items:baseline;gap:.8rem;border-bottom:1px solid var(--line);padding-bottom:.3rem}
 .gh h2{font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-weight:500;font-size:1.3rem;margin:0}
 .gh .range{color:var(--mut);font-size:.85rem;font-style:italic}
-.gh .cnt{margin-left:auto;font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.75rem;color:var(--mut);font-variant-numeric:tabular-nums}
-.card{display:block;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ec,var(--line2));border-radius:6px;padding:.6rem .75rem;color:var(--ink);text-decoration:none;box-shadow:0 1px 3px var(--shadow)}
+.gh .cnt{margin-inline-start:auto;font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.75rem;color:var(--mut);font-variant-numeric:tabular-nums}
+.card{display:block;background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--ec,var(--line2));border-radius:6px;padding:.6rem .75rem;color:var(--ink);text-decoration:none;box-shadow:0 1px 3px var(--shadow)}
 .card:hover{border-color:var(--gold);color:var(--ink)}
 .card .t{font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-style:italic;font-size:1.02rem;line-height:1.25}
 .card .a{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.72rem;color:var(--mut);margin-top:.3rem;display:flex;gap:.4rem;align-items:center}
@@ -166,19 +167,19 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .xgroup{margin:.9rem 0}
 .xgroup .lbl{display:block;margin-bottom:.4rem}
 .xrow{display:flex;gap:.6rem;flex-wrap:wrap}
-.xchip{display:flex;flex-direction:column;border:1px solid var(--line2);background:var(--panel);border-radius:6px;padding:.35rem .65rem;color:var(--ink);max-width:100%;text-decoration:none;border-left:3px solid var(--ec,var(--line2))}
+.xchip{display:flex;flex-direction:column;border:1px solid var(--line2);background:var(--panel);border-radius:6px;padding:.35rem .65rem;color:var(--ink);max-width:100%;text-decoration:none;border-inline-start:3px solid var(--ec,var(--line2))}
 .xchip:hover{border-color:var(--gold);color:var(--ink)}
 .xchip .xt{font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-style:italic;font-size:.9rem;line-height:1.2}
 .xchip .xa{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.68rem;color:var(--mut)}
 .pn{display:flex;justify-content:space-between;gap:1rem;max-width:72ch;margin:2rem auto 1rem;border-top:1px solid var(--line);padding-top:.8rem}
 .pn a{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.78rem;color:var(--mut);max-width:45%;text-decoration:none}
 .pn a b{display:block;font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-style:italic;font-weight:400;font-size:.95rem;color:var(--ink)}
-.pn a.next{text-align:right}
-.thinnote{max-width:72ch;margin:1rem auto;color:var(--mut);font-style:italic;border-left:2px solid var(--line2);padding-left:1rem}
+.pn a.next{text-align:end}
+.thinnote{max-width:72ch;margin:1rem auto;color:var(--mut);font-style:italic;border-inline-start:2px solid var(--line2);padding-inline-start:1rem}
 
 /* ---- composers ---- */
 .alist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;margin-top:1rem}
-.acard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ec,var(--line2));border-radius:6px;padding:.8rem .9rem;color:var(--ink);text-decoration:none}
+.acard{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--ec,var(--line2));border-radius:6px;padding:.8rem .9rem;color:var(--ink);text-decoration:none}
 .acard:hover{border-color:var(--gold);color:var(--ink)}
 .acard .an{font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-weight:500;font-size:1.1rem}
 .acard .al{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.72rem;color:var(--mut);margin-top:.1rem}
@@ -198,8 +199,8 @@ select.chip{appearance:auto;cursor:pointer;color:var(--ink)}
 .bignums div b{display:block;font-family:'Bodoni MT',Didot,'Playfair Display',Georgia,serif;font-size:2rem;font-weight:500;font-variant-numeric:tabular-nums}
 .bignums div span{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.72rem;color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
 .legend{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.72rem;color:var(--mut);margin-top:.8rem}
-.legend i{display:inline-block;width:.7rem;height:.7rem;border-radius:2px;vertical-align:-1px;margin-right:.3rem}
-.hist{margin:.3rem 0;padding-left:1.2rem;font-size:.92rem}
+.legend i{display:inline-block;width:.7rem;height:.7rem;border-radius:2px;vertical-align:-1px;margin-inline-end:.3rem}
+.hist{margin:.3rem 0;padding-inline-start:1.2rem;font-size:.92rem}
 .hist li{margin:.15rem 0}
 .hist a{text-decoration:none}
 .prose{max-width:38rem}
@@ -222,7 +223,7 @@ footer a{color:var(--mut)}
 .tbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.9rem 0}
 .tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
 table.grid{border-collapse:collapse;width:100%;font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.82rem}
-table.grid th{position:sticky;top:0;z-index:2;background:var(--panel2);text-align:left;padding:.5rem .6rem;font-weight:700;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);white-space:nowrap;cursor:pointer;border-bottom:1px solid var(--line)}
+table.grid th{position:sticky;top:0;z-index:2;background:var(--panel2);text-align:start;padding:.5rem .6rem;font-weight:700;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);white-space:nowrap;cursor:pointer;border-bottom:1px solid var(--line)}
 table.grid th:hover{color:var(--ink)}
 table.grid th .ar{opacity:.5;font-size:.7em}
 table.grid td{padding:.42rem .6rem;border-bottom:1px solid var(--line);vertical-align:top;max-width:15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -244,7 +245,7 @@ table.grid td.nw{white-space:nowrap;color:var(--mut)}
 .tctl input[type=search]{font:inherit;font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.8rem;padding:.35rem .7rem;border:1px solid var(--line2);border-radius:99px;background:var(--panel);color:var(--ink);width:12rem;box-shadow:0 2px 8px var(--shadow)}
 .tkey{position:absolute;bottom:.7rem;left:.7rem;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:.5rem .7rem;font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.7rem;color:var(--mut);line-height:1.7;box-shadow:0 2px 8px var(--shadow);z-index:3;max-width:min(20rem,60vw)}
 .tkey b{color:var(--ink)}
-.tkey i{display:inline-block;width:.6rem;height:.6rem;border-radius:99px;margin-right:.3rem;vertical-align:middle}
+.tkey i{display:inline-block;width:.6rem;height:.6rem;border-radius:99px;margin-inline-end:.3rem;vertical-align:middle}
 #ttip{position:absolute;z-index:4;pointer-events:none;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:.45rem .65rem;box-shadow:0 4px 16px var(--shadow);max-width:17rem;display:none}
 #ttip .tt{font-family:Georgia,serif;font-size:.9rem;line-height:1.3}
 #ttip .ts{font-family:var(--app-font,'Segoe UI',system-ui,sans-serif);font-size:.7rem;color:var(--mut);margin-top:.15rem}
@@ -270,15 +271,15 @@ table.grid td.nw{white-space:nowrap;color:var(--mut)}
 #d-status{max-width:1000px;margin:6px auto 0;color:var(--gold);font-size:12.5px}
 #d-tracks{max-width:1000px;margin:4px auto 0}
 #d-tracks summary{cursor:pointer;color:var(--mut);font-size:12px}
-#d-list{margin:6px 0 0;padding-left:22px;max-height:150px;overflow-y:auto}
+#d-list{margin:6px 0 0;padding-inline-start:22px;max-height:150px;overflow-y:auto}
 #d-list li{margin:2px 0;color:var(--mut);cursor:pointer;font-size:12.5px}
 #d-list li:hover{color:var(--ink)}
 #d-list li.on{color:var(--gold)}
 #d-upnext{max-width:1000px;margin:4px auto 0}
 #d-upnext summary{cursor:pointer;color:var(--mut);font-size:12px}
-#d-uq{margin:6px 0;padding-left:22px;max-height:150px;overflow-y:auto;font-size:12.5px}
+#d-uq{margin:6px 0;padding-inline-start:22px;max-height:150px;overflow-y:auto;font-size:12.5px}
 #d-uq a{text-decoration:none}
-.uq-x{color:var(--mut);font-size:11px;margin-left:4px}
+.uq-x{color:var(--mut);font-size:11px;margin-inline-start:4px}
 .uq-x:hover{color:var(--red)}
 
 /* ---- work actions, keys ---- */
@@ -331,7 +332,7 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:var(--app-fon
   #ftog{display:inline-flex}
   .tools select.chip{max-width:44vw}
   .era{margin-top:28px}
-  .composers{padding-left:18px}
+  .composers{padding-inline-start:18px}
   .comp::before{left:-23px}
   .c-bio{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
   .c-bio.open{display:block}
@@ -373,7 +374,7 @@ details.howto summary{cursor:pointer;color:var(--gold);font-family:var(--app-fon
 body.gymon{overflow:hidden}
 .g-top{display:flex;align-items:center;gap:10px}
 #g-x{font-size:22px;color:var(--ink);padding:8px 12px}
-.g-sync{flex:1;text-align:left;color:var(--mut);font-size:13px;padding:8px 0}
+.g-sync{flex:1;text-align:start;color:var(--mut);font-size:13px;padding:8px 0}
 .g-wake{color:var(--mut);font-size:13px;display:flex;gap:6px;align-items:center}
 .g-now{text-align:center;padding:6px 0}
 .g-t{font:600 1.45rem Georgia,serif;color:var(--ink);line-height:1.2}
@@ -399,27 +400,51 @@ body.gymon{overflow:hidden}
 <div id="app"></div>
 <div id="dock" hidden>
   <div class="d-main">
-    <button id="d-play" title="Play / pause">▶</button>
+    <button id="d-play" title="Play / pause" data-t-attr="title">▶</button>
     <div class="d-info"><div id="d-title">—</div><div id="d-sub">—</div></div>
-    <div class="d-ctrl"><button id="d-prev" title="Previous track">⏮</button><button id="d-next" title="Next track">⏭</button><button id="d-gym" title="Gym mode: big buttons, one screen">⛶</button></div>
+    <div class="d-ctrl"><button id="d-prev" title="Previous track" data-t-attr="title">⏮</button><button id="d-next" title="Next track" data-t-attr="title">⏭</button><button id="d-gym" title="Gym mode: big buttons, one screen" data-t-attr="title">⛶</button></div>
     <span id="d-cur">0:00</span>
-    <input id="d-seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
+    <input id="d-seek" type="range" min="0" max="1000" value="0" aria-label="Seek" data-t-attr="aria-label">
     <span id="d-dur">0:00</span>
-    <input id="d-vol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+    <input id="d-vol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume" data-t-attr="aria-label">
     <a id="d-yt" href="#" target="_blank" rel="noopener">YT ↗</a>
-    <button id="d-close" title="Close player">✕</button>
+    <button id="d-close" title="Close player" data-t-attr="title">✕</button>
   </div>
   <div id="d-status" hidden></div>
-  <details id="d-tracks" hidden><summary>Tracks in this recording</summary><ol id="d-list"></ol></details>
-  <details id="d-upnext" hidden><summary>Up next</summary><ol id="d-uq"></ol><button class="obtn" id="d-uqclear">Clear queue</button></details>
+  <details id="d-tracks" hidden><summary data-t>Tracks in this recording</summary><ol id="d-list"></ol></details>
+  <details id="d-upnext" hidden><summary data-t>Up next</summary><ol id="d-uq"></ol><button class="obtn" id="d-uqclear" data-t>Clear queue</button></details>
 </div>
 <div id="gym" class="ui" hidden></div>
 <input type="file" id="impfile" accept=".json" hidden>
 <script id="db" type="application/json"></script>
-<script>window.PROSEQ="?v=cj-mwbi28fm"</script>
-<script src="db.js?v=cj-mwbi28fm"></script>
+<script>window.PROSEQ="?v=cj-mwfv18ph"</script>
+<script src="db.js?v=cj-mwfv18ph"></script>
 <script>
 "use strict";
+// Languages (house standard 20): English is written straight into the code through t(); font.js loads the
+// dictionary from locales/. The fallbacks keep the page working where font.js cannot load (the claude.ai artifact, tests).
+const t = window.t || Object.assign((s, p) => String(s).replace(/\{(\w+)\}/g, (m, k) => p && k in p ? p[k] : m), {n: (one, other, n, p) => t(n===1 ? one : other, Object.assign({n}, p))});
+const FMT = (window.appFont && appFont.fmt) || (() => { const D = d => d instanceof Date ? d : new Date(d), I = (d, o) => new Intl.DateTimeFormat(undefined, o).format(D(d));
+  return {number: (n, o = {}) => new Intl.NumberFormat(undefined, {maximumFractionDigits: o.max ?? 2, minimumFractionDigits: o.min || 0}).format(n),
+    percent: (x, max = 0) => new Intl.NumberFormat(undefined, {style: "percent", maximumFractionDigits: max}).format(x),
+    date: (d, st = "medium") => I(d, {dateStyle: st}), time: d => I(d, {timeStyle: "short"}), dateTime: (d, st = "medium") => I(d, {dateStyle: st, timeStyle: "short"}),
+    custom: I, relative: d => I(d, {dateStyle: "medium"}), list: a => a.join(", "),
+    months: (w = "long") => Array.from({length: 12}, (_, i) => I(new Date(2026, i, 1), {month: w})), weekdays: (w = "short") => Array.from({length: 7}, (_, i) => I(new Date(2026, 0, 5 + i), {weekday: w}))}; })();
+// The label tables below are written in English and translated in place once the dictionary has loaded (localize, at boot).
+// EN keeps the English for what machines read (the Cowork brief, the coach request), for narration, and for search.
+// i18n-keys: Classical | Jazz | Blues & gospel | Folk | Country | Rock | Pop | Soul & funk | Hip-hop | Electronic | Global traditions | Screen & stage
+// i18n-keys: Symphony | Orchestral | Concerto | Chamber & solo | Keyboard | Opera | Ballet & stage | Choral & sacred | Song | Experimental | Album | Track
+// i18n-keys: Landmark | Major work | Notable | Landmark composer | Major composer | Notable composer | Not heard | Heard | Studied | Loved
+// i18n-keys: Medieval | Renaissance | Baroque | Romantic | Modern | Contemporary
+// i18n-keys: Germany & Austria | France & Low Countries | Italy | Britain & Ireland | Spain & Portugal | Russia | Central & Eastern Europe | Nordic & Baltic | Americas | Asia, Africa & Oceania
+// i18n-keys: faith & the sacred | the inner world | story & the stage | nature & landscape | love & desire | form & abstraction | dance & the body | war & protest | the city & modern life | death & memory | virtuosity & display | childhood & play | night & dream | nation & folk
+const EN = {};
+function localize(){
+  EN.T = {...TRADITIONS}; EN.G = {...GENRES}; EN.S = [...STATUS];
+  [TRADITIONS, GENRES, SIGL, SIGC].forEach(o => Object.keys(o).forEach(k => o[k] = t(o[k])));
+  STATUS.forEach((v, i) => STATUS[i] = t(v));
+  ERAS.forEach(e => { e.en = e.name; e.name = t(e.name); });
+}
 const DB = window.DBJSON || JSON.parse(document.getElementById("db").textContent);
 const ERAS = DB.eras;                       // {id,name,years,mark,color,intro}
 const ERA = {}; ERAS.forEach(e => ERA[e.id] = e);
@@ -457,7 +482,7 @@ const clean = s => norm(s).replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").tri
 const cname = w => w.composer && comp[w.composer] ? comp[w.composer].name : (w.culture || "");
 const lastName = c => c.name.split(" ").pop();
 const fmt = t => { t = Math.max(0, t|0); return (t/60|0) + ":" + String(t%60).padStart(2,"0"); };
-const fmtH = s => { const h = s/3600|0, m = (s%3600)/60|0; return h ? h+"h "+m+"m" : m+"m "+(s%60|0)+"s"; };
+const fmtH = s => { const h = s/3600|0, m = (s%3600)/60|0; return h ? t('{h}h {m}m', {h, m}) : t('{m}m {s}s', {m, s: s%60|0}); };
 const enc = encodeURIComponent;
 const q = w => cname(w) + " " + w.title;
 const LINKS = w => [
@@ -465,7 +490,7 @@ const LINKS = w => [
   ["Spotify", "https://open.spotify.com/search/" + enc(q(w))],
   ["Apple Music", "https://music.apple.com/search?term=" + enc(q(w))],
   ["Internet Archive", "https://archive.org/search?query=" + enc(q(w)) + "&and%5B%5D=mediatype%3A%22audio%22"],
-  ["Score (IMSLP)", "https://imslp.org/index.php?search=" + enc(q(w))],
+  [t('Score (IMSLP)'),"https://imslp.org/index.php?search=" + enc(q(w))],
   ["Wikipedia", "https://en.wikipedia.org/w/index.php?search=" + enc(w.wiki || q(w)) + "&go=Go"]
 ];
 
@@ -557,11 +582,11 @@ function livesView(y){
   const yr = LV.y, lo = yr - 90, hi = yr + 90, X = v => (100*(Math.max(lo, Math.min(hi, v)) - lo)/(hi - lo)).toFixed(2);
   const ppl = lives().filter(p => p.b <= yr && p.d >= yr && (LV.t==="all" || p.t===LV.t));
   const ws = chrono.filter(w => w.sortYear===yr && (LV.t==="all" || w.tradition===LV.t));
-  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Who was alive</h1><span class="sub">pick a year: everyone in the catalogue living then, and how old they were</span></div>
-  <div class="lv-ctl ui"><button class="obtn" data-ly="-10">−10</button><input type="range" id="lv-y" min="900" max="${NOWY}" value="${yr}" aria-label="Year"><button class="obtn" data-ly="10">+10</button><b id="lv-b">${yr}</b>
-    <select id="lv-t"><option value="all">All music</option>${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===LV.t ? " selected" : ""}>${v}</option>`).join("")}</select></div>
-  <p class="sub ui">${ppl.length} alive in ${yr}${ws.length ? " · written or released that year: " + ws.slice(0,6).map(w => `<a href="#/w/${w.id}">${esc(w.title)}</a>`).join(", ") + (ws.length>6 ? " …" : "") : ""}</p>
-  <div class="ui">${ppl.slice(0,150).map(p => `<div class="lv-row"><a href="#/c/${p.c.id}" title="${esc(p.c.life)}">${esc(p.c.name)}</a><div class="lv-bar" style="--ac:${(ERA[p.c.era]||{}).color||"var(--gold)"}"><i style="left:${X(p.b)}%;right:${100 - X(p.d)}%"></i><em style="left:50%"></em><span>${yr - p.b}</span></div></div>`).join("")}${ppl.length>150 ? `<p class="sub">…and ${ppl.length-150} more — narrow the genre.</p>` : ""}</div>`);
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>${t('Who was alive')}</h1><span class="sub">${t('pick a year: everyone in the catalogue living then, and how old they were')}</span></div>
+  <div class="lv-ctl ui"><button class="obtn" data-ly="-10">−10</button><input type="range" id="lv-y" min="900" max="${NOWY}" value="${yr}" aria-label="${esc(t('Year'))}"><button class="obtn" data-ly="10">+10</button><b id="lv-b">${yr}</b>
+    <select id="lv-t"><option value="all">${t('All music')}</option>${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===LV.t ? " selected" : ""}>${v}</option>`).join("")}</select></div>
+  <p class="sub ui">${t.n('{n} alive in {year}', '{n} alive in {year}', ppl.length, {year: yr})}${ws.length ? " · " + t('written or released that year: {works}', {works: ws.slice(0,6).map(w => `<a href="#/w/${w.id}">${esc(w.title)}</a>`).join(", ") + (ws.length>6 ? " …" : "")}) : ""}</p>
+  <div class="ui">${ppl.slice(0,150).map(p => `<div class="lv-row"><a href="#/c/${p.c.id}" title="${esc(p.c.life)}">${esc(p.c.name)}</a><div class="lv-bar" style="--ac:${(ERA[p.c.era]||{}).color||"var(--gold)"}"><i style="left:${X(p.b)}%;right:${100 - X(p.d)}%"></i><em style="left:50%"></em><span>${yr - p.b}</span></div></div>`).join("")}${ppl.length>150 ? `<p class="sub">${t('…and {n} more — narrow the genre.', {n: ppl.length-150})}</p>` : ""}</div>`);
   afterRender();
   const go = v => { LV.y = v; history.replaceState(null, "", "#/lives/" + v); livesView(); };
   const r = $("#lv-y"); r.oninput = () => { $("#lv-b").textContent = r.value; }; r.onchange = () => go(+r.value);
@@ -573,7 +598,7 @@ function livesView(y){
 // A free stream from a random point, title hidden; guess the composer, the era or the genre.
 const QZ = {mode: "composer", t: "classical", a: new Audio(), w: null, opts: [], done: false, busy: false};
 QZ.a.preload = "none";
-["play","pause"].forEach(ev => QZ.a.addEventListener(ev, () => { const b = $("#qz-pp"); if(b) b.textContent = QZ.a.paused ? "▶ Play" : "⏸ Pause"; }));
+["play","pause"].forEach(ev => QZ.a.addEventListener(ev, () => { const b = $("#qz-pp"); if(b) b.textContent = QZ.a.paused ? t('▶ Play') : t('⏸ Pause'); }));
 const shuf = a => { for(let i = a.length-1; i>0; i--){ const j = Math.random()*(i+1)|0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 function quizAnswer(w){ return QZ.mode==="era" ? w.era : QZ.mode==="genre" ? w.tradition : w.composer; }
 const quizLabel = v => QZ.mode==="era" ? (ERA[v]||{}).name : QZ.mode==="genre" ? TRADITIONS[v] : (comp[v]||{}).name;
@@ -585,7 +610,7 @@ function quizOptions(w){
 }
 async function quizNext(){
   if(QZ.busy) return; QZ.busy = true; QZ.done = false; QZ.a.pause();
-  const box = $("#qz-box"); if(box) box.innerHTML = `<p class="sub">Finding a recording…</p>`;
+  const box = $("#qz-box"); if(box) box.innerHTML = `<p class="sub">${t('Finding a recording…')}</p>`;
   const scope = chrono.filter(w => (QZ.mode==="genre" || w.tradition===(QZ.mode==="era" ? "classical" : QZ.t)) && (w.sig||0)>=2 && w.composer);
   const known = scope.filter(w => IACACHE[w.id]);   // works already found on the Archive come up first: faster
   for(let tries = 0; tries<6; tries++){
@@ -603,17 +628,17 @@ async function quizNext(){
       QZ.busy = false; quizRender(); return;
     }catch(e){}
   }
-  QZ.busy = false; if(box) box.innerHTML = `<p class="sub">Couldn't find a free recording just now. <button class="obtn" id="qz-go">Try again</button></p>`; const g = $("#qz-go"); if(g) g.onclick = quizNext;
+  QZ.busy = false; if(box) box.innerHTML = `<p class="sub">${t("Couldn't find a free recording just now.")} <button class="obtn" id="qz-go">${t('Try again')}</button></p>`; const g = $("#qz-go"); if(g) g.onclick = quizNext;
 }
 function quizRender(){
   const box = $("#qz-box"); if(!box || !QZ.w) return;
   const w = QZ.w, right = quizAnswer(w), q = ST.quiz || {n:0, ok:0};
-  box.innerHTML = `<p class="sub">${QZ.mode==="era" ? "Which era?" : QZ.mode==="genre" ? "Which genre?" : "Who wrote or made this?"}</p>
-    <div class="sd-row" style="justify-content:center"><button class="obtn" id="qz-pp">${QZ.a.paused ? "▶ Play" : "⏸ Pause"}</button><button class="obtn" id="qz-jump">↷ Another spot</button></div>
+  box.innerHTML = `<p class="sub">${QZ.mode==="era" ? t('Which era?') : QZ.mode==="genre" ? t('Which genre?') : t('Who wrote or made this?')}</p>
+    <div class="sd-row" style="justify-content:center"><button class="obtn" id="qz-pp">${QZ.a.paused ? t('▶ Play') : t('⏸ Pause')}</button><button class="obtn" id="qz-jump">${t('↷ Another spot')}</button></div>
     <div class="q-opts">${QZ.opts.map(v => `<button data-qa="${esc(v)}" class="${QZ.done ? (v===right ? "ok" : v===QZ.pick ? "bad" : "") : ""}">${esc(quizLabel(v)||v)}</button>`).join("")}</div>
-    ${QZ.done ? `<div class="q-ans">${QZ.pick===right ? "✓ Right" : "✗ Not quite"} — <a href="#/w/${w.id}">${esc(w.title)}</a></div><p class="sub">${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""} · ${esc((ERA[w.era]||{}).name||"")} · ${esc(TRADITIONS[w.tradition]||"")}</p>
-      <div class="sd-row" style="justify-content:center"><button class="gbtn" id="qz-next">Next ⏭</button><button class="obtn" data-play="${w.id}">▶ Hear it all</button><button class="obtn" id="qz-want">${rec(w.id).w ? "★ On your list" : "☆ Want to hear"}</button></div>` : ""}
-    <p class="sub">Score: ${q.ok}/${q.n}${q.n ? " · " + Math.round(100*q.ok/q.n) + "%" : ""}</p>`;
+    ${QZ.done ? `<div class="q-ans">${QZ.pick===right ? t('✓ Right') : t('✗ Not quite')} —<a href="#/w/${w.id}">${esc(w.title)}</a></div><p class="sub">${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""} · ${esc((ERA[w.era]||{}).name||"")} · ${esc(TRADITIONS[w.tradition]||"")}</p>
+      <div class="sd-row" style="justify-content:center"><button class="gbtn" id="qz-next">${t('Next ⏭')}</button><button class="obtn" data-play="${w.id}">${t('▶ Hear it all')}</button><button class="obtn" id="qz-want">${rec(w.id).w ? t('★ On your list') : t('☆ Want to hear')}</button></div>` : ""}
+    <p class="sub">${t('Score: {ok}/{n}', {ok: q.ok, n: q.n})}${q.n ? " · " + FMT.percent(q.ok/q.n) : ""}</p>`;
   box.querySelector("#qz-pp").onclick = () => { QZ.a.paused ? QZ.a.play().catch(()=>{}) : QZ.a.pause(); };
   box.querySelector("#qz-jump").onclick = () => { if(QZ.a.duration) QZ.a.currentTime = QZ.a.duration * Math.random() * .85; };
   box.querySelectorAll("[data-qa]").forEach(b => b.onclick = () => { if(QZ.done) return;
@@ -622,11 +647,11 @@ function quizRender(){
   const wt = box.querySelector("#qz-want"); if(wt) wt.onclick = () => { toggleWant(w.id); quizRender(); };
 }
 function quizView(){
-  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Blind listening</h1><span class="sub">a free recording from somewhere in the middle, title hidden: guess, then see what it was</span></div>
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>${t('Blind listening')}</h1><span class="sub">${t('a free recording from somewhere in the middle, title hidden: guess, then see what it was')}</span></div>
   <div class="qz ui"><div class="sd-row" style="justify-content:center">
-    <select id="qz-m"><option value="composer">Guess the composer / artist</option><option value="era">Guess the era (classical)</option><option value="genre">Guess the genre (all music)</option></select>
+    <select id="qz-m"><option value="composer">${t('Guess the composer / artist')}</option><option value="era">${t('Guess the era (classical)')}</option><option value="genre">${t('Guess the genre (all music)')}</option></select>
     <select id="qz-t"${QZ.mode==="composer" ? "" : " hidden"}>${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===QZ.t ? " selected" : ""}>${v}</option>`).join("")}</select></div>
-  <div id="qz-box"><button class="gbtn" id="qz-start" style="margin-top:1rem">▶ Start</button></div></div>`);
+  <div id="qz-box"><button class="gbtn" id="qz-start" style="margin-top:1rem">${t('▶ Start')}</button></div></div>`);
   afterRender();
   $("#qz-m").value = QZ.mode;
   $("#qz-m").onchange = e => { QZ.mode = e.target.value; $("#qz-t").hidden = QZ.mode!=="composer"; QZ.w = null; quizNext(); };
@@ -649,17 +674,17 @@ function reviewView(y){
   const fav = Object.keys(TRADITIONS).map(t => inY.filter(x => x.w.tradition===t).sort((a,b) => (b.r.s*10 + b.r.r) - (a.r.s*10 + a.r.r))[0]).filter(x => x && (x.r.s>=3 || x.r.r>=4));
   const plays = ST.log.filter(e => new Date(e.ts).getFullYear()===yr).length;
   const li = (a, lab) => a.map(([k,n]) => `<li>${esc(lab(k))} <small style="color:var(--mut)">· ${n}</small></li>`).join("");
-  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Year in review</h1><span class="sub">from the date each work was first marked</span></div>
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>${t('Year in review')}</h1><span class="sub">${t('from the date each work was first marked')}</span></div>
   ${years.length>1 ? `<div class="sd-row ui">${years.map(v => `<a class="chip${v===yr ? " on" : ""}" href="#/review/${v}">${v}</a>`).join("")}</div>` : ""}
-  ${!inY.length ? `<p class="howto">Nothing marked in ${yr} yet. Every work you hear lands here.</p>` : `<div class="rv-card ui"><h2>${yr}</h2>
-    <div class="bignums"><div><b>${inY.length}</b><span>works heard</span></div><div><b>${inY.filter(x => x.r.s>=3).length}</b><span>loved</span></div><div><b>${byT.length}</b><span>genres</span></div><div><b>${new Set(inY.map(x => x.w.composer)).size}</b><span>composers &amp; artists</span></div>${plays ? `<div><b>${plays}</b><span>plays here (recent)</span></div>` : ""}</div>
-    ${opened.length ? `<p><b>New ground:</b> your first ${opened.map(t => TRADITIONS[t]).join(", ")}.</p>` : ""}
-    <div class="prog-grid"><div><h3>Genres</h3><ol>${li(byT, k => TRADITIONS[k])}</ol></div>${byE.length ? `<div><h3>Classical eras</h3><ol>${li(byE, k => (ERA[k]||{}).name)}</ol></div>` : ""}
-      <div><h3>Most heard</h3><ol>${li(byC, k => (comp[k]||{}).name)}</ol></div></div>
-    ${fav.length ? `<h3>Favourites</h3><div class="gallery">${fav.map(x => cardHTML(x.w, TRADITIONS[x.w.tradition] + (x.r.r ? " · " + "★".repeat(x.r.r) : ""))).join("")}</div>` : ""}
-    <div class="sd-row"><button class="obtn" id="rv-exp">⬇ Save as a page</button></div></div>`}`);
+  ${!inY.length ? `<p class="howto">${t('Nothing marked in {year} yet. Every work you hear lands here.', {year: yr})}</p>` : `<div class="rv-card ui"><h2>${yr}</h2>
+    <div class="bignums"><div><b>${inY.length}</b><span>${t('works heard')}</span></div><div><b>${inY.filter(x => x.r.s>=3).length}</b><span>${t('loved')}</span></div><div><b>${byT.length}</b><span>${t('genres')}</span></div><div><b>${new Set(inY.map(x => x.w.composer)).size}</b><span>${esc(t('composers & artists'))}</span></div>${plays ? `<div><b>${plays}</b><span>${t('plays here (recent)')}</span></div>` : ""}</div>
+    ${opened.length ? `<p><b>${t('New ground:')}</b> ${t('your first {genres}.', {genres: FMT.list(opened.map(k => TRADITIONS[k]))})}</p>` : ""}
+    <div class="prog-grid"><div><h3>${t('Genres')}</h3><ol>${li(byT, k => TRADITIONS[k])}</ol></div>${byE.length ? `<div><h3>${t('Classical eras')}</h3><ol>${li(byE, k => (ERA[k]||{}).name)}</ol></div>` : ""}
+      <div><h3>${t('Most heard')}</h3><ol>${li(byC, k => (comp[k]||{}).name)}</ol></div></div>
+    ${fav.length ? `<h3>${t('Favourites')}</h3><div class="gallery">${fav.map(x => cardHTML(x.w, TRADITIONS[x.w.tradition] + (x.r.r ? " · " + "★".repeat(x.r.r) : ""))).join("")}</div>` : ""}
+    <div class="sd-row"><button class="obtn" id="rv-exp">${t('⬇ Save as a page')}</button></div></div>`}`);
   afterRender();
-  const ex = $("#rv-exp"); if(ex) ex.onclick = () => exportList(inY.sort((a,b) => a.r.h - b.r.h).map(x => x.w), "My " + yr + " in music — The Classical Journey");
+  const ex = $("#rv-exp"); if(ex) ex.onclick = () => exportList(inY.sort((a,b) => a.r.h - b.r.h).map(x => x.w), t('My {year} in music — The Classical Journey', {year: yr}));
 }
 
 /* ---------- piece of the day, weekly mix, loved-piece re-listens ---------- */
@@ -684,9 +709,9 @@ function dailyPick(){
 function todayHTML(){
   const w = dailyPick(); if(!w) return "";
   const done = isHeard(w.id), n = streak();
-  return `<div class="today ui"><span class="lbl" style="margin:0">Today's piece${n ? " · 🔥 " + n + "-day streak" : ""}</span>
-    <div class="t-w"><a href="#/w/${w.id}">${esc(w.title)}</a><span>${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""} · ${esc(TRADITIONS[w.tradition]||"")}${done ? " · ✓ heard" : ""}</span></div>
-    <button class="gbtn" data-play="${w.id}">▶ Play</button></div>`;
+  return `<div class="today ui"><span class="lbl" style="margin:0">${t("Today's piece")}${n ? " · " + t.n('🔥 {n}-day streak', '🔥 {n}-day streak', n) : ""}</span>
+    <div class="t-w"><a href="#/w/${w.id}">${esc(w.title)}</a><span>${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""} · ${esc(TRADITIONS[w.tradition]||"")}${done ? " · " + t('✓ heard') : ""}</span></div>
+    <button class="gbtn" data-play="${w.id}">${t('▶ Play')}</button></div>`;
 }
 function lastPlayed(id){ for(let i = ST.log.length-1; i>=0; i--) if(ST.log[i].id===id) return ST.log[i].ts; return rec(id).h || 0; }
 // Loved pieces come back after 1 week, then a month, then every 3 months: familiar, not heard once
@@ -710,9 +735,9 @@ function weeklyMix(){
 function mixHTML(){
   const ids = weeklyMix(); if(!ids.length) return "";
   const due = new Set(dueRelistens());
-  return `<div style="margin-top:1.2rem"><span class="lbl">This week's mix · ${ids.length} · new every Monday</span>
-    <div class="tools ui" style="position:static;border:0;padding:.3rem 0"><button class="gbtn" data-playlist="${ids.join(",")}">▶ Play the mix</button></div>
-    <div class="gallery" style="margin-top:.4rem">${ids.map(id => cardHTML(byId[id], due.has(id) ? "↻ due for a re-listen" : cname(byId[id]))).join("")}</div></div>`;
+  return `<div style="margin-top:1.2rem"><span class="lbl">${t("This week's mix · {n} · new every Monday", {n: ids.length})}</span>
+    <div class="tools ui" style="position:static;border:0;padding:.3rem 0"><button class="gbtn" data-playlist="${ids.join(",")}">${t('▶ Play the mix')}</button></div>
+    <div class="gallery" style="margin-top:.4rem">${ids.map(id => cardHTML(byId[id], due.has(id) ? t('↻ due for a re-listen') : cname(byId[id]))).join("")}</div></div>`;
 }
 
 /* ---------- listening history: mark what you already heard on Spotify / YouTube / Last.fm / ListenBrainz ---------- */
@@ -765,10 +790,10 @@ async function fetchListenBrainz(user, msg){
   const out = []; let max = 0;
   for(let p = 0; p<60; p++){
     const r = await fetch("https://api.listenbrainz.org/1/user/" + encodeURIComponent(user) + "/listens?count=1000" + (max ? "&max_ts=" + max : ""));
-    if(!r.ok) throw new Error("ListenBrainz said " + r.status + (r.status===404 ? " — check the username" : ""));
+    if(!r.ok) throw new Error(r.status===404 ? t("ListenBrainz said {status} — check the username", {status: r.status}) : t("ListenBrainz said {status}", {status: r.status}));
     const ls = ((await r.json()).payload || {}).listens || []; if(!ls.length) break;
     ls.forEach(l => { const m = l.track_metadata||{}; out.push({a:m.artist_name, t:m.track_name, b:m.release_name, ts:l.listened_at*1000}); });
-    max = ls[ls.length-1].listened_at; msg(out.length.toLocaleString() + " listens read…");
+    max = ls[ls.length-1].listened_at; msg(t.n("{n} listen read…", "{n} listens read…", out.length));
   }
   return out;
 }
@@ -779,7 +804,7 @@ async function fetchLastfm(user, key, msg){
     const j = await r.json(); if(j.error) throw new Error("Last.fm: " + j.message);
     pages = +((j.recenttracks||{})["@attr"]||{}).totalPages || 1;
     for(const t of (j.recenttracks||{}).track||[]) if(t.date) out.push({a:(t.artist||{})["#text"], t:t.name, b:(t.album||{})["#text"], ts:t.date.uts*1000});
-    msg(out.length.toLocaleString() + " scrobbles read…");
+    msg(t.n("{n} scrobble read…", "{n} scrobbles read…", out.length));
   }
   return out;
 }
@@ -787,37 +812,37 @@ function historyDialog(){
   const old = $("#dlg"); if(old) old.remove();
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
   let lf = {}; try{ lf = JSON.parse(localStorage.getItem("cj.hist")||"{}"); }catch(e){}
-  d.innerHTML = `<div class="sd-card"><h3>Import listening history</h3>
-    <p class="sd-p">Marks as <b>Heard</b> everything in the catalogue you have already played elsewhere. You see the matches before anything is marked.</p>
-    <h4>Spotify or YouTube files</h4>
-    <p class="sd-p">Spotify: Account → Privacy → <i>Download your data</i> (extended streaming history), then pick the <b>Streaming_History_Audio_*.json</b> files. YouTube: Google Takeout → YouTube → history as JSON, then pick <b>watch-history.json</b>.</p>
-    <div class="sd-row"><button class="obtn" id="hi-files">Choose files…</button><input type="file" id="hi-in" accept=".json" multiple hidden></div>
-    <h4>ListenBrainz</h4><div class="sd-row"><input type="text" id="hi-lb" placeholder="username" value="${esc(lf.lb||"")}"><button class="obtn" id="hi-lbgo">Fetch</button></div>
-    <h4>Last.fm</h4><p class="sd-p">Needs a free API key from last.fm/api/account/create; it stays on this device.</p>
-    <div class="sd-row"><input type="text" id="hi-lfu" placeholder="username" value="${esc(lf.u||"")}"><input type="text" id="hi-lfk" placeholder="API key" value="${esc(lf.k||"")}"><button class="obtn" id="hi-lfgo">Fetch</button></div>
+  d.innerHTML = `<div class="sd-card"><h3>${t("Import listening history")}</h3>
+    <p class="sd-p">${t("Marks as {heard} everything in the catalogue you have already played elsewhere. You see the matches before anything is marked.", {heard: "<b>" + STATUS[1] + "</b>"})}</p>
+    <h4>${t("Spotify or YouTube files")}</h4>
+    <p class="sd-p">${t("Spotify: Account → Privacy → {download} (extended streaming history), then pick the {files} files.", {download: "<i>" + t("Download your data") + "</i>", files: "<b>Streaming_History_Audio_*.json</b>"})} ${t("YouTube: Google Takeout → YouTube → history as JSON, then pick {file}.", {file: "<b>watch-history.json</b>"})}</p>
+    <div class="sd-row"><button class="obtn" id="hi-files">${t("Choose files…")}</button><input type="file" id="hi-in" accept=".json" multiple hidden></div>
+    <h4>ListenBrainz</h4><div class="sd-row"><input type="text" id="hi-lb" placeholder="${esc(t("username"))}" value="${esc(lf.lb||"")}"><button class="obtn" id="hi-lbgo">${t("Fetch")}</button></div>
+    <h4>Last.fm</h4><p class="sd-p">${t("Needs a free API key from {url}; it stays on this device.", {url: "last.fm/api/account/create"})}</p>
+    <div class="sd-row"><input type="text" id="hi-lfu" placeholder="${esc(t("username"))}" value="${esc(lf.u||"")}"><input type="text" id="hi-lfk" placeholder="${esc(t("API key"))}" value="${esc(lf.k||"")}"><button class="obtn" id="hi-lfgo">${t("Fetch")}</button></div>
     <p class="sd-p" id="hi-msg"></p><div id="hi-out"></div>
-    <div class="sd-row"><button class="obtn" id="hi-x">Close</button></div></div>`;
+    <div class="sd-row"><button class="obtn" id="hi-x">${t("Close")}</button></div></div>`;
   document.body.appendChild(d);
   const msg = t => { d.querySelector("#hi-msg").textContent = t; };
   const store = () => { try{ localStorage.setItem("cj.hist", JSON.stringify({lb:d.querySelector("#hi-lb").value.trim(), u:d.querySelector("#hi-lfu").value.trim(), k:d.querySelector("#hi-lfk").value.trim()})); }catch(e){} };
   d.onclick = e => { if(e.target===d) d.remove(); };
   d.querySelector("#hi-x").onclick = () => d.remove();
   d.querySelector("#hi-files").onclick = () => d.querySelector("#hi-in").click();
-  const run = async get => { try{ msg("Reading…"); show(await get()); }catch(e){ msg(e.message || "Couldn't read that."); } };
+  const run = async get => { try{ msg(t("Reading…")); show(await get()); }catch(e){ msg(e.message || t("Couldn't read that.")); } };
   d.querySelector("#hi-in").onchange = ev => run(async () => { let out = []; for(const f of ev.target.files) out = out.concat(parseHistFile(JSON.parse(await f.text()))); return out; });
   d.querySelector("#hi-lbgo").onclick = () => { store(); const u = d.querySelector("#hi-lb").value.trim(); if(u) run(() => fetchListenBrainz(u, msg)); };
   d.querySelector("#hi-lfgo").onclick = () => { store(); const u = d.querySelector("#hi-lfu").value.trim(), k = d.querySelector("#hi-lfk").value.trim(); if(u && k) run(() => fetchLastfm(u, k, msg)); };
   function show(listens){
     const f = matchListens(listens), ids = Object.keys(f).filter(id => !isHeard(id)).sort((a,b) => f[b].n - f[a].n);
-    msg(listens.length.toLocaleString() + " plays read · " + Object.keys(f).length + " catalogue works found · " + ids.length + " not yet marked heard.");
+    msg(t("{plays} plays read · {found} catalogue works found · {left} not yet marked heard.", {plays: FMT.number(listens.length), found: FMT.number(Object.keys(f).length), left: FMT.number(ids.length)}));
     const out = d.querySelector("#hi-out");
     if(!ids.length){ out.innerHTML = ""; return; }
-    out.innerHTML = `<div class="hi-list">${ids.map(id => `<label><input type="checkbox" checked data-hid="${id}"><span><b>${esc(byId[id].title)}</b> — ${esc(cname(byId[id]))} <small>· ${f[id].n}× · e.g. ${esc(f[id].ex)}</small></span></label>`).join("")}</div>
-      <div class="sd-row"><button class="gbtn" id="hi-ok">Mark ${ids.length} as heard</button></div>`;
+    out.innerHTML = `<div class="hi-list">${ids.map(id => `<label><input type="checkbox" checked data-hid="${id}"><span><b>${esc(byId[id].title)}</b> — ${esc(cname(byId[id]))} <small>· ${f[id].n}× · ${t("e.g. {example}", {example: esc(f[id].ex)})}</small></span></label>`).join("")}</div>
+      <div class="sd-row"><button class="gbtn" id="hi-ok">${t.n("Mark {n} as heard", "Mark {n} as heard", ids.length)}</button></div>`;
     out.querySelector("#hi-ok").onclick = () => {
       const pick = [...out.querySelectorAll("[data-hid]:checked")].map(b => b.dataset.hid);
       for(const id of pick){ const r = Object.assign({s:0,r:0,n:"",h:0,p:0}, ST.works[id]); r.s = Math.max(r.s,1); r.p = Math.max(r.p||0, f[id].n); r.h = r.h || f[id].ts || Date.now(); ST.works[id] = r; }
-      save(); msg(pick.length + " works marked heard."); out.innerHTML = ""; route();
+      save(); msg(t.n("{n} work marked heard.", "{n} works marked heard.", pick.length)); out.innerHTML = ""; route();
     };
   }
 }
@@ -844,7 +869,7 @@ function importAny(o){
 }
 $("#impfile").addEventListener("change", async ev => {
   const f = ev.target.files[0]; if(!f) return;
-  try{ importAny(JSON.parse(await f.text())); }catch(e){ alert("That file could not be read as journey progress."); }
+  try{ importAny(JSON.parse(await f.text())); }catch(e){ alert(t("That file could not be read as journey progress.")); }
   ev.target.value = "";
 });
 
@@ -858,12 +883,12 @@ const canSync = () => !!CLOUD || !!(BK.on && BK.h) || GD.on;
 function setSyncChip(){
   const el = $("#sync"); if(!el) return;
   el.className = "";
-  if(!canSync()){ el.textContent = BK.supported ? "this device only · sync & backup" : "this device · backup"; return; }
+  if(!canSync()){ el.textContent = BK.supported ? t("this device only · sync & backup") : t("this device · backup"); return; }
   const where = CLOUD ? " · claude.ai" : GD.on ? " · Drive" : (BK.h ? " · " + BK.h.name : "");
-  if(syncState==="busy"){ el.textContent = "syncing…"; el.className = "busy"; }
-  else if(syncState==="err"){ el.textContent = "sync paused — tap"; el.className = "err"; }
-  else if(syncState==="dirty"){ el.textContent = "unsaved" + where; }
-  else el.textContent = "synced ✓" + where;
+  if(syncState==="busy"){ el.textContent = t("syncing…"); el.className = "busy"; }
+  else if(syncState==="err"){ el.textContent = t("sync paused — tap"); el.className = "err"; }
+  else if(syncState==="dirty"){ el.textContent = t("unsaved") + where; }
+  else el.textContent = t("synced ✓") + where;
   // the Google account picture shows whose Drive this is
   if(GD.on && GD.pic){ const i = document.createElement("img"); i.className = "gav"; i.src = GD.pic; i.alt = ""; i.referrerPolicy = "no-referrer"; el.prepend(i); }
   const gs = $("#g-sync"); if(gs) gs.textContent = gymSync();
@@ -921,10 +946,10 @@ let gisP = null;
 const loadGis = () => gisP || (gisP = new Promise((res, rej) => {
   if(window.google && google.accounts && google.accounts.oauth2) return res();
   const sc = document.createElement("script"); sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
-  sc.onload = () => res(); sc.onerror = () => { gisP = null; rej(new Error("Google sign-in didn't load")); }; document.head.appendChild(sc); }));
+  sc.onload = () => res(); sc.onerror = () => { gisP = null; rej(new Error(t("Google sign-in didn't load"))); }; document.head.appendChild(sc); }));
 const gdToken = prompt => new Promise((res, rej) => google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT, scope:GD_SCOPE,
-  callback: r => { if(r && r.access_token){ GD.tok = r.access_token; GD.exp = Date.now() + (r.expires_in||3600)*1000; res(); } else rej(new Error((r && r.error) || "sign-in failed")); },
-  error_callback: e => rej(new Error((e && (e.message || e.type)) || "sign-in dismissed"))}).requestAccessToken({prompt}));
+  callback: r => { if(r && r.access_token){ GD.tok = r.access_token; GD.exp = Date.now() + (r.expires_in||3600)*1000; res(); } else rej(new Error((r && r.error) || t("sign-in failed"))); },
+  error_callback: e => rej(new Error((e && (e.message || e.type)) || t("sign-in dismissed")))}).requestAccessToken({prompt}));
 async function gdAuth(interactive){
   if(GD.tok && GD.exp > Date.now() + 60000) return;
   if(GD.busy) return GD.busy;
@@ -1037,7 +1062,7 @@ async function bkWrite(){
     for(const n of names.slice(0, Math.max(0, names.length-BK.KEEP))) await BK.h.removeEntry(n).catch(()=>{});
     await syncWrite();
     BK.last = Date.now(); BK.err = ""; localStorage.setItem("cj.baklast", BK.last);
-  }catch(e){ BK.err = e.name || "write failed"; }
+  }catch(e){ BK.err = e.name || t("write failed"); }
   bkStatus();
 }
 function bkQueue(){ if(!BK.on) return; if(Date.now()-BK.last > 300000){ bkWrite(); return; } clearTimeout(BK.timer); BK.timer = setTimeout(bkWrite, 45000); }
@@ -1049,7 +1074,7 @@ async function bkMaybeRestore(){
   try{
     const names = await bkList(); if(!names.length) return;
     const latest = names[names.length-1];
-    if(confirm("Progress here is empty, but a backup exists ("+latest+"). Restore it?")){
+    if(confirm(t("Progress here is empty, but a backup exists ({file}). Restore it?", {file: latest}))){
       const f = await (await BK.h.getFileHandle(latest)).getFile(); importAny(JSON.parse(await f.text()));
     }
   }catch(e){}
@@ -1071,10 +1096,10 @@ document.addEventListener("visibilitychange", () => {
 function briefData(){
   const now = Date.now(), D = 864e5, ago = d => now - d*D, day = t => new Date(t).toLocaleDateString("sv");
   const marked = Object.entries(ST.works).filter(([id,r]) => byId[id] && r.s>0).map(([id,r]) => ({w: byId[id], r}));
-  const row = x => ({id: x.w.id, title: x.w.title, by: cname(x.w), genre: TRADITIONS[x.w.tradition]||x.w.tradition, era: x.w.tradition==="classical" ? (ERA[x.w.era]||{}).name||"" : "", year: x.w.year||"", status: STATUS[x.r.s], stars: x.r.r||0, first: x.r.h ? day(x.r.h) : ""});
+  const row = x => ({id: x.w.id, title: x.w.title, by: cname(x.w), genre: EN.T[x.w.tradition]||x.w.tradition, era: x.w.tradition==="classical" ? (ERA[x.w.era]||{}).en||"" : "", year: x.w.year||"", status: EN.S[x.r.s], stars: x.r.r||0, first: x.r.h ? day(x.r.h) : ""});
   const inWin = (a, b) => marked.filter(x => x.r.h && x.r.h >= ago(a) && x.r.h < ago(b));
   const plays = (a, b) => ST.log.filter(e => e.ts >= ago(a) && e.ts < ago(b)).length;
-  const tally = l => Object.entries(l.reduce((o,x) => (o[TRADITIONS[x.w.tradition]] = (o[TRADITIONS[x.w.tradition]]||0) + 1, o), {})).sort((a,b) => b[1]-a[1]);
+  const tally = l => Object.entries(l.reduce((o,x) => (o[EN.T[x.w.tradition]] = (o[EN.T[x.w.tradition]]||0) + 1, o), {})).sort((a,b) => b[1]-a[1]);
   const last = Math.max(0, ...marked.map(x => x.r.h||0), ...ST.log.map(e => e.ts));
   const tp = byId[(ST.day||{})[day(now)]], ns = nextStop(), mix = ST.mix && ST.mix.wk===isoWeek() ? ST.mix.ids.filter(id => byId[id]) : [];
   const w7 = inWin(7, 0), w30 = inWin(30, 0);
@@ -1152,32 +1177,32 @@ function toolsDialog(refresh){
   const old = $("#dlg"); if(old){ old.remove(); if(!refresh) return; }
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
   let bk = "";
-  const gd = !GD.ok ? "" : `<h4>Google Drive — phone and computer</h4>` + (GD.on
-    ? `<p class="sd-p">${GD.pic ? `<img class="gav" style="margin-left:0" src="${esc(GD.pic)}" alt="" referrerpolicy="no-referrer">` : ""}On${GD.email ? " as <b>" + esc(GD.email) + "</b>" : ""} — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.${GD.err ? ` <span style="color:var(--red)">Last attempt failed (${esc(GD.err)}) — tap Reconnect.</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Sync now</button><button class="obtn danger" id="gd-off">Turn off</button></div>`
-    : `<p class="sd-p">Off. Sign in with Google once on each device, phone included, and every mark syncs through a private app folder in your Drive.${GD.err ? ` <span style="color:var(--red)">(${esc(GD.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">Connect Google Drive</button></div>`);
-  if(!BK.supported) bk = GD.ok ? "" : `<p class="sd-p">Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.</p>`;
-  else if(!BK.h) bk = `<p class="sd-p">Off. Choose a folder inside <b>Google Drive</b> (your Drive is mounted at <b>H:\My Drive</b>) and this page keeps <b>classical-journey-progress.json</b> there. Google Drive for Desktop moves that file between your computers, and each one merges what it finds, so nothing is ever overwritten. Timestamped snapshots are kept alongside it — newest ${BK.KEEP}, older deleted — so a bad merge or a browser-data clear is recoverable.</p><div class="sd-row"><button class="obtn" id="bk-pick">🗀 Choose sync folder</button></div>`;
-  else if(!BK.on) bk = `<p class="sd-p">Paused — the browser needs permission for <b>${esc(BK.h.name)}</b> again. Nothing syncs until you grant it.</p><div class="sd-row"><button class="obtn" id="bk-resume">Resume sync</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
-  else bk = `<p class="sd-p">On → syncing through <b>${esc(BK.h.name)}</b> · last write <b>${BK.last ? new Date(BK.last).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "—"}</b> · checks for other devices every 45s · keeps newest ${BK.KEEP} snapshots${BK.err ? ` · <span style="color:var(--red)">last write failed (${esc(BK.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="bk-now">Sync now</button><button class="obtn" id="bk-pick">Change folder</button><button class="obtn danger" id="bk-off">Turn off</button></div>`;
+  const gd = !GD.ok ? "" : `<h4>${t('Google Drive — phone and computer')}</h4>` + (GD.on
+    ? `<p class="sd-p">${GD.pic ? `<img class="gav" style="margin-inline-start:0" src="${esc(GD.pic)}" alt="" referrerpolicy="no-referrer">` : ""}${GD.email ? t('On as {email} — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.', {email: "<b>" + esc(GD.email) + "</b>"}) : t('On — progress lives in a private app folder in your Drive (the one Tachyread uses), checked every 45 s and whenever you come back to the app.')}${GD.err ? ` <span style="color:var(--red)">${t('Last attempt failed ({error}) — tap Reconnect.', {error: esc(GD.err)})}</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">${t('Sync now')}</button><button class="obtn danger" id="gd-off">${t('Turn off')}</button></div>`
+    : `<p class="sd-p">${t('Off. Sign in with Google once on each device, phone included, and every mark syncs through a private app folder in your Drive.')}${GD.err ? ` <span style="color:var(--red)">(${esc(GD.err)})</span>` : ""}</p><div class="sd-row"><button class="obtn" id="gd-con">${t('Connect Google Drive')}</button></div>`);
+  if(!BK.supported) bk = GD.ok ? "" : `<p class="sd-p">${t('Folder sync needs Chrome or Edge on a computer. On this device, export a file instead.')}</p>`;
+  else if(!BK.h) bk = `<p class="sd-p">${t('Off. Choose a folder inside {drive} (your Drive is mounted at {path}) and this page keeps {file} there. Google Drive for Desktop moves that file between your computers, and each one merges what it finds, so nothing is ever overwritten. Timestamped snapshots are kept alongside it — newest {n}, older deleted — so a bad merge or a browser-data clear is recoverable.', {drive: "<b>Google Drive</b>", path: "<b>H:\\My Drive</b>", file: "<b>classical-journey-progress.json</b>", n: BK.KEEP})}</p><div class="sd-row"><button class="obtn" id="bk-pick">${t('🗀 Choose sync folder')}</button></div>`;
+  else if(!BK.on) bk = `<p class="sd-p">${t('Paused — the browser needs permission for {folder} again. Nothing syncs until you grant it.', {folder: "<b>" + esc(BK.h.name) + "</b>"})}</p><div class="sd-row"><button class="obtn" id="bk-resume">${t('Resume sync')}</button><button class="obtn" id="bk-pick">${t('Change folder')}</button><button class="obtn danger" id="bk-off">${t('Turn off')}</button></div>`;
+  else bk = `<p class="sd-p">${t('On → syncing through {folder}', {folder: "<b>" + esc(BK.h.name) + "</b>"})} · ${t('last write {when}', {when: "<b>" + (BK.last ? FMT.custom(BK.last, {month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "—") + "</b>"})} · ${t('checks for other devices every 45s')} · ${t('keeps newest {n} snapshots', {n: BK.KEEP})}${BK.err ? ` · <span style="color:var(--red)">${t('last write failed ({error})', {error: esc(BK.err)})}</span>` : ""}</p><div class="sd-row"><button class="obtn" id="bk-now">${t('Sync now')}</button><button class="obtn" id="bk-pick">${t('Change folder')}</button><button class="obtn danger" id="bk-off">${t('Turn off')}</button></div>`;
   d.innerHTML = `<div class="sd-card">
-    <h3>Sync &amp; backup</h3>
-    <p class="sd-p">${CLOUD ? "Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account." : "Everything you hear, rate and note is saved on this device. Nothing leaves it unless you turn on sync below."}</p>
-    ${gd}${bk ? `<h4>Sync folder (Drive for Desktop)</h4>${bk}` : ""}
-    ${BK.supported ? `<h4>Cowork folder — morning brief</h4><p class="sd-p">${!CW.h ? "Off. Choose <b>Documents\\Cowork\\Cowork Link Folders\\ClassicalJourney</b> and this computer keeps <b>BRIEF.md</b> + <b>brief.json</b> there — this week's listening, today's piece, the mix and journey progress — for the daily and weekly brief." : CW.on ? "On → writing BRIEF.md + brief.json to <b>" + esc(CW.h.name) + "</b> after every change." : "Paused — the browser needs permission for <b>" + esc(CW.h.name) + "</b> again."}</p><div class="sd-row">${CW.h && !CW.on ? '<button class="obtn" id="cw-resume">Resume</button>' : ""}<button class="obtn" id="cw-pick">${CW.h ? "Change folder" : "🗀 Choose Cowork folder"}</button>${CW.on ? '<button class="obtn" id="cw-now">Write now</button>' : ""}</div>` : ""}
-    <h4>Listening history</h4><div class="sd-row"><button class="obtn" id="sd-hist">⇣ Import from Spotify, YouTube, Last.fm or ListenBrainz…</button></div>
-    <h4>Files</h4>
-    <div class="sd-row"><button class="obtn" id="sd-exp">⬇ Export progress</button><button class="obtn" id="sd-imp">⬆ Import progress</button><button class="obtn danger" id="sd-reset">Reset everything</button></div>
+    <h3>${esc(t('Sync & backup'))}</h3>
+    <p class="sd-p">${CLOUD ? t("Everything you hear, rate and note is saved on this device <b>and</b> in this page's own store on claude.ai, so it survives a browser-data clear and follows your account.") : t("Everything you hear, rate and note is saved on this device. Nothing leaves it unless you turn on sync below.")}</p>
+    ${gd}${bk ? `<h4>${t('Sync folder (Drive for Desktop)')}</h4>${bk}` : ""}
+    ${BK.supported ? `<h4>${t('Cowork folder — morning brief')}</h4><p class="sd-p">${!CW.h ? t("Off. Choose {folder} and this computer keeps {brief} + {json} there — this week's listening, today's piece, the mix and journey progress — for the daily and weekly brief.", {folder: "<b>Documents\\Cowork\\Cowork Link Folders\\ClassicalJourney</b>", brief: "<b>BRIEF.md</b>", json: "<b>brief.json</b>"}) : CW.on ? t('On → writing BRIEF.md + brief.json to {folder} after every change.', {folder: "<b>" + esc(CW.h.name) + "</b>"}) : t('Paused — the browser needs permission for {folder} again.', {folder: "<b>" + esc(CW.h.name) + "</b>"})}</p><div class="sd-row">${CW.h && !CW.on ? `<button class="obtn" id="cw-resume">${t('Resume')}</button>` : ""}<button class="obtn" id="cw-pick">${CW.h ? t('Change folder') : t('🗀 Choose Cowork folder')}</button>${CW.on ? `<button class="obtn" id="cw-now">${t('Write now')}</button>` : ""}</div>` : ""}
+    <h4>${t('Listening history')}</h4><div class="sd-row"><button class="obtn" id="sd-hist">${t('⇣ Import from Spotify, YouTube, Last.fm or ListenBrainz…')}</button></div>
+    <h4>${t('Files')}</h4>
+    <div class="sd-row"><button class="obtn" id="sd-exp">${t('⬇ Export progress')}</button><button class="obtn" id="sd-imp">${t('⬆ Import progress')}</button><button class="obtn danger" id="sd-reset">${t('Reset everything')}</button></div>
     <p class="sd-p" id="sd-msg"></p>
-    <div class="sd-row"><button class="obtn" id="sd-close">Close</button></div>
+    <div class="sd-row"><button class="obtn" id="sd-close">${t('Close')}</button></div>
   </div>`;
   document.body.appendChild(d);
-  const msg = t => { d.querySelector("#sd-msg").textContent = t; };
+  const msg = m => { d.querySelector("#sd-msg").textContent = m; };
   d.querySelector("#sd-close").onclick = () => d.remove();
   d.onclick = e => { if(e.target===d) d.remove(); };
   const on = (id, fn) => { const el = d.querySelector(id); if(el) el.onclick = fn; };
   on("#gd-con", gdConnect); on("#gd-off", gdOff); on("#bk-pick", bkPick); on("#bk-now", bkWrite); on("#bk-off", bkOff); on("#bk-resume", bkResume); on("#cw-pick", cwPick); on("#cw-resume", cwResume); on("#cw-now", cwWrite);
   on("#sd-hist", historyDialog); on("#sd-exp", exportState); on("#sd-imp", () => $("#impfile").click());
-  on("#sd-reset", () => { if(confirm("Erase all listening progress, ratings, notes, lessons and history on this device?")){ ["cj-state","cm.v2","cm.heard","cm.lessons"].forEach(k => localStorage.removeItem(k)); location.reload(); } });
+  on("#sd-reset", () => { if(confirm(t("Erase all listening progress, ratings, notes, lessons and history on this device?"))){ ["cj-state","cm.v2","cm.heard","cm.lessons"].forEach(k => localStorage.removeItem(k)); location.reload(); } });
 }
 
 /* ---------- shell ---------- */
@@ -1187,25 +1212,25 @@ function shellHTML(view, inner){
   return `<header class="top">
     <a class="brand" href="#/">The Classical Journey</a>
     <nav class="main ui">
-      <a href="#/" class="${tab("journey")}">Journey</a>
-      <a href="#/works" class="${tab("works")}">Works</a>
-      <a href="#/composers" class="${tab("composers")}">Composers</a>
-      <a href="#/theory" class="${tab("theory")}">Theory</a>
-      <a href="#/tree" class="${tab("tree")}">Constellation</a>
-      <a href="#/table" class="${tab("table")}">Table</a>
-      <a href="#/progress" class="${tab("progress")}">Progress</a>
-      <button id="gsearch" class="chip" title="Search everything (press /)">🔍 Search</button>
-      <span id="sync" title="Sync & backup"></span>
+      <a href="#/" class="${tab("journey")}">${t('Journey')}</a>
+      <a href="#/works" class="${tab("works")}">${t('Works')}</a>
+      <a href="#/composers" class="${tab("composers")}">${t('Composers')}</a>
+      <a href="#/theory" class="${tab("theory")}">${t('Theory')}</a>
+      <a href="#/tree" class="${tab("tree")}">${t('Constellation')}</a>
+      <a href="#/table" class="${tab("table")}">${t('Table')}</a>
+      <a href="#/progress" class="${tab("progress")}">${t('Progress')}</a>
+      <button id="gsearch" class="chip" title="${esc(t('Search everything (press /)'))}">${t('🔍 Search')}</button>
+      <span id="sync" title="${esc(t('Sync & backup'))}"></span>
     </nav>
   </header><main class="fade">${inner}</main>
-  <nav class="tabs ui" aria-label="Sections">
-    <a href="#/" class="${tab("journey")}"><i>◷</i>Journey</a>
-    <a href="#/works" class="${tab("works")}"><i>♫</i>Works</a>
-    <a href="#/composers" class="${tab("composers")}"><i>☺</i>Artists</a>
-    <a href="#/theory" class="${tab("theory")}"><i>✎</i>Theory</a>
-    <a href="#/more" class="${["tree","table","progress","about","more"].includes(view) ? "on" : ""}"><i>☰</i>More</a>
+  <nav class="tabs ui" aria-label="${esc(t('Sections'))}">
+    <a href="#/" class="${tab("journey")}"><i>◷</i>${t('Journey')}</a>
+    <a href="#/works" class="${tab("works")}"><i>♫</i>${t('Works')}</a>
+    <a href="#/composers" class="${tab("composers")}"><i>☺</i>${t('Artists')}</a>
+    <a href="#/theory" class="${tab("theory")}"><i>✎</i>${t('Theory')}</a>
+    <a href="#/more" class="${["tree","table","progress","about","more"].includes(view) ? "on" : ""}"><i>☰</i>${t('More')}</a>
   </nav>
-  <footer>A thousand years, one long line. · <a href="#/about">About</a><br><span style="font-size:.85em">Nothing is hosted here: every work links out to the music, and streams are found live in the Internet Archive.</span></footer>`;
+  <footer>${t('A thousand years, one long line.')} · <a href="#/about">${t('About')}</a><br><span style="font-size:.85em">${t('Nothing is hosted here: every work links out to the music, and streams are found live in the Internet Archive.')}</span></footer>`;
 }
 function afterRender(){ setSyncChip(); const s = $("#sync"); if(s) s.onclick = () => toolsDialog(); const g = $("#gsearch"); if(g) g.onclick = openSearch; }
 
@@ -1219,33 +1244,33 @@ function saveFile(name, text, type){
 }
 function exportList(list, title){
   const li = list.map(w => { const L = LINKS(w); return `<li><b>${esc(w.title)}</b> — ${esc(cname(w))}${w.year ? ", "+esc(w.year) : ""} <small>(${esc(TRADITIONS[w.tradition]||"")} · ${esc(GENRES[w.genre]||w.genre)})</small><br><a href="${L[0][1]}">YouTube</a> · <a href="${L[1][1]}">Spotify</a> · <a href="${L[2][1]}">Apple Music</a></li>`; }).join("");
-  const html = `<!doctype html><meta charset="utf-8"><title>${esc(title)}</title><style>body{font:16px/1.5 Georgia,serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#222}li{margin:.6rem 0}small{color:#777}a{color:#8a6d12}</style><h1>${esc(title)}</h1><p>${list.length} works from The Classical Journey · ${new Date().toLocaleDateString()}</p><ol>${li}</ol>`;
+  const html = `<!doctype html><meta charset="utf-8"><title>${esc(title)}</title><style>body{font:16px/1.5 Georgia,serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#222}li{margin:.6rem 0}small{color:#777}a{color:#8a6d12}</style><h1>${esc(title)}</h1><p>${t.n('{n} work from The Classical Journey', '{n} works from The Classical Journey', list.length)} · ${FMT.date(new Date())}</p><ol>${li}</ol>`;
   saveFile(title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".html", html, "text/html");
 }
 async function cacheAll(btn){
   const n = Math.max(...DB.works.map(w => w.pc||0)) + 1; let done = 0;
   btn.disabled = true;
   try{ await fetch("./"); await fetch("db.js" + (window.PROSEQ||"")); }catch(e){}   // the page and index too, in case they loaded before the service worker took over
-  for(let k = 0; k < n; k++){ try{ await loadProse(k); }catch(e){} done++; btn.textContent = `Downloading… ${done}/${n}`; }
+  for(let k = 0; k < n; k++){ try{ await loadProse(k); }catch(e){} done++; btn.textContent = t('Downloading… {done}/{total}', {done, total: n}); }
   DB.works.forEach(proseReady);
-  btn.textContent = "✓ Everything is saved for offline"; 
+  btn.textContent = t('✓ Everything is saved for offline'); 
 }
 /* ---------- search everything ---------- */
 let GIDX = null;
 function recentHTML(){
-  return RECENT.length ? `<h4>Recently viewed</h4>${RECENT.slice(0,10).map(id => `<a class="gs-row" href="#/w/${id}"><b>${esc(byId[id].title)}</b><span>${esc(cname(byId[id]))}</span></a>`).join("")}` : `<p class="sd-p">Type at least two letters. Esc closes.</p>`;
+  return RECENT.length ? `<h4>${t('Recently viewed')}</h4>${RECENT.slice(0,10).map(id => `<a class="gs-row" href="#/w/${id}"><b>${esc(byId[id].title)}</b><span>${esc(cname(byId[id]))}</span></a>`).join("")}` : `<p class="sd-p">${t('Type at least two letters. Esc closes.')}</p>`;
 }
 function openSearch(){
   const old = $("#dlg"); if(old) old.remove();
   if(!GIDX) GIDX = {
     w: chrono.map(w => [clean(w.title+" "+cname(w)+" "+(w.cat||"")+" "+(w.movement||"")+" "+w.year), w]),
     c: DB.composers.map(c => [clean(c.name+" "+(c.origin||"")), c]),
-    l: DB.lessons.map(l => [clean(l.title+" "+(TRADITIONS[l.tradition]||"")), l]) };
+    l: DB.lessons.map(l => [clean(l.title+" "+(TRADITIONS[l.tradition]||"")+" "+(EN.T[l.tradition]||"")), l]) };
   const d = document.createElement("div"); d.id = "dlg"; d.className = "ui";
-  d.innerHTML = `<div class="sd-card gs-card"><input type="search" id="gsq" placeholder="Search works, composers, artists, theory…" autocomplete="off"><div id="gsr">${recentHTML()}</div></div>`;
+  d.innerHTML = `<div class="sd-card gs-card"><input type="search" id="gsq" placeholder="${esc(t('Search works, composers, artists, theory…'))}" autocomplete="off"><div id="gsr">${recentHTML()}</div></div>`;
   d.onclick = e => { if(e.target===d) d.remove(); };
   document.body.appendChild(d);
-  const q = $("#gsq"), out = $("#gsr"); q.focus(); let t;
+  const q = $("#gsq"), out = $("#gsr"); q.focus(); let tm;
   const hit = (s, toks) => toks.every(k => s.includes(k));
   const run = () => {
     const toks = clean(q.value).split(" ").filter(Boolean);
@@ -1253,25 +1278,25 @@ function openSearch(){
     const cs = GIDX.c.filter(([s]) => hit(s,toks)).map(x => x[1]).sort((a,b) => (b.sig||0)-(a.sig||0)).slice(0,8);
     const ws = GIDX.w.filter(([s]) => hit(s,toks)).map(x => x[1]).sort((a,b) => (b.sig||0)-(a.sig||0) || a.sortYear-b.sortYear).slice(0,30);
     const ls = GIDX.l.filter(([s]) => hit(s,toks)).map(x => x[1]).slice(0,5);
-    const row = (href, t, sub) => `<a class="gs-row" href="${href}"><b>${esc(t)}</b><span>${esc(sub)}</span></a>`;
-    out.innerHTML = (!cs.length && !ws.length && !ls.length) ? `<p class="sd-p">Nothing matches.</p>` :
-      (cs.length ? `<h4>Composers &amp; artists</h4>${cs.map(c => row("#/c/"+c.id, c.name, (c.life||"")+" · "+(c.origin||""))).join("")}` : "") +
-      (ws.length ? `<h4>Works</h4>${ws.map(w => row("#/w/"+w.id, w.title, cname(w)+(w.year ? ", "+w.year : "")+" · "+(TRADITIONS[w.tradition]||""))).join("")}` : "") +
-      (ls.length ? `<h4>Theory stops</h4>${ls.map(l => row("#/theory", l.title, TRADITIONS[l.tradition]||"Classical")).join("")}` : "");
+    const row = (href, title, sub) => `<a class="gs-row" href="${href}"><b>${esc(title)}</b><span>${esc(sub)}</span></a>`;
+    out.innerHTML = (!cs.length && !ws.length && !ls.length) ? `<p class="sd-p">${t('Nothing matches.')}</p>` :
+      (cs.length ? `<h4>${esc(t('Composers & artists'))}</h4>${cs.map(c => row("#/c/"+c.id, c.name, (c.life||"")+" · "+(c.origin||""))).join("")}` : "") +
+      (ws.length ? `<h4>${t('Works')}</h4>${ws.map(w => row("#/w/"+w.id, w.title, cname(w)+(w.year ? ", "+w.year : "")+" · "+(TRADITIONS[w.tradition]||""))).join("")}` : "") +
+      (ls.length ? `<h4>${t('Theory stops')}</h4>${ls.map(l => row("#/theory", l.title, TRADITIONS[l.tradition]||t('Classical'))).join("")}` : "");
   };
-  q.oninput = () => { clearTimeout(t); t = setTimeout(run, 120); };
+  q.oninput = () => { clearTimeout(tm); tm = setTimeout(run, 120); };
   q.onkeydown = e => { if(e.key==="Enter"){ const a = out.querySelector(".gs-row"); if(a){ location.hash = a.getAttribute("href"); d.remove(); } } };
   out.onclick = e => { if(e.target.closest(".gs-row")) d.remove(); };
 }
 function badge(id){
   const r = rec(id); if(!r.s && !r.r && !r.w) return "";
-  return `<span class="badge">${MARKS[r.s]||""}${!r.s && r.w ? `<span title="Want to hear">☆</span>` : ""}${r.r ? ` <span class="st">${"★".repeat(r.r)}</span>` : ""}</span>`;
+  return `<span class="badge">${MARKS[r.s]||""}${!r.s && r.w ? `<span title="${esc(t('Want to hear'))}">☆</span>` : ""}${r.r ? ` <span class="st">${"★".repeat(r.r)}</span>` : ""}</span>`;
 }
 function cardHTML(w, sub){
   const e = ERA[w.era];
   return `<a class="card${w.thin ? " thin" : ""}" href="#/w/${w.id}" style="--ec:${e ? e.color : ""}"><div class="t">${esc(w.title)}</div>
     <div class="a"><span><span class="sigdots" title="${SIGL[w.sig]||""}">${dots(w.sig)}</span> ${esc(sub!==undefined ? sub : cname(w)+(w.year ? ", "+w.year : ""))}</span>${badge(w.id)}</div>
-    <div class="g">${w.thin ? "entry coming" : (w.tradition && w.tradition!=="classical" ? esc(TRADITIONS[w.tradition]) + " · " : "") + esc(GENRES[w.genre]||w.genre)}${w.cat ? " · "+esc(w.cat) : ""}${w.mins ? " · "+w.mins+" min" : ""}</div></a>`;
+    <div class="g">${w.thin ? t('entry coming') : (w.tradition && w.tradition!=="classical" ? esc(TRADITIONS[w.tradition]) + " · " : "") + esc(GENRES[w.genre]||w.genre)}${w.cat ? " · "+esc(w.cat) : ""}${w.mins ? " · "+t('{n} min', {n: w.mins}) : ""}</div></a>`;
 }
 
 /* ---------- paging: render a long list 60 at a time, more on scroll ---------- */
@@ -1280,7 +1305,7 @@ function pager(key, items, render){   // items: {h:headerHTML} | {w:item}; a hea
   const total = items.filter(x => x.w).length; let i = 0, n = 0;
   const take = max => { let s = "", h = ""; while(i < items.length && n < max){ const it = items[i++]; if(it.h){ h = it.h; continue; } s += h + render(it.w); h = ""; n++; } return s; };
   const html = take(Math.max(LIM[key]||0, STEP));
-  const btn = () => n < total ? `<button class="pmore ui">Show more · ${(total-n).toLocaleString()} left</button>` : "";
+  const btn = () => n < total ? `<button class="pmore ui">${t('Show more · {n} left', {n: FMT.number(total-n)})}</button>` : "";
   return { html, foot: `<div class="pmw">${btn()}</div>`, wire(box){
     const w = $(".pmw"); if(!w || !box) return;
     let io;
@@ -1302,7 +1327,7 @@ if(!TRADITIONS[JT]) JT = "classical";
 const JD = {};
 const bucket = y => y < 1900 ? Math.floor(y/100)*100 : Math.floor(y/10)*10;
 function journeyPicker(){
-  return `<select class="chip" id="jtrad" aria-label="Journey through">${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===JT ? " selected" : ""}>${k==="classical" ? "Classical journey" : v + " journey"}</option>`).join("")}</select>`;
+  return `<select class="chip" id="jtrad" aria-label="${esc(t('Journey through'))}">${Object.entries(TRADITIONS).map(([k,v]) => `<option value="${k}"${k===JT ? " selected" : ""}>${esc(t('{genre} journey', {genre: v}))}</option>`).join("")}</select>`;
 }
 function wirePicker(){ $("#jtrad").onchange = e => { JT = e.target.value; JQ = ""; try{ sessionStorage.setItem("cj-jt", JT); }catch(err){} journeyView(); scrollTo(0,0); }; }
 function genreJourneyView(){
@@ -1319,21 +1344,21 @@ function genreJourneyView(){
   const nW = ws.filter(w => isHeard(w.id)).length, nA = new Set(ws.map(w => w.composer || w.culture)).size;
   const lessons = DB.lessons.filter(l => l.tradition===JT);
   const k = buckets.indexOf(cur), p = buckets[k-1], n = buckets[k+1];
-  let inner = `<div class="hero"><h1>The ${esc(name)} journey</h1><span class="sub">${ws.length.toLocaleString()} works · ${nA} artists · ${lessons.length} theory stops</span></div>
-  <div class="tools ui" style="position:static;border:0;padding:0">${journeyPicker()}<button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a></div>
+  let inner = `<div class="hero"><h1>${t('The {genre} journey', {genre: esc(name)})}</h1><span class="sub">${t.n('{n} work', '{n} works', ws.length)} · ${t.n('{n} artist', '{n} artists', nA)} · ${t.n('{n} theory stop', '{n} theory stops', lessons.length)}</span></div>
+  <div class="tools ui" style="position:static;border:0;padding:0">${journeyPicker()}<button class="gbtn" id="go">${t('▶ Continue the journey')}</button><button class="obtn" id="jsur" title="${esc(t('A random unheard work from this journey'))}">${t('🎲 Surprise me')}</button><a class="obtn" href="#/play">${t('⟳ Autoplay')}</a></div>
   ${JQ ? "" : todayHTML()}
   <div id="jbar"><div class="pfill"><i style="width:${100*nW/(ws.length||1)}%"></i></div>
-    <div id="jstats"><b>${nW}</b>/<b>${ws.length}</b> works heard · one ${cur<1900 ? "century" : "decade"} at a time</div>
-    <nav id="eranav" aria-label="Decades" class="ui">${buckets.map(b => { const bw = ws.filter(w => bucket(w.sortYear)===b);
-      return `<button class="chip${b===cur ? " on" : ""}" data-b="${b}">${b}s <b>${bw.filter(w => isHeard(w.id)).length}/${bw.length}</b></button>`; }).join("")}</nav></div>
-  ${lessons.length ? `<details class="howto" style="margin-top:1rem"><summary>Theory stops for ${esc(name.toLowerCase())} (${lessons.length})</summary><div class="lessons">${lessons.map(lessonCard).join("")}</div></details>` : ""}
-  <section class="era" style="--ac:var(--gold)"><div class="era-mark" aria-hidden="true">${cur}s</div>
+    <div id="jstats">${t('{heard}/{total} works heard', {heard: `<b>${nW}</b>`, total: `<b>${ws.length}</b>`})} · ${cur<1900 ? t('one century at a time') : t('one decade at a time')}</div>
+    <nav id="eranav" aria-label="${esc(t('Decades'))}" class="ui">${buckets.map(b => { const bw = ws.filter(w => bucket(w.sortYear)===b);
+      return `<button class="chip${b===cur ? " on" : ""}" data-b="${b}">${t('{year}s', {year: b})} <b>${bw.filter(w => isHeard(w.id)).length}/${bw.length}</b></button>`; }).join("")}</nav></div>
+  ${lessons.length ? `<details class="howto" style="margin-top:1rem"><summary>${t('Theory stops for {genre} ({n})', {genre: esc(name.toLowerCase()), n: lessons.length})}</summary><div class="lessons">${lessons.map(lessonCard).join("")}</div></details>` : ""}
+  <section class="era" style="--ac:var(--gold)"><div class="era-mark" aria-hidden="true">${t('{year}s', {year: cur})}</div>
     <div class="composers">${groups.map(g => `<article class="comp" data-c="${esc(g.k)}">
-      <div class="c-head"><h3>${g.c ? `<a href="#/c/${g.c.id}">${esc(g.c.name)}</a>` : esc(g.culture||"Traditional")}</h3>${g.c ? `<span class="c-meta">${esc(g.c.life||"")}${g.c.origin ? " · "+esc(g.c.origin) : ""}</span>` : ""}
-        <button class="radio" data-jfrom="${g.ws[0].id}" title="Play the ${esc(name.toLowerCase())} journey onward from here">⏵ Play from here</button></div>
+      <div class="c-head"><h3>${g.c ? `<a href="#/c/${g.c.id}">${esc(g.c.name)}</a>` : esc(g.culture||t('Traditional'))}</h3>${g.c ? `<span class="c-meta">${esc(g.c.life||"")}${g.c.origin ? " · "+esc(g.c.origin) : ""}</span>` : ""}
+        <button class="radio" data-jfrom="${g.ws[0].id}" title="${esc(t('Play the {genre} journey onward from here', {genre: name.toLowerCase()}))}">${t('⏵ Play from here')}</button></div>
       ${g.c && g.c.bio ? `<p class="c-bio">${esc(g.c.bio)}</p>` : ""}
-      <div class="c-works">${g.ws.map(workChip).join("")}${g.ws.length>6 ? `<button class="more">+${g.ws.length-6} more</button>` : ""}</div></article>`).join("")}</div></section>
-  <div class="eranext">${p!==undefined ? `<button data-b="${p}">← ${p}s</button>` : "<span></span>"}${n!==undefined ? `<button data-b="${n}">${n}s →</button>` : ""}</div>`;
+      <div class="c-works">${g.ws.map(workChip).join("")}${g.ws.length>6 ? `<button class="more">${t('+{n} more', {n: g.ws.length-6})}</button>` : ""}</div></article>`).join("")}</div></section>
+  <div class="eranext">${p!==undefined ? `<button data-b="${p}">← ${t('{year}s', {year: p})}</button>` : "<span></span>"}${n!==undefined ? `<button data-b="${n}">${t('{year}s', {year: n})} →</button>` : ""}</div>`;
   app.innerHTML = shellHTML("journey", inner); afterRender(); wirePicker();
   $("#jsur").onclick = () => surprise(ws);
   document.querySelectorAll("#eranav .chip, .eranext button").forEach(b => b.onclick = () => { JD[JT] = +b.dataset.b; genreJourneyView(); const s = $(".era"); if(s) s.scrollIntoView(); });
@@ -1350,17 +1375,17 @@ function journeyView(){
   const showEra = ERA[JE] ? JE : nextStop().era;
   const nW = journey.filter(w => isHeard(w.id)).length, nL = Object.keys(ST.lessons).length;
   const nC = spineComposers.filter(compHeard).length;
-  let inner = `<div class="hero"><h1>The Classical Journey</h1><span class="sub">${journey.length.toLocaleString()} classical works · ${spineComposers.length} composers · ${DB.lessons.filter(l => l.tradition==="classical").length} theory stops · ${(chrono.length-journey.length).toLocaleString()} more in Works — pick another genre from the menu</span></div>
-  <details class="howto"><summary>How the journey works</summary>Walk the timeline from top to bottom. Every work opens to its own page — what you are hearing, the world it came from, what to listen for — with links to hear it on <b>YouTube</b>, <b>Spotify</b>, <b>Apple Music</b> and the <b>Internet Archive</b>, and a <b>▶</b> that streams a free recording right here. <b>⏵ Radio</b> on any composer plays the journey onward from that stop. Gold <b>theory stops</b> teach you what to listen <i>for</i>, right when history invented it. This timeline is the classical spine; jazz, rock, folk and the rest are in <b>Works</b>, filtered by genre. Mark works <b>heard</b>, <b>studied</b> or <b>loved</b>; everything is tracked under <b>Progress</b>. One era shows at a time — pick it from the row of eras.</details>
+  let inner = `<div class="hero"><h1>The Classical Journey</h1><span class="sub">${t.n('{n} classical work', '{n} classical works', journey.length)} · ${t.n('{n} composer', '{n} composers', spineComposers.length)} · ${t.n('{n} theory stop', '{n} theory stops', DB.lessons.filter(l => l.tradition==="classical").length)} · ${t('{n} more in Works — pick another genre from the menu', {n: FMT.number(chrono.length-journey.length)})}</span></div>
+  <details class="howto"><summary>${t('How the journey works')}</summary>${t('Walk the timeline from top to bottom. Every work opens to its own page — what you are hearing, the world it came from, what to listen for — with links to hear it on <b>YouTube</b>, <b>Spotify</b>, <b>Apple Music</b> and the <b>Internet Archive</b>, and a <b>▶</b> that streams a free recording right here. <b>⏵ Radio</b> on any composer plays the journey onward from that stop. Gold <b>theory stops</b> teach you what to listen <i>for</i>, right when history invented it. This timeline is the classical spine; jazz, rock, folk and the rest are in <b>Works</b>, filtered by genre. Mark works <b>heard</b>, <b>studied</b> or <b>loved</b>; everything is tracked under <b>Progress</b>. One era shows at a time — pick it from the row of eras.')}</details>
   <div class="tools ui" style="position:static;border:0;padding:0">
     ${journeyPicker()}
-    <input type="search" id="jq" placeholder="Search composers, works, countries…" value="${esc(JQ)}">
-    <button class="gbtn" id="go">▶ Continue the journey</button><button class="obtn" id="jsur" title="A random unheard work from this journey">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a>
+    <input type="search" id="jq" placeholder="${esc(t('Search composers, works, countries…'))}" value="${esc(JQ)}">
+    <button class="gbtn" id="go">${t('▶ Continue the journey')}</button><button class="obtn" id="jsur" title="${esc(t('A random unheard work from this journey'))}">${t('🎲 Surprise me')}</button><a class="obtn" href="#/play">${t('⟳ Autoplay')}</a>
   </div>
   ${JQ ? "" : todayHTML()}
   <div id="jbar"><div class="pfill"><i style="width:${100*nW/journey.length}%"></i></div>
-    <div id="jstats"><b>${nC}</b>/<b>${spineComposers.length}</b> composers · <b>${nW}</b>/<b>${journey.length}</b> works · <b>${nL}</b>/<b>${DB.lessons.length}</b> theory stops · <b>${fmtH(ST.sec)}</b> listened</div>
-    <nav id="eranav" aria-label="Eras" class="ui">${ERAS.map(e => { const cs = spineComposers.filter(c => c.era===e.id); return `<button class="chip${!JQ && e.id===showEra ? " on" : ""}" data-era="${e.id}" style="--dc:${e.color}">${e.name} <b>${cs.filter(compHeard).length}/${cs.length}</b></button>`; }).join("")}</nav></div>`;
+    <div id="jstats">${t('{heard}/{total} composers', {heard: `<b>${nC}</b>`, total: `<b>${spineComposers.length}</b>`})} · ${t('{heard}/{total} works', {heard: `<b>${nW}</b>`, total: `<b>${journey.length}</b>`})} · ${t('{heard}/{total} theory stops', {heard: `<b>${nL}</b>`, total: `<b>${DB.lessons.length}</b>`})} · ${t('{time} listened', {time: `<b>${fmtH(ST.sec)}</b>`})}</div>
+    <nav id="eranav" aria-label="${esc(t('Eras'))}" class="ui">${ERAS.map(e => { const cs = spineComposers.filter(c => c.era===e.id); return `<button class="chip${!JQ && e.id===showEra ? " on" : ""}" data-era="${e.id}" style="--dc:${e.color}">${e.name} <b>${cs.filter(compHeard).length}/${cs.length}</b></button>`; }).join("")}</nav></div>`;
   let stop = 0;
   for(const e of ERAS){
     const cs = spineComposers.filter(c => c.era===e.id);
@@ -1369,15 +1394,15 @@ function journeyView(){
     inner += `<section class="era" id="era-${e.id}" style="--ac:${e.color}">
       <div class="era-mark" aria-hidden="true">${e.mark}</div>
       <header class="era-head"><h2>${esc(e.name)}</h2><span class="era-years">${esc(e.years)}</span>
-        <span class="era-prog"><i style="width:${ws.length ? 100*hw/ws.length : 0}%"></i></span><span class="ep-txt">${hw}/${ws.length} works</span></header>
+        <span class="era-prog"><i style="width:${ws.length ? 100*hw/ws.length : 0}%"></i></span><span class="ep-txt">${t('{heard}/{total} works', {heard: hw, total: ws.length})}</span></header>
       <p class="era-intro">${esc(e.intro)}</p>
       <div class="lessons">${DB.lessons.filter(l => l.era===e.id && l.tradition==="classical").map(lessonCard).join("")}</div>
       <div class="composers">${cs.map(c => { stop++; const ws = spine[c.id]||[];
         return `<article class="comp${compDone(c) ? " done" : ""}" data-c="${c.id}">
-          <div class="c-head"><span class="c-num">STOP ${stop}</span><h3><a href="#/c/${c.id}">${esc(c.name)}</a></h3><span class="c-meta"><span class="sigdots" title="${SIGC[c.sig]||""}">${dots(c.sig)}</span> ${esc(c.life)} · ${esc(c.origin)}</span>
-            ${ws.length ? `<button class="radio" data-radio="${c.id}" title="Play the journey onward from here">⏵ Radio</button>` : ""}</div>
+          <div class="c-head"><span class="c-num">${t('STOP {n}', {n: stop})}</span><h3><a href="#/c/${c.id}">${esc(c.name)}</a></h3><span class="c-meta"><span class="sigdots" title="${SIGC[c.sig]||""}">${dots(c.sig)}</span> ${esc(c.life)} · ${esc(c.origin)}</span>
+            ${ws.length ? `<button class="radio" data-radio="${c.id}" title="${esc(t('Play the journey onward from here'))}">${t('⏵ Radio')}</button>` : ""}</div>
           <p class="c-bio">${esc(c.bio)}</p>
-          <div class="c-works">${ws.map(workChip).join("")}${ws.length>6 ? `<button class="more">+${ws.length-6} more</button>` : ""}</div></article>`; }).join("")}</div>
+          <div class="c-works">${ws.map(workChip).join("")}${ws.length>6 ? `<button class="more">${t('+{n} more', {n: ws.length-6})}</button>` : ""}</div></article>`; }).join("")}</div>
     </section>`;
   }
   if(!JQ){ const k = ERAS.findIndex(e => e.id===showEra), p = ERAS[k-1], n = ERAS[k+1];
@@ -1385,12 +1410,12 @@ function journeyView(){
   app.innerHTML = shellHTML("journey", inner);
   afterRender(); wirePicker();
   $("#jsur").onclick = () => surprise(journey);
-  const jq = $("#jq"); let t;
+  const jq = $("#jq"); let tm;
   if(JQ){ const v = clean(JQ);
     document.querySelectorAll(".comp").forEach(el => { el.style.display = clean(el.textContent).includes(v) ? "" : "none"; });
     document.querySelectorAll(".lessons,.era-intro,.era-mark").forEach(el => { el.style.display = "none"; });
     document.querySelectorAll(".era").forEach(s => { s.style.display = s.querySelector('.comp:not([style*="none"])') ? "" : "none"; }); }
-  jq.oninput = () => { clearTimeout(t); t = setTimeout(() => { JQ = jq.value.trim(); journeyView(); const el = $("#jq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 300); };
+  jq.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { JQ = jq.value.trim(); journeyView(); const el = $("#jq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 300); };
   $("#go").onclick = () => {
     const c = nextStop();
     if(JQ || c.era!==showEra){ JQ = ""; setEra(c.era); journeyView(); }
@@ -1402,15 +1427,15 @@ function journeyView(){
 }
 function workChip(w){
   const r = rec(w.id);
-  return `<span class="work h${r.s}" data-w="${w.id}"><button class="pl" data-play="${w.id}" title="Stream a free recording here">▶</button><a href="#/w/${w.id}">${r.s ? `<span class="mk">${MARKS[r.s]}</span>` : r.w ? `<span class="mk">☆</span>` : ""}${esc(w.title)}</a></span>`;
+  return `<span class="work h${r.s}" data-w="${w.id}"><button class="pl" data-play="${w.id}" title="${esc(t('Stream a free recording here'))}">▶</button><a href="#/w/${w.id}">${r.s ? `<span class="mk">${MARKS[r.s]}</span>` : r.w ? `<span class="mk">☆</span>` : ""}${esc(w.title)}</a></span>`;
 }
 function lessonCard(l){
   const d = l.title in ST.lessons;
   return `<details class="lesson${d ? " done" : ""}" data-l="${esc(l.title)}">
-    <summary><span class="lb">${l.tradition && l.tradition!=="classical" ? esc(TRADITIONS[l.tradition]||l.tradition) + " · theory stop" : "Theory stop"}</span>${esc(l.title)}</summary>
+    <summary><span class="lb">${l.tradition && l.tradition!=="classical" ? t('{genre} · theory stop', {genre: esc(TRADITIONS[l.tradition]||l.tradition)}) : t('Theory stop')}</span>${esc(l.title)}</summary>
     <p>${esc(l.body)}</p>
-    <div class="l-hear">${(l.hear||[]).map(h => `<a href="https://www.youtube.com/results?search_query=${enc(h.q)}" target="_blank" rel="noopener">▶ Hear it: ${esc(h.label)}</a>${h.id && byId[h.id] ? `<a href="#/w/${h.id}" title="Open in the catalogue">${esc(byId[h.id].title)} →</a>` : ""}`).join("")}</div>
-    <button class="obtn l-done">${d ? "✓ Learned" : "Mark as learned"}</button></details>`;
+    <div class="l-hear">${(l.hear||[]).map(h => `<a href="https://www.youtube.com/results?search_query=${enc(h.q)}" target="_blank" rel="noopener">${t('▶ Hear it: {label}', {label: esc(h.label)})}</a>${h.id && byId[h.id] ? `<a href="#/w/${h.id}" title="${esc(t('Open in the catalogue'))}">${esc(byId[h.id].title)} →</a>` : ""}`).join("")}</div>
+    <button class="obtn l-done">${d ? t('✓ Learned') : t('Mark as learned')}</button></details>`;
 }
 function refreshChip(id){
   const r = rec(id);
@@ -1434,29 +1459,29 @@ function worksView(){
     && (!F.sig || w.sig>=+F.sig) && (!F.mov || w.movement===F.mov)
     && (!F.reg || w.region===F.reg) && (!F.th || (w.themes||[]).includes(F.th))
     && (!F.st || (F.st==="unheard" ? rec(w.id).s===0 : F.st==="want" ? wants(w.id) : rec(w.id).s>=+F.st))
-    && (!qq || clean(w.title+" "+cname(w)+" "+w.year+" "+(w.movement||"")+" "+(w.cat||"")+" "+(GENRES[w.genre]||"")+" "+(TRADITIONS[w.tradition]||"")).includes(qq));
-  const sel = (id,label,opts,cur) => `<select class="chip" id="${id}"><option value="">${label}</option>${opts.map(o => { const [v,t] = Array.isArray(o) ? o : [o,o]; return `<option value="${esc(v)}"${cur===v ? " selected" : ""}>${esc(t)}</option>`; }).join("")}</select>`;
-  let inner = `<div class="hero"><h1>Works</h1><span class="sub">${chrono.length.toLocaleString()} works · ${heard} heard</span></div>
+    && (!qq || clean(w.title+" "+cname(w)+" "+w.year+" "+(w.movement||"")+" "+(w.cat||"")+" "+(GENRES[w.genre]||"")+" "+(TRADITIONS[w.tradition]||"")+" "+(EN.G[w.genre]||"")+" "+(EN.T[w.tradition]||"")).includes(qq));
+  const sel = (id,label,opts,cur) => `<select class="chip" id="${id}"><option value="">${esc(label)}</option>${opts.map(o => { const [v,lab] = Array.isArray(o) ? o : [o,o]; return `<option value="${esc(v)}"${cur===v ? " selected" : ""}>${esc(lab)}</option>`; }).join("")}</select>`;
+  let inner = `<div class="hero"><h1>${t('Works')}</h1><span class="sub">${t.n('{n} work', '{n} works', chrono.length)} · ${t('{n} heard', {n: heard})}</span></div>
   <div class="tools ui">
-    <input type="search" placeholder="Search works, composers, catalogue…" value="${esc(F.q)}" id="fq">
-    ${sel("ftrad","All genres",Object.entries(TRADITIONS),F.trad)}
-    <button class="chip" id="ftog">Filters${nf ? ` (${nf})` : ""} ▾</button>
+    <input type="search" placeholder="${esc(t('Search works, composers, catalogue…'))}" value="${esc(F.q)}" id="fq">
+    ${sel("ftrad",t('All genres'),Object.entries(TRADITIONS),F.trad)}
+    <button class="chip" id="ftog">${nf ? t('Filters ({n}) ▾', {n: nf}) : t('Filters ▾')}</button>
     <div class="fmore${FOPEN ? " open" : ""}">
-    ${sel("fera","All eras",ERAS.map(e => [e.id,e.name]),F.era)}
-    ${sel("fgen","All forms",Object.entries(GENRES),F.gen)}
-    ${sel("fsig","Any significance",[["3","◆◆◆ Landmarks"],["2","◆◆ Major +"]],F.sig)}
-    ${sel("fmov","All movements",MOVEMENTS,F.mov)}
-    ${sel("freg","All regions",REGIONS,F.reg)}
-    ${sel("fth","All themes",THEMES,F.th)}
-    ${sel("fst","Any status",[["want","☆ Want to hear"],["unheard","Not heard"],["1","Heard +"],["2","Studied +"],["3","Loved"]],F.st)}
-    ${sel("fsort","Chronological",[["sig","By significance"],["rating","By my rating"],["short","Shortest first"]],F.sort==="chrono" ? "" : F.sort)}
-  </div></div><div class="wacts ui"><button class="obtn" id="wsur" title="A random unheard work from this list">🎲 Surprise me</button><a class="obtn" href="#/play">⟳ Autoplay</a><button class="obtn" id="wplay" title="Queue this list, in order">▶ Play these</button><button class="obtn" id="wexp" title="Save this list as a page with listening links">⬇ Export list</button></div><div class="gallery" id="wgal">`;
+    ${sel("fera",t('All eras'),ERAS.map(e => [e.id,e.name]),F.era)}
+    ${sel("fgen",t('All forms'),Object.entries(GENRES),F.gen)}
+    ${sel("fsig",t('Any significance'),[["3",t('◆◆◆ Landmarks')],["2",t('◆◆ Major +')]],F.sig)}
+    ${sel("fmov",t('All movements'),MOVEMENTS,F.mov)}
+    ${sel("freg",t('All regions'),REGIONS.map(r => [r, t(r)]),F.reg)}
+    ${sel("fth",t('All themes'),THEMES.map(x => [x, t(x)]),F.th)}
+    ${sel("fst",t('Any status'),[["want",t('☆ Want to hear')],["unheard",t('Not heard')],["1",t('Heard +')],["2",t('Studied +')],["3",t('Loved')]],F.st)}
+    ${sel("fsort",t('Chronological'),[["sig",t('By significance')],["rating",t('By my rating')],["short",t('Shortest first')]],F.sort==="chrono" ? "" : F.sort)}
+  </div></div><div class="wacts ui"><button class="obtn" id="wsur" title="${esc(t('A random unheard work from this list'))}">${t('🎲 Surprise me')}</button><a class="obtn" href="#/play">${t('⟳ Autoplay')}</a><button class="obtn" id="wplay" title="${esc(t('Queue this list, in order'))}">${t('▶ Play these')}</button><button class="obtn" id="wexp" title="${esc(t('Save this list as a page with listening links'))}">${t('⬇ Export list')}</button></div><div class="gallery" id="wgal">`;
   const matched = chrono.filter(match), items = [], cards = ws => ws.forEach(w => items.push({w}));
-  if(!matched.length) inner += `<p class="empty">Nothing matches — clear a filter.</p>`;
+  if(!matched.length) inner += `<p class="empty">${t('Nothing matches — clear a filter.')}</p>`;
   else if(F.sort==="sig"){
     const sorted = matched.slice().sort((a,b) => (b.sig||0)-(a.sig||0) || a.sortYear-b.sortYear);
     for(const tier of [3,2,1]){ const ws = sorted.filter(w => (w.sig||0)===tier); if(!ws.length) continue;
-      items.push({h:`<div class="gh"><h2>${SIGL[tier]}s</h2><span class="range">${dots(tier)}</span><span class="cnt">${ws.length}</span></div>`}); cards(ws); }
+      items.push({h:`<div class="gh"><h2>${tier===3 ? t('Landmarks') : tier===2 ? t('Major works') : t('Notables')}</h2><span class="range">${dots(tier)}</span><span class="cnt">${ws.length}</span></div>`}); cards(ws); }
   } else if(F.sort==="rating"){
     cards(matched.slice().sort((a,b) => (rec(b.id).r||0)-(rec(a.id).r||0) || (b.sig||0)-(a.sig||0) || a.sortYear-b.sortYear));
   } else if(F.sort==="short"){
@@ -1465,7 +1490,7 @@ function worksView(){
     for(const e of ERAS){
       const ws = matched.filter(w => w.era===e.id); if(!ws.length) continue;
       const all = chrono.filter(w => w.era===e.id), eh = all.filter(w => isHeard(w.id)).length;
-      items.push({h:`<div class="gh"><h2 style="color:${e.color}">${esc(e.name)}</h2><span class="range">${esc(e.years)}</span><span class="cnt">${eh}/${all.length} heard</span></div>`}); cards(ws);
+      items.push({h:`<div class="gh"><h2 style="color:${e.color}">${esc(e.name)}</h2><span class="range">${esc(e.years)}</span><span class="cnt">${t('{heard}/{total} heard', {heard: eh, total: all.length})}</span></div>`}); cards(ws);
     }
   }
   const pg = pager("works", items, w => cardHTML(w));
@@ -1474,13 +1499,13 @@ function worksView(){
   const shown = items.filter(x => x.w).map(x => x.w);
   $("#wsur").onclick = () => surprise(shown);
   $("#wplay").onclick = () => enqueue(shown.slice(0, 200).map(w => w.id));
-  $("#wexp").onclick = () => exportList(shown, F.st==="want" ? "My To hear list" : F.st==="3" ? "Works I love" : "The Classical Journey — " + (TRADITIONS[F.trad] || "selected works"));
+  $("#wexp").onclick = () => exportList(shown, F.st==="want" ? t('My To hear list') : F.st==="3" ? t('Works I love') : t('The Classical Journey — {what}', {what: TRADITIONS[F.trad] || t('selected works')}));
   $("#ftog").onclick = () => { FOPEN = !FOPEN; $(".fmore").classList.toggle("open", FOPEN); };
   const saveF = () => { LIM.works = 0; try{ sessionStorage.setItem("cj-filter", JSON.stringify(F)); }catch(e){} worksView(); };
   const wire = (id,key) => { document.getElementById(id).onchange = e => { F[key] = e.target.value; if(key==="sort" && !F.sort) F.sort = "chrono"; saveF(); }; };
   wire("ftrad","trad"); wire("fera","era"); wire("fgen","gen"); wire("fsig","sig"); wire("fmov","mov"); wire("freg","reg"); wire("fth","th"); wire("fst","st"); wire("fsort","sort");
-  const fq = document.getElementById("fq"); let t;
-  fq.oninput = e => { F.q = e.target.value; LIM.works = 0; clearTimeout(t); t = setTimeout(() => { try{ sessionStorage.setItem("cj-filter", JSON.stringify(F)); }catch(err){} worksView(); const el = document.getElementById("fq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 350); };
+  const fq = document.getElementById("fq"); let tm;
+  fq.oninput = e => { F.q = e.target.value; LIM.works = 0; clearTimeout(tm); tm = setTimeout(() => { try{ sessionStorage.setItem("cj-filter", JSON.stringify(F)); }catch(err){} worksView(); const el = document.getElementById("fq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 350); };
 }
 
 /* ---------- work page ---------- */
@@ -1507,53 +1532,53 @@ function workView(id){
   const e = ERA[w.era], c = w.composer && comp[w.composer];
   const ready = proseReady(w);
   if(!ready) loadProse(w.pc).then(() => { if(location.hash==="#/w/"+encodeURIComponent(id) || location.hash==="#/w/"+id){ const y = scrollY; workView(id); scrollTo(0, y); } },
-    () => { const el = $("#proseload"); if(el) el.textContent = "The notes could not be loaded — check your connection and reopen this page."; });
+    () => { const el = $("#proseload"); if(el) el.textContent = t("The notes could not be loaded — check your connection and reopen this page."); });
   const sec = (t,body) => body ? `<div class="section"><h3>${t}</h3><p>${esc(body)}</p></div>` : "";
   const inner = `
   <div class="wall">
     <div class="cline">${c ? `<a href="#/c/${c.id}">${esc(c.name)}</a>` : esc(w.culture||"")}</div>
     <h1>${esc(w.title)}</h1>
-    <div class="meta">${w.year ? `<span>${esc(w.year)}</span>` : ""}${w.cat ? `<span>${esc(w.cat)}</span>` : ""}${w.key ? `<span>${esc(w.key)}</span>` : ""}${w.mins ? `<span>${w.mins} min</span>` : ""}<br>
+    <div class="meta">${w.year ? `<span>${esc(w.year)}</span>` : ""}${w.cat ? `<span>${esc(w.cat)}</span>` : ""}${w.key ? `<span>${esc(w.key)}</span>` : ""}${w.mins ? `<span>${t("{n} min", {n: w.mins})}</span>` : ""}<br>
     ${w.forces ? `<span>${esc(w.forces)}</span>` : ""}<span>${e ? esc(e.name) : ""}</span>${w.thin ? "" : `<span>${GENRES[w.genre]||w.genre}</span>`}</div>
     ${w.sigWhy ? `<div class="sigline ui"><span class="sigdots">${dots(w.sig)}</span> <b>${SIGL[w.sig]}</b> — ${esc(w.sigWhy)}</div>` : ""}
     <div class="taxo ui">
       ${w.tradition && w.tradition!=="classical" ? `<button class="chip" data-f="trad" data-v="${esc(w.tradition)}">${esc(TRADITIONS[w.tradition]||w.tradition)}</button>` : ""}
       ${w.movement ? `<button class="chip" data-f="mov" data-v="${esc(w.movement)}">${esc(w.movement)}</button>` : ""}
-      ${w.region ? `<button class="chip" data-f="reg" data-v="${esc(w.region)}">${esc(w.region)}</button>` : ""}
-      ${(w.themes||[]).map(t => `<button class="chip" data-f="th" data-v="${esc(t)}">${esc(t)}</button>`).join("")}
+      ${w.region ? `<button class="chip" data-f="reg" data-v="${esc(w.region)}">${esc(t(w.region))}</button>` : ""}
+      ${(w.themes||[]).map(th => `<button class="chip" data-f="th" data-v="${esc(th)}">${esc(t(th))}</button>`).join("")}
     </div>
     <div class="listen ui">
-      <div class="row"><button class="gbtn" data-play="${w.id}">▶ Stream here</button><button class="obtn" data-enq="${w.id}" title="Add to Up next (q)">＋ Queue</button>
+      <div class="row"><button class="gbtn" data-play="${w.id}">${t("▶ Stream here")}</button><button class="obtn" data-enq="${w.id}" title="${esc(t("Add to Up next (q)"))}">${t("＋ Queue")}</button>
         ${LINKS(w).map(([n,u]) => `<a class="obtn" data-listen="${w.id}" href="${u}" target="_blank" rel="noopener">${n} ↗</a>`).join("")}</div>
-      <div class="note">The stream is found live in the Internet Archive's free collections (old recordings carry the crackle of their century — that is history too). The links open searches on each service, so they never go stale; opening one marks the work as heard.</div>
+      <div class="note">${t("The stream is found live in the Internet Archive's free collections (old recordings carry the crackle of their century — that is history too). The links open searches on each service, so they never go stale; opening one marks the work as heard.")}</div>
     </div>
-    <p class="keys ui">Keys: <b>h</b> heard · <b>s</b> studied · <b>l</b> loved · <b>w</b> want to hear · <b>q</b> queue · <b>p</b> play · <b>←/→</b> earlier/later · <b>/</b> search</p>
+    <p class="keys ui">${t("Keys:")} <b>h</b> ${t("heard")} · <b>s</b> ${t("studied")} · <b>l</b> ${t("loved")} · <b>w</b> ${t("want to hear")} · <b>q</b> ${t("queue")} · <b>p</b> ${t("play")} · <b>←/→</b> ${t("earlier/later")} · <b>/</b> ${t("search")}</p>
     <div class="tracker ui">
-      <div class="row"><span class="lbl">My listening</span>
+      <div class="row"><span class="lbl">${t("My listening")}</span>
         <div class="seg" id="seg">${STATUS.map((s,ix) => `<button data-s="${ix}" class="${r.s===ix ? "on" : ""}">${s}</button>`).join("")}</div>
-        <button class="obtn" id="want" title="Keep it on your To hear list until you have heard it">${r.w ? "★ On your list" : "☆ Want to hear"}</button></div>
-      <div class="row"><span class="lbl">Rating</span>
-        <div class="stars" id="stars">${[1,2,3,4,5].map(n => `<button data-r="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${n} star">★</button>`).join("")}</div>
-        <span class="facts" id="facts">${r.h ? "first heard "+new Date(r.h).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : ""}${r.p ? " · "+r.p+" play"+(r.p>1 ? "s" : "") : ""}</span></div>
-      <textarea id="notes" placeholder="Your notes — what you heard, what stayed with you…">${esc(r.n)}</textarea>
+        <button class="obtn" id="want" title="${esc(t("Keep it on your To hear list until you have heard it"))}">${r.w ? t("★ On your list") : t("☆ Want to hear")}</button></div>
+      <div class="row"><span class="lbl">${t("Rating")}</span>
+        <div class="stars" id="stars">${[1,2,3,4,5].map(n => `<button data-r="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${esc(t.n("{n} star", "{n} stars", n))}">★</button>`).join("")}</div>
+        <span class="facts" id="facts">${esc(factsText(r))}</span></div>
+      <textarea id="notes" placeholder="${esc(t("Your notes — what you heard, what stayed with you…"))}">${esc(r.n)}</textarea>
     </div>
   </div>
-  ${w.thin ? `<p class="thinnote">This entry has not been written up yet — the listening links and your tracking work now; the catalogue text arrives with the next build.</p>` : ""}
-  ${ready ? "" : `<p class="thinnote" id="proseload">Loading the notes…</p>`}
-  ${sec("About the music", w.about)}
-  ${sec("The world it comes from", w.context)}
-  ${sec("Listen closer", w.hidden)}
-  ${sec("Reception & debate", w.crit)}
-  ${sec("How to listen", w.enjoy)}
+  ${w.thin ? `<p class="thinnote">${t("This entry has not been written up yet — the listening links and your tracking work now; the catalogue text arrives with the next build.")}</p>` : ""}
+  ${ready ? "" : `<p class="thinnote" id="proseload">${t("Loading the notes…")}</p>`}
+  ${sec(t("About the music"), w.about)}
+  ${sec(t("The world it comes from"), w.context)}
+  ${sec(t("Listen closer"), w.hidden)}
+  ${sec(esc(t("Reception & debate")), w.crit)}
+  ${sec(t("How to listen"), w.enjoy)}
   <div class="xlinks">
-    ${xgroupHTML("Grows out of", w.links.pre)}
-    ${xgroupHTML("Feeds into", w.links.succ)}
-    ${xgroupHTML("Kindred works", w.links.sim)}
-    ${xgroupHTML("In argument with", w.links.con)}
+    ${xgroupHTML(t("Grows out of"), w.links.pre)}
+    ${xgroupHTML(t("Feeds into"), w.links.succ)}
+    ${xgroupHTML(t("Kindred works"), w.links.sim)}
+    ${xgroupHTML(t("In argument with"), w.links.con)}
   </div>
   <div class="pn ui">
-    ${prev ? `<a href="#/w/${prev.id}">← earlier<b>${esc(prev.title)}</b></a>` : "<span></span>"}
-    ${next ? `<a class="next" href="#/w/${next.id}">later →<b>${esc(next.title)}</b></a>` : "<span></span>"}
+    ${prev ? `<a href="#/w/${prev.id}">${t("← earlier")}<b>${esc(prev.title)}</b></a>` : "<span></span>"}
+    ${next ? `<a class="next" href="#/w/${next.id}">${t("later →")}<b>${esc(next.title)}</b></a>` : "<span></span>"}
   </div>`;
   app.innerHTML = shellHTML("works", inner);
   afterRender();
@@ -1563,15 +1588,17 @@ function workView(id){
     location.hash = "#/works";
   });
   $("#seg").onclick = e => { const b = e.target.closest("button"); if(!b) return; const s = +b.dataset.s; setRec(id, {s}); [...e.currentTarget.children].forEach(x => x.classList.toggle("on", +x.dataset.s===s)); };
-  $("#want").onclick = e => { toggleWant(id); e.currentTarget.textContent = rec(id).w ? "★ On your list" : "☆ Want to hear"; };
+  $("#want").onclick = e => { toggleWant(id); e.currentTarget.textContent = rec(id).w ? t("★ On your list") : t("☆ Want to hear"); };
   $("#stars").onclick = e => { const b = e.target.closest("button"); if(!b) return; let n = +b.dataset.r; if(rec(id).r===n) n = 0; setRec(id, {r:n}); [...e.currentTarget.children].forEach(x => x.classList.toggle("on", +x.dataset.r<=n && n>0)); };
   const notes = $("#notes"); notes.addEventListener("change", () => setRec(id, {n:notes.value.trim()}));
 }
+// "first heard 8 Nov 2026 · 3 plays", under the rating
+const factsText = r => [r.h ? t("first heard {date}", {date: FMT.date(r.h)}) : "", r.p ? t.n("{n} play", "{n} plays", r.p) : ""].filter(Boolean).join(" · ");
 function refreshTracker(id){   // after a play or link click on the open work page
   const seg = $("#seg"); if(!seg || location.hash !== "#/w/"+id) return;
   const r = rec(id);
   [...seg.children].forEach(x => x.classList.toggle("on", +x.dataset.s===r.s));
-  const f = $("#facts"); if(f) f.textContent = (r.h ? "first heard "+new Date(r.h).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "") + (r.p ? " · "+r.p+" play"+(r.p>1 ? "s" : "") : "");
+  const f = $("#facts"); if(f) f.textContent = factsText(r);
 }
 
 /* ---------- composers ---------- */
@@ -1583,18 +1610,18 @@ function composersView(){
   if(AF.sort==="name") list.sort((a,b) => a.name.localeCompare(b.name));
   else if(AF.sort==="sig") list.sort((a,b) => (b.sig||0)-(a.sig||0) || a.born-b.born);
   const chipb = (v,l) => `<button class="chip ${AF.sig===v ? "on" : ""}" data-sig="${v}">${l}</button>`;
-  const inner = `<div class="hero"><h1>Composers &amp; artists</h1><span class="sub">${list.length} of ${DB.composers.length}</span></div>
+  const inner = `<div class="hero"><h1>${esc(t("Composers & artists"))}</h1><span class="sub">${t("{n} of {total}", {n: list.length, total: DB.composers.length})}</span></div>
   <div class="tools ui">
-    ${chipb("","All")}${chipb("3","◆◆◆ Landmark")}${chipb("2","◆◆ Major +")}
-    <select class="chip" id="aera"><option value="">All eras</option>${ERAS.map(e => `<option value="${e.id}"${AF.era===e.id ? " selected" : ""}>${esc(e.name)}</option>`).join("")}</select>
-    <select class="chip" id="asort"><option value="chrono"${AF.sort==="chrono" ? " selected" : ""}>By birth</option><option value="sig"${AF.sort==="sig" ? " selected" : ""}>By significance</option><option value="name"${AF.sort==="name" ? " selected" : ""}>A–Z</option></select>
+    ${chipb("",t("All"))}${chipb("3",t("◆◆◆ Landmark"))}${chipb("2",t("◆◆ Major +"))}
+    <select class="chip" id="aera"><option value="">${t("All eras")}</option>${ERAS.map(e => `<option value="${e.id}"${AF.era===e.id ? " selected" : ""}>${esc(e.name)}</option>`).join("")}</select>
+    <select class="chip" id="asort"><option value="chrono"${AF.sort==="chrono" ? " selected" : ""}>${t("By birth")}</option><option value="sig"${AF.sort==="sig" ? " selected" : ""}>${t("By significance")}</option><option value="name"${AF.sort==="name" ? " selected" : ""}>${t("A–Z")}</option></select>
   </div>
   <div class="alist" id="agal">`;
   const pg = pager("comps", list.map(c => ({w:c})), c => { const ws = compWorks[c.id]||[], heard = ws.filter(w => isHeard(w.id)).length, e = ERA[c.era];
     return `<a class="acard" href="#/c/${c.id}" style="--ec:${e ? e.color : ""}"><div class="an"><span class="sigdots" title="${SIGC[c.sig]||""}">${dots(c.sig)}</span> ${esc(c.name)}</div>
       <div class="al">${esc(c.life)} · ${esc(c.origin)}</div>
       ${c.sigWhy ? `<div class="al" style="margin-top:.25rem;font-style:italic">${esc(c.sigWhy)}</div>` : ""}
-      <div class="aw">${heard}/${ws.length} works heard</div></a>`; });
+      <div class="aw">${t("{heard}/{total} works heard", {heard, total: ws.length})}</div></a>`; });
   app.innerHTML = shellHTML("composers", inner + pg.html + "</div>" + pg.foot); afterRender(); pg.wire($("#agal"));
   const re = () => { LIM.comps = 0; composersView(); };
   document.querySelectorAll(".tools .chip[data-sig]").forEach(b => b.onclick = () => { AF.sig = b.dataset.sig; re(); });
@@ -1608,12 +1635,12 @@ function composerView(id){
   ${c.sigWhy ? `<div class="sigline ui"><span class="sigdots">${dots(c.sig)}</span> <b>${SIGC[c.sig]}</b> — ${esc(c.sigWhy)}</div>` : ""}
   <p class="abio">${esc(c.bio)}</p>
   <div class="tools ui" style="position:static;border:0">
-    ${ws.length ? `<button class="gbtn" data-radio="${c.id}" data-only="1">⏵ Play all ${ws.length} works</button><button class="obtn" data-radio="${c.id}">⏵ Radio: journey onward from here</button>` : ""}
+    ${ws.length ? `<button class="gbtn" data-radio="${c.id}" data-only="1">${t.n("⏵ Play {n} work", "⏵ Play all {n} works", ws.length)}</button><button class="obtn" data-radio="${c.id}">${t("⏵ Radio: journey onward from here")}</button>` : ""}
     ${e ? `<span class="chip" style="--dc:${e.color}">${esc(e.name)}</span>` : ""}
-    ${c.born ? `<a class="obtn" href="#/lives/${c.born + 35}" title="Everyone alive when ${esc(c.name)} was 35">Who else was alive ↗</a>` : ""}
+    ${c.born ? `<a class="obtn" href="#/lives/${c.born + 35}" title="${esc(t("Everyone alive when {name} was 35", {name: c.name}))}">${t("Who else was alive ↗")}</a>` : ""}
     <a class="obtn" href="https://en.wikipedia.org/w/index.php?search=${enc(c.name)}&go=Go" target="_blank" rel="noopener">Wikipedia ↗</a>
   </div>
-  <span class="lbl">Works, in order of composition</span>
+  <span class="lbl">${t("Works, in order of composition")}</span>
   <div class="gallery" style="margin-top:.6rem">${ws.map(w => cardHTML(w, w.year || "")).join("")}</div>`;
   app.innerHTML = shellHTML("composers", inner); afterRender();
 }
@@ -1637,6 +1664,7 @@ function startAuto(resume){
   if(SS && PS.say!=="off"){ SS.cancel(); SS.speak(new SpeechSynthesisUtterance("")); }
   P.prevW = null; playQueue(q, i); P.auto = true; P.cap = PS.pace==="taste" ? PS.mins*60 : 0; PS.last = q[i]; psave();
 }
+// ponytail: narration stays English, it reads the English catalogue
 // Spoken before each piece: what it is, who made it (when the composer changes), the notes, and the
 // next unread theory stop for that era and genre — which then counts as done.
 const SS = "speechSynthesis" in window ? speechSynthesis : null;
@@ -1670,7 +1698,7 @@ function narration(w, theoryOnly){
     if(l){ out.push("Theory stop: " + l.title + ".", l.body); ST.lessons[l.title] = Date.now(); save(); }
   }
   if(theoryOnly) return out.flatMap(sentences);   // no recording to play: keep the lesson, skip the notes
-  if(PS.say==="full" && w.tradition==="classical" && ERA[w.era] && (!prev || prev.era!==w.era)) out.push("The " + ERA[w.era].name + " era, " + ERA[w.era].years + ".", ERA[w.era].intro);
+  if(PS.say==="full" && w.tradition==="classical" && ERA[w.era] && (!prev || prev.era!==w.era)) out.push("The " + ERA[w.era].en + " era, " + ERA[w.era].years + ".", ERA[w.era].intro);
   if(PS.say!=="brief" && c && (!prev || prev.composer!==w.composer)) out.push(c.name + (c.life ? ", " + c.life.replace(/–/g, " to ") : "") + ".", c.bio);
   out.push("Now: " + w.title + ", by " + by + (w.year ? ", " + w.year : "") + ".");
   if(PS.say!=="brief") out.push(w.about);
@@ -1681,17 +1709,17 @@ function narration(w, theoryOnly){
 function playView(){
   const q = autoQueue(), n = q.length, resumable = PS.last && byId[PS.last] && q.includes(PS.last) && q.indexOf(PS.last)>0;
   const radio = (k,v,t) => `<label class="pk"><input type="radio" name="${k}" value="${v}"${PS[k]===v ? " checked" : ""}> ${t}</label>`;
-  app.innerHTML = shellHTML("more", `<div class="hero"><h1>Autoplay</h1><span class="sub">a hands-free run through a journey — every piece that plays is marked heard</span></div>
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>${t("Autoplay")}</h1><span class="sub">${t("a hands-free run through a journey — every piece that plays is marked heard")}</span></div>
   <div class="play-set ui">
-    <fieldset><legend>Journey</legend><select id="pj"><option value="classical">Classical journey (composer by composer)</option>${Object.entries(TRADITIONS).filter(([k]) => k!=="classical").map(([k,v]) => `<option value="${k}">${v} journey</option>`).join("")}<option value="all">All music, oldest first</option><option value="landmarks">Landmarks, every genre</option></select></fieldset>
-    <fieldset><legend>Which works</legend>${radio("st","unheard","Not heard yet")}${radio("st","loved","Loved — re-listen")}${radio("st","all","Everything")}<br>${radio("sig","","Any significance")}${radio("sig","2","◆◆ Major and up")}${radio("sig","3","◆◆◆ Landmarks only")}</fieldset>
-    <fieldset><legend>Order</legend>${radio("order","journey","Journey order")}${radio("order","sig","Most significant first")}${radio("order","random","Shuffle")}</fieldset>
-    <fieldset><legend>Pace</legend>${radio("pace","whole","Whole piece")}${radio("pace","taste","A taste of each:")} <label class="pk"><input type="range" min="1" max="20" id="pmins" value="${PS.mins}"> <span id="pmv">${PS.mins}</span> min</label>
-      <p class="sd-p">Pieces with no free recording are skipped after 10 s and stay unheard.</p></fieldset>
-    <fieldset><legend>Narration — spoken before each piece</legend>${SS ? `${radio("say","off","Off")}${radio("say","brief","Just the title")}${radio("say","notes","Title, composer and the notes")}${radio("say","full","Everything: era, composer, notes, context, what to listen for")}<br>
-      <label class="pk"><input type="checkbox" id="pth"${PS.theory ? " checked" : ""}> Theory stops — read the next one for that era and genre, then mark it done</label><br>
-      <label class="pk">Voice <select id="pvoice"><option value="">Default</option></select></label><label class="pk">Speed <input type="range" min="0.7" max="1.6" step="0.1" id="prate" value="${PS.rate||1}"> <span id="prv">${PS.rate||1}</span>×</label>` : "This browser can't speak."}</fieldset>
-    <div class="sd-row"><button class="gbtn" id="pgo"${n ? "" : " disabled"}>▶ Play ${n.toLocaleString()} works</button>${resumable ? `<button class="obtn" id="pres">Resume at “${esc(byId[PS.last].title)}”</button>` : ""}<a class="obtn" href="#/gym">⛶ Gym mode</a></div>
+    <fieldset><legend>${t("Journey")}</legend><select id="pj"><option value="classical">${t("Classical journey (composer by composer)")}</option>${Object.entries(TRADITIONS).filter(([k]) => k!=="classical").map(([k,v]) => `<option value="${k}">${t("{genre} journey", {genre: v})}</option>`).join("")}<option value="all">${t("All music, oldest first")}</option><option value="landmarks">${t("Landmarks, every genre")}</option></select></fieldset>
+    <fieldset><legend>${t("Which works")}</legend>${radio("st","unheard",t("Not heard yet"))}${radio("st","loved",t("Loved — re-listen"))}${radio("st","all",t("Everything"))}<br>${radio("sig","",t("Any significance"))}${radio("sig","2",t("◆◆ Major and up"))}${radio("sig","3",t("◆◆◆ Landmarks only"))}</fieldset>
+    <fieldset><legend>${t("Order")}</legend>${radio("order","journey",t("Journey order"))}${radio("order","sig",t("Most significant first"))}${radio("order","random",t("Shuffle"))}</fieldset>
+    <fieldset><legend>${t("Pace")}</legend>${radio("pace","whole",t("Whole piece"))}${radio("pace","taste",t("A taste of each:"))} <label class="pk"><input type="range" min="1" max="20" id="pmins" value="${PS.mins}"> <span id="pmv">${PS.mins}</span> ${t("min")}</label>
+      <p class="sd-p">${t("Pieces with no free recording are skipped after 10 s and stay unheard.")}</p></fieldset>
+    <fieldset><legend>${t("Narration — spoken before each piece")}</legend>${SS ? `${radio("say","off",t("Off"))}${radio("say","brief",t("Just the title"))}${radio("say","notes",t("Title, composer and the notes"))}${radio("say","full",t("Everything: era, composer, notes, context, what to listen for"))}<br>
+      <label class="pk"><input type="checkbox" id="pth"${PS.theory ? " checked" : ""}> ${t("Theory stops — read the next one for that era and genre, then mark it done")}</label><br>
+      <label class="pk">${t("Voice")} <select id="pvoice"><option value="">${t("Default")}</option></select></label><label class="pk">${t("Speed")} <input type="range" min="0.7" max="1.6" step="0.1" id="prate" value="${PS.rate||1}"> <span id="prv">${FMT.number(PS.rate||1, {max:1})}</span>×</label>` : t("This browser can't speak.")}</fieldset>
+    <div class="sd-row"><button class="gbtn" id="pgo"${n ? "" : " disabled"}>${t.n("▶ Play {n} work", "▶ Play {n} works", n)}</button>${resumable ? `<button class="obtn" id="pres">${t("Resume at “{title}”", {title: esc(byId[PS.last].title)})}</button>` : ""}<a class="obtn" href="#/gym">${t("⛶ Gym mode")}</a></div>
   </div>`);
   afterRender();
   $("#pj").value = PS.j;
@@ -1700,10 +1728,10 @@ function playView(){
   const sl = $("#pmins"); sl.oninput = () => { PS.mins = +sl.value; $("#pmv").textContent = sl.value; psave(); };
   if(SS){
     const vs = $("#pvoice"), fill = () => { const cur = (() => { try{ return localStorage.getItem("cj-voice")||""; }catch(e){ return ""; } })();
-      vs.innerHTML = '<option value="">Default</option>' + SS.getVoices().filter(v => /^en/i.test(v.lang)).map(v => `<option${v.name===cur ? " selected" : ""}>${esc(v.name)}</option>`).join(""); };
+      vs.innerHTML = `<option value="">${t("Default")}</option>` + SS.getVoices().filter(v => /^en/i.test(v.lang)).map(v => `<option${v.name===cur ? " selected" : ""}>${esc(v.name)}</option>`).join(""); };
     fill(); SS.onvoiceschanged = fill;
     vs.onchange = e => { e.stopPropagation(); try{ localStorage.setItem("cj-voice", vs.value); }catch(err){} speak(["This is how I sound."], P.gen = (P.gen||0)+1); };
-    const pr = $("#prate"); pr.oninput = () => { PS.rate = +pr.value; $("#prv").textContent = pr.value; psave(); };
+    const pr = $("#prate"); pr.oninput = () => { PS.rate = +pr.value; $("#prv").textContent = FMT.number(+pr.value, {max:1}); psave(); };
     pr.onchange = e => e.stopPropagation();
     $("#pth").onchange = e => { e.stopPropagation(); PS.theory = e.target.checked; psave(); };
   }
@@ -1714,18 +1742,18 @@ function playView(){
 /* ---------- more (the phone tab bar's overflow) ---------- */
 function moreView(){
   const row = (h,t,d) => `<a class="mrow" href="${h}"><b>${t}</b><span>${d}</span></a>`;
-  app.innerHTML = shellHTML("more", `<div class="hero"><h1>More</h1></div><div class="mlist">
-    ${row("#/gym","Gym mode","One screen, big buttons: play and mark progress between sets")}
-    ${row("#/play","Autoplay","Hands-free through a journey, marking each piece as it plays")}
-    ${row("#/progress","Progress","What you have heard, studied and loved")}
-    ${row("#/quiz","Blind listening","Hear a clip, guess the composer, era or genre")}
-    ${row("#/lives","Who was alive","Pick a year: everyone living then, and their ages")}
-    ${row("#/review","Year in review","Your year in music: genres, favourites, new ground")}
-    ${row("#/tree","Constellation","Every work as a star map of influence")}
-    ${row("#/table","Table","Sort and search everything at once")}
-    ${row("#/about","About","How it works, sync and backup")}</div>
-    <div class="tools ui" style="position:static;border:0"><button class="obtn" id="msync">Sync &amp; backup…</button>${SITE ? `<button class="obtn" id="moff" title="Fetch every write-up once so the whole catalogue works with no connection">⬇ Download everything for offline</button>` : ""}</div>
-    ${RECENT.length ? `<span class="lbl">Recently viewed</span><div class="gallery" style="margin-top:.6rem">${RECENT.map(id => cardHTML(byId[id])).join("")}</div>` : ""}`);
+  app.innerHTML = shellHTML("more", `<div class="hero"><h1>${t("More")}</h1></div><div class="mlist">
+    ${row("#/gym",t("Gym mode"),t("One screen, big buttons: play and mark progress between sets"))}
+    ${row("#/play",t("Autoplay"),t("Hands-free through a journey, marking each piece as it plays"))}
+    ${row("#/progress",t("Progress"),t("What you have heard, studied and loved"))}
+    ${row("#/quiz",t("Blind listening"),t("Hear a clip, guess the composer, era or genre"))}
+    ${row("#/lives",t("Who was alive"),t("Pick a year: everyone living then, and their ages"))}
+    ${row("#/review",t("Year in review"),t("Your year in music: genres, favourites, new ground"))}
+    ${row("#/tree",t("Constellation"),t("Every work as a star map of influence"))}
+    ${row("#/table",t("Table"),t("Sort and search everything at once"))}
+    ${row("#/about",t("About"),t("How it works, sync and backup"))}</div>
+    <div class="tools ui" style="position:static;border:0"><button class="obtn" id="msync">${esc(t("Sync & backup…"))}</button>${SITE ? `<button class="obtn" id="moff" title="${esc(t("Fetch every write-up once so the whole catalogue works with no connection"))}">${t("⬇ Download everything for offline")}</button>` : ""}</div>
+    ${RECENT.length ? `<span class="lbl">${t("Recently viewed")}</span><div class="gallery" style="margin-top:.6rem">${RECENT.map(id => cardHTML(byId[id])).join("")}</div>` : ""}`);
   afterRender(); $("#msync").onclick = () => toolsDialog();
   const mo = $("#moff"); if(mo) mo.onclick = () => cacheAll(mo);
 }
@@ -1733,8 +1761,8 @@ function moreView(){
 /* ---------- theory ---------- */
 function theoryView(){
   const done = Object.keys(ST.lessons).length;
-  let inner = `<div class="hero"><h1>Theory stops</h1><span class="sub">${done}/${DB.lessons.length} learned · each one placed where history invented it</span></div>
-  <p class="howto">The gold stops that punctuate the Journey, gathered in one place, plus the ones for jazz, blues, rock and the rest that the classical timeline does not carry. Read each in a couple of minutes, hear the example, then go and listen for it.</p>`;
+  let inner = `<div class="hero"><h1>${t("Theory stops")}</h1><span class="sub">${t("{done}/{total} learned · each one placed where history invented it", {done, total: DB.lessons.length})}</span></div>
+  <p class="howto">${t("The gold stops that punctuate the Journey, gathered in one place, plus the ones for jazz, blues, rock and the rest that the classical timeline does not carry. Read each in a couple of minutes, hear the example, then go and listen for it.")}</p>`;
   for(const e of ERAS){
     const ls = DB.lessons.filter(l => l.era===e.id); if(!ls.length) continue;
     inner += `<div class="gh" style="margin-top:1.6rem"><h2 style="color:${e.color}">${esc(e.name)}</h2><span class="range">${esc(e.years)}</span><span class="cnt">${ls.filter(l => l.title in ST.lessons).length}/${ls.length}</span></div><div class="lessons">${ls.map(lessonCard).join("")}</div>`;
@@ -1759,7 +1787,7 @@ function progressView(){
   const all = chrono;
   const heard = all.filter(w => rec(w.id).s>0), studied = all.filter(w => rec(w.id).s>1), loved = all.filter(w => rec(w.id).s>2);
   const rated = Object.values(ST.works).filter(r => r.r>0);
-  const avg = rated.length ? (rated.reduce((s,r) => s+r.r, 0)/rated.length).toFixed(1) : "—";
+  const avg = rated.length ? FMT.number(rated.reduce((s,r) => s+r.r, 0)/rated.length, {max:1, min:1}) : "—";
   const plays = Object.values(ST.works).reduce((a,r) => a+(r.p||0), 0);
   const bar = ws => { const t = ws.length||1, lv = ws.filter(w => rec(w.id).s>2).length, rest = ws.filter(w => rec(w.id).s===1 || rec(w.id).s===2).length;
     return `<div class="bar"><i class="deep" style="width:${lv/t*100}%"></i><i style="width:${rest/t*100}%;opacity:.55"></i></div>`; };
@@ -1767,47 +1795,45 @@ function progressView(){
   const nDone = DB.composers.filter(compDone).length, nStarted = DB.composers.filter(compHeard).length;
   const hist = ST.log.slice(-12).reverse();
   const toHear = chrono.filter(w => wants(w.id)).sort((a,b) => rec(b.id).w - rec(a.id).w), sugg = suggestions(12);
-  const inner = `<div class="hero"><h1>Progress</h1><span class="sub">your way through a thousand years</span></div>
+  const inner = `<div class="hero"><h1>${t("Progress")}</h1><span class="sub">${t("your way through a thousand years")}</span></div>
   <div class="bignums ui">
-    <div><b>${heard.length}<small style="font-size:1rem;color:var(--mut)">/${all.length}</small></b><span>heard</span></div>
-    <div><b>${studied.length}</b><span>studied</span></div>
-    <div><b>${loved.length}</b><span>loved</span></div>
-    <div><b>${avg}</b><span>avg rating</span></div>
-    <div><b>${fmtH(ST.sec)}</b><span>streamed here</span></div>
-    <div><b>${plays}</b><span>plays</span></div>
-    <div><b>${streak()}</b><span>day streak</span></div>
-    <div><b>${nStarted}<small style="font-size:1rem;color:var(--mut)">/${DB.composers.length}</small></b><span>composers begun</span></div>
-    <div><b>${nDone}</b><span>composers complete</span></div>
-    <div><b>${Object.keys(ST.lessons).length}<small style="font-size:1rem;color:var(--mut)">/${DB.lessons.length}</small></b><span>theory stops</span></div>
+    <div><b>${heard.length}<small style="font-size:1rem;color:var(--mut)">/${all.length}</small></b><span>${t("heard")}</span></div>
+    <div><b>${studied.length}</b><span>${t("studied")}</span></div>
+    <div><b>${loved.length}</b><span>${t("loved")}</span></div>
+    <div><b>${avg}</b><span>${t("avg rating")}</span></div>
+    <div><b>${fmtH(ST.sec)}</b><span>${t("streamed here")}</span></div>
+    <div><b>${plays}</b><span>${t("plays")}</span></div>
+    <div><b>${streak()}</b><span>${t("day streak")}</span></div>
+    <div><b>${nStarted}<small style="font-size:1rem;color:var(--mut)">/${DB.composers.length}</small></b><span>${t("composers begun")}</span></div>
+    <div><b>${nDone}</b><span>${t("composers complete")}</span></div>
+    <div><b>${Object.keys(ST.lessons).length}<small style="font-size:1rem;color:var(--mut)">/${DB.lessons.length}</small></b><span>${t("theory stops")}</span></div>
   </div>
   ${todayHTML()}
-  <div class="tools ui" style="position:static;border:0"><button class="obtn" id="p-tools">Sync &amp; backup…</button><button class="obtn" id="p-hist">⇣ Import listening history</button><button class="obtn" id="p-exp">⬇ Export progress</button><button class="obtn" id="p-imp">⬆ Import progress</button></div>
+  <div class="tools ui" style="position:static;border:0"><button class="obtn" id="p-tools">${esc(t("Sync & backup…"))}</button><button class="obtn" id="p-hist">${t("⇣ Import listening history")}</button><button class="obtn" id="p-exp">${t("⬇ Export progress")}</button><button class="obtn" id="p-imp">${t("⬆ Import progress")}</button></div>
   ${mixHTML()}
-  ${toHear.length ? `<div style="margin-top:1.2rem"><span class="lbl">☆ To hear · ${toHear.length}</span><div class="gallery" style="margin-top:.6rem">${toHear.slice(0,24).map(w => cardHTML(w, cname(w))).join("")}</div>${toHear.length>24 ? `<p class="sub ui"><a href="#/works" id="p-allwant">All ${toHear.length} on your list →</a></p>` : ""}</div>` : ""}
-  <div style="margin-top:1.2rem"><span class="lbl">${sugg.length ? "Because you liked…" : "Start here — landmarks you have not heard"}</span><div class="gallery" style="margin-top:.6rem">${
+  ${toHear.length ? `<div style="margin-top:1.2rem"><span class="lbl">${t("☆ To hear · {n}", {n: toHear.length})}</span><div class="gallery" style="margin-top:.6rem">${toHear.slice(0,24).map(w => cardHTML(w, cname(w))).join("")}</div>${toHear.length>24 ? `<p class="sub ui"><a href="#/works" id="p-allwant">${t("All {n} on your list →", {n: toHear.length})}</a></p>` : ""}</div>` : ""}
+  <div style="margin-top:1.2rem"><span class="lbl">${sugg.length ? t("Because you liked…") : t("Start here — landmarks you have not heard")}</span><div class="gallery" style="margin-top:.6rem">${
     (sugg.length ? sugg : chrono.filter(w => w.sig===3 && !isHeard(w.id)).sort((a,b) => (a.id.length*7+a.sortYear)%13 - (b.id.length*7+b.sortYear)%13).slice(0,12).map(w => ({w})))
-      .map(({w,from}) => cardHTML(w, from ? "↳ from " + from.title : cname(w))).join("")}</div></div>
+      .map(({w,from}) => cardHTML(w, from ? t("↳ from {title}", {title: from.title}) : cname(w))).join("")}</div></div>
   <div class="prog-grid ui">
-    <div class="pblock"><h3>By era</h3>${ERAS.map(e => row(esc(e.name), all.filter(w => w.era===e.id), e.color)).join("")}</div>
-    <div class="pblock"><h3>By genre</h3>${Object.entries(TRADITIONS).map(([k,v]) => { const ws = all.filter(w => w.tradition===k); return ws.length ? row(v,ws) : ""; }).join("")}</div>
-    <div class="pblock"><h3>By form</h3>${Object.entries(GENRES).map(([k,v]) => { const ws = all.filter(w => w.genre===k && !w.thin); return ws.length ? row(v,ws) : ""; }).join("")}</div>
-    <div class="pblock"><h3>By significance</h3>${[3,2,1].map(t => row(`${dots(t)} ${SIGL[t]}s`, all.filter(w => (w.sig||0)===t && !w.thin))).join("")}</div>
-    <div class="pblock"><h3>By region</h3>${REGIONS.map(r => { const ws = all.filter(w => w.region===r); return ws.length ? row(esc(r),ws) : ""; }).join("")}</div>
+    <div class="pblock"><h3>${t("By era")}</h3>${ERAS.map(e => row(esc(e.name), all.filter(w => w.era===e.id), e.color)).join("")}</div>
+    <div class="pblock"><h3>${t("By genre")}</h3>${Object.entries(TRADITIONS).map(([k,v]) => { const ws = all.filter(w => w.tradition===k); return ws.length ? row(v,ws) : ""; }).join("")}</div>
+    <div class="pblock"><h3>${t("By form")}</h3>${Object.entries(GENRES).map(([k,v]) => { const ws = all.filter(w => w.genre===k && !w.thin); return ws.length ? row(v,ws) : ""; }).join("")}</div>
+    <div class="pblock"><h3>${t("By significance")}</h3>${[3,2,1].map(sg => row(`${dots(sg)} ${[, t("Notables"), t("Major works"), t("Landmarks")][sg]}`, all.filter(w => (w.sig||0)===sg && !w.thin))).join("")}</div>
+    <div class="pblock"><h3>${t("By region")}</h3>${REGIONS.map(r => { const ws = all.filter(w => w.region===r); return ws.length ? row(esc(t(r)),ws) : ""; }).join("")}</div>
   </div>
-  <div class="legend"><i style="background:var(--star)"></i>loved <i style="background:var(--gold);opacity:.55"></i>heard or studied</div>
-  <div class="pblock ui" style="margin-top:1.5rem"><h3>Font</h3>
+  <div class="legend"><i style="background:var(--star)"></i>${t("loved")} <i style="background:var(--gold);opacity:.55"></i>${t("heard or studied")}</div>
+  <div class="pblock ui" style="margin-top:1.5rem"><h3>${t("Font")}</h3>
     <app-font-picker></app-font-picker>
-    <p class="sub" style="margin:.4rem 0 0">Applies to every app by this maker on this device.</p>
+    <p class="sub" style="margin:.4rem 0 0">${t("Applies to every app by this maker on this device.")}</p>
   </div>
-  <div class="pblock ui" style="margin-top:1.5rem"><h3>Ask for a programme</h3>
-    <p class="sub" style="margin:.2rem 0 .7rem">Hand what you have heard and loved to an agent through a
-    folder on this device &mdash; CoworkSyncHub, Claude Desktop, or a person &mdash; and it will suggest what
-    to listen to next. Nothing is uploaded.</p>
+  <div class="pblock ui" style="margin-top:1.5rem"><h3>${t("Ask for a programme")}</h3>
+    <p class="sub" style="margin:.2rem 0 .7rem">${t("Hand what you have heard and loved to an agent through a folder on this device — CoworkSyncHub, Claude Desktop, or a person — and it will suggest what to listen to next. Nothing is uploaded.")}</p>
     <div id="coachHost"></div>
     <div id="coachReply" class="prose" style="display:none;white-space:pre-wrap;margin-top:.7rem"></div>
   </div>
-  ${hist.length ? `<div style="margin-top:1.5rem"><span class="lbl">Recently played</span><ol class="hist">${hist.map(e => { const w = byId[e.id]; return w ? `<li><a href="#/w/${w.id}">${esc(w.title)}</a> — ${esc(cname(w))} <span style="color:var(--mut)">· ${new Date(e.ts).toLocaleDateString(undefined,{month:"short",day:"numeric"})}</span></li>` : ""; }).join("")}</ol></div>` : ""}
-  ${loved.length ? `<div style="margin-top:1.5rem"><span class="lbl">Loved</span><div class="gallery" style="margin-top:.6rem">${loved.map(w => cardHTML(w, cname(w))).join("")}</div></div>` : ""}`;
+  ${hist.length ? `<div style="margin-top:1.5rem"><span class="lbl">${t("Recently played")}</span><ol class="hist">${hist.map(e => { const w = byId[e.id]; return w ? `<li><a href="#/w/${w.id}">${esc(w.title)}</a> — ${esc(cname(w))} <span style="color:var(--mut)">· ${FMT.custom(e.ts, {month:"short",day:"numeric"})}</span></li>` : ""; }).join("")}</ol></div>` : ""}
+  ${loved.length ? `<div style="margin-top:1.5rem"><span class="lbl">${t("Loved")}</span><div class="gallery" style="margin-top:.6rem">${loved.map(w => cardHTML(w, cname(w))).join("")}</div></div>` : ""}`;
   app.innerHTML = shellHTML("progress", inner); afterRender(); mountCoach();
   const aw = $("#p-allwant"); if(aw) aw.onclick = () => { F.st = "want"; LIM.works = 0; try{ sessionStorage.setItem("cj-filter", JSON.stringify(F)); }catch(e){} };
   $("#p-tools").onclick = () => toolsDialog(); $("#p-exp").onclick = exportState; $("#p-hist").onclick = historyDialog; $("#p-imp").onclick = () => $("#impfile").click();
@@ -1882,7 +1908,7 @@ function mountCoach(){
                   loved:all.filter(w=>mark(w).s>2).length,
                   plays:Object.values(ST.works).reduce((a,r)=>a+(r.p||0),0),
                   hoursStreamed:Math.round((ST.sec||0)/360)/10},
-          byEra:Object.fromEntries(DB.eras.map(e=>[e.name, tally(all.filter(w=>w.era===e.id))])),
+          byEra:Object.fromEntries(DB.eras.map(e=>[e.en||e.name, tally(all.filter(w=>w.era===e.id))])),
           byGenre:Object.fromEntries(genres.map(g=>[g, tally(all.filter(w=>w.genre===g))])),
           loved:rated.map(([id,r])=>byId[id]?Object.assign(brief(byId[id]),{rating:r.r}):null).filter(Boolean),
           recentlyPlayed:(ST.log||[]).slice(-25).reverse()
@@ -1909,14 +1935,14 @@ function mountCoach(){
       // cowork v2 (house standard): review the reply before it replaces the current one; undo from the history
       channels:{
         coach:{
-          label:"Programme coach",
-          preview:(reply)=>{ const t=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||""; return [{ id:"reply", label:"Show this advice in The Classical Journey (replaces the current one)", detail:t.slice(0,400) }]; },
+          label:t("Programme coach"),
+          preview:(reply)=>{ const txt=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||""; return [{ id:"reply", label:t("Show this advice in The Classical Journey (replaces the current one)"), detail:txt.slice(0,400) }]; },
           apply:(reply)=>{
             let prev=""; try{ prev=localStorage.getItem("cj-coach-reply")||""; }catch(e){}
-            const t=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||JSON.stringify(reply,null,2);
-            try{ localStorage.setItem("cj-coach-reply", t); }catch(e){}
-            show(t);
-            return { summary:"new advice shown", undo:{ prev } };
+            const txt=typeof reply==="string"?reply:(reply&&(reply.reply||(reply.payload&&reply.payload.reply)))||JSON.stringify(reply,null,2);
+            try{ localStorage.setItem("cj-coach-reply", txt); }catch(e){}
+            show(txt);
+            return { summary:t("new advice shown"), undo:{ prev } };
           },
           undo:(d)=>{ try{ localStorage.setItem("cj-coach-reply", d.prev||""); }catch(e){} show(d.prev||""); },
         },
@@ -1928,24 +1954,25 @@ function mountCoach(){
 /* ---------- about ---------- */
 function aboutView(){
   const full = DB.works.filter(w => !w.thin).length;
-  const inner = `<div class="hero"><h1>About</h1><span class="sub">where all of this comes from</span></div>
+  const alink = (href, txt) => `<a href="${href}" target="_blank" rel="noopener">${txt}</a>`;
+  const inner = `<div class="hero"><h1>${t("About")}</h1><span class="sub">${t("where all of this comes from")}</span></div>
   <div class="prose">
-    <h3>What this is</h3>
-    <p>A private listening companion: ${DB.works.length.toLocaleString()} works by ${DB.composers.length.toLocaleString()} composers across a thousand years, ${full.toLocaleString()} of them with a full catalogue entry — what you are hearing, the world it came from, what most listeners miss, how judgment has changed, and how to listen — plus ${DB.lessons.length} theory stops placed where history invented the idea. It is a personal reading aid, not a publication or an authority. The catalogue was last built ${esc(DB.built||"")}.</p>
-    <p>${ARTIFACT ? `There is also an installable version at <a href="https://adervec.github.io/classical-journey/" target="_blank" rel="noopener">adervec.github.io/classical-journey</a>, which works offline and streams from the Internet Archive (this page cannot, because its sandbox blocks the request).` : `This page works offline once loaded, and can be installed as an app from your browser menu. There is also a copy on claude.ai that keeps your progress in your account.`}</p>
-    <h3>The music</h3>
-    <p>Nothing is hosted here. The <b>▶ Stream</b> button searches the <a href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a> at the moment you press it and plays whatever free recording it finds — often historic performances in the public domain, sometimes nothing. Every work also links to a live search on YouTube, Spotify, Apple Music, the Internet Archive, IMSLP (scores) and Wikipedia, so nothing here can rot into a dead link. Recordings on those services belong to their owners and are subject to their terms.</p>
-    <h3>The writing</h3>
-    <p>The entries were written for this collection and draw on standard musicology and programme-note literature. They are summaries for a general reader and will contain errors of emphasis and, occasionally, of fact. Check anything that matters against a specialist source. Contested dates and attributions are flagged with "probably" or "perhaps".</p>
-    <h3>Significance</h3>
-    <p>◆◆◆ marks landmarks that changed what music could do; ◆◆ major works performed and taught everywhere; ◆ works genuinely worth hearing but not pivotal. The tiers are one curator's calibration, meant as a way in, not a verdict.</p>
-    <h3>Your data</h3>
-    <p>What you have heard, your ratings, notes and listening time are stored in your browser. To carry them between computers, point the app at a folder inside Google Drive: it keeps one JSON file there, Drive for Desktop moves the file, and each computer merges what it finds. Nothing goes to any other service, there is no account, no analytics and no tracking. Clearing site data clears the local copy, so keep the sync folder on or export a file now and then.</p>
-    <h3>Corrections</h3>
-    <p>If an entry is wrong, note the work's id (in the address bar) — the fix belongs in the catalogue data and can be made at the source.</p>
+    <h3>${t("What this is")}</h3>
+    <p>${t("A private listening companion: {works} works by {composers} composers across a thousand years, {full} of them with a full catalogue entry — what you are hearing, the world it came from, what most listeners miss, how judgment has changed, and how to listen — plus {lessons} theory stops placed where history invented the idea.", {works: FMT.number(DB.works.length), composers: FMT.number(DB.composers.length), full: FMT.number(full), lessons: FMT.number(DB.lessons.length)})} ${t("It is a personal reading aid, not a publication or an authority.")} ${t("The catalogue was last built {date}.", {date: esc(DB.built||"")})}</p>
+    <p>${ARTIFACT ? t("There is also an installable version at {link}, which works offline and streams from the Internet Archive (this page cannot, because its sandbox blocks the request).", {link: alink("https://adervec.github.io/classical-journey/", "adervec.github.io/classical-journey")}) : t("This page works offline once loaded, and can be installed as an app from your browser menu. There is also a copy on claude.ai that keeps your progress in your account.")}</p>
+    <h3>${t("The music")}</h3>
+    <p>${t("Nothing is hosted here. The {stream} button searches the {archive} at the moment you press it and plays whatever free recording it finds — often historic performances in the public domain, sometimes nothing.", {stream: "<b>" + t("▶ Stream") + "</b>", archive: alink("https://archive.org", "Internet Archive")})} ${t("Every work also links to a live search on YouTube, Spotify, Apple Music, the Internet Archive, IMSLP (scores) and Wikipedia, so nothing here can rot into a dead link. Recordings on those services belong to their owners and are subject to their terms.")}</p>
+    <h3>${t("The writing")}</h3>
+    <p>${t("The entries were written for this collection and draw on standard musicology and programme-note literature. They are summaries for a general reader and will contain errors of emphasis and, occasionally, of fact.")} ${t('Check anything that matters against a specialist source. Contested dates and attributions are flagged with "probably" or "perhaps".')}</p>
+    <h3>${t("Significance")}</h3>
+    <p>${t("◆◆◆ marks landmarks that changed what music could do; ◆◆ major works performed and taught everywhere; ◆ works genuinely worth hearing but not pivotal. The tiers are one curator's calibration, meant as a way in, not a verdict.")}</p>
+    <h3>${t("Your data")}</h3>
+    <p>${t("What you have heard, your ratings, notes and listening time are stored in your browser. To carry them between computers, point the app at a folder inside Google Drive: it keeps one JSON file there, Drive for Desktop moves the file, and each computer merges what it finds.")} ${t("Nothing goes to any other service, there is no account, no analytics and no tracking. Clearing site data clears the local copy, so keep the sync folder on or export a file now and then.")}</p>
+    <h3>${t("Corrections")}</h3>
+    <p>${t("If an entry is wrong, note the work's id (in the address bar) — the fix belongs in the catalogue data and can be made at the source.")}</p>
 
-    <h3>Elsewhere</h3>
-    <p>More apps by the same maker, all free and local-first, are at <a href="https://adervec.github.io/portal/" target="_blank" rel="noopener">adervec.github.io</a>.</p>
+    <h3>${t("Elsewhere")}</h3>
+    <p>${t("More apps by the same maker, all free and local-first, are at {link}.", {link: alink("https://adervec.github.io/portal/", "adervec.github.io")})}</p>
   </div>`;
   app.innerHTML = shellHTML("about", inner); afterRender();
 }
@@ -2004,9 +2031,9 @@ function treeView(){
   const T = buildTree();
   const inner = `<div id="treewrap">
     <canvas id="tree"></canvas>
-    <div class="tctl ui"><input type="search" id="tsearch" placeholder="Find in the constellation…"><button class="chip" id="tfit">Reset view</button><button class="chip" id="tunseen">Dim heard</button></div>
-    <div class="tkey ui"><b>${T.nodes.length.toLocaleString()} works</b> — the core is the oldest, the rim is today; each arc is a region, each cluster a movement. Lines are lineage: what led to what.<br>
-      <i style="background:var(--star)"></i>loved <i style="background:var(--gold)"></i>studied <i style="background:var(--blue)"></i>heard <i style="background:var(--mut);opacity:.5"></i>not yet</div>
+    <div class="tctl ui"><input type="search" id="tsearch" placeholder="${esc(t("Find in the constellation…"))}"><button class="chip" id="tfit">${t("Reset view")}</button><button class="chip" id="tunseen">${t("Dim heard")}</button></div>
+    <div class="tkey ui">${t("{works} — the core is the oldest, the rim is today; each arc is a region, each cluster a movement. Lines are lineage: what led to what.", {works: "<b>" + t.n("{n} work", "{n} works", T.nodes.length) + "</b>"})}<br>
+      <i style="background:var(--star)"></i>${t("loved")} <i style="background:var(--gold)"></i>${t("studied")} <i style="background:var(--blue)"></i>${t("heard")} <i style="background:var(--mut);opacity:.5"></i>${t("not yet")}</div>
     <div id="ttip"><div class="tt"></div><div class="ts"></div></div></div>`;
   app.innerHTML = shellHTML("tree", inner); afterRender();
   const cv = $("#tree"), ctx = cv.getContext("2d"), tip = $("#ttip"), wrap = $("#treewrap");
@@ -2041,7 +2068,7 @@ function treeView(){
     ctx.globalAlpha = 1;
     if(V.k>0.10){ ctx.fillStyle = C("--mut"); ctx.font = "700 11px 'Segoe UI',system-ui,sans-serif";
       for(const s of T.sectors){ const mid = (s.a0+s.a1)/2, rr = (T.R1+52)*V.k; const x = V.x+Math.cos(mid)*rr, y = V.y+Math.sin(mid)*rr;
-        ctx.textAlign = Math.cos(mid)>.2 ? "left" : Math.cos(mid)<-.2 ? "right" : "center"; ctx.fillText(s.reg.toUpperCase(), x, y); } }
+        ctx.textAlign = Math.cos(mid)>.2 ? "left" : Math.cos(mid)<-.2 ? "right" : "center"; ctx.fillText(t(s.reg).toUpperCase(), x, y); } }
     if(hot){ const L = hot.w.links||{}; const rel = [...(L.pre||[]),...(L.succ||[]),...(L.sim||[]),...(L.con||[])];
       ctx.strokeStyle = C("--gold"); ctx.lineWidth = 1.4; ctx.globalAlpha = .9; ctx.beginPath(); const hs = toScreen(hot);
       for(const id of rel){ const p = T.pos.get(id); if(!p) continue; const ps = toScreen(p); ctx.moveTo(hs.x,hs.y); ctx.lineTo(ps.x,ps.y); }
@@ -2068,7 +2095,7 @@ function treeView(){
   cv.addEventListener("wheel", e => { e.preventDefault(); const r = cv.getBoundingClientRect(), px = e.clientX-r.left, py = e.clientY-r.top;
     const f = Math.exp(-e.deltaY*0.0016), k2 = Math.max(0.04, Math.min(6, V.k*f)); V.x = px-(px-V.x)*(k2/V.k); V.y = py-(py-V.y)*(k2/V.k); V.k = k2; draw(); }, {passive:false});
   $("#tfit").onclick = () => { fit(); draw(); };
-  $("#tunseen").onclick = e => { dimSeen = !dimSeen; e.target.classList.toggle("on", dimSeen); e.target.textContent = dimSeen ? "Show heard" : "Dim heard"; draw(); };
+  $("#tunseen").onclick = e => { dimSeen = !dimSeen; e.target.classList.toggle("on", dimSeen); e.target.textContent = dimSeen ? t("Show heard") : t("Dim heard"); draw(); };
   const ts = $("#tsearch"); let st;
   ts.oninput = () => { clearTimeout(st); st = setTimeout(() => { const qq = clean(ts.value); hits = qq ? new Set(T.nodes.filter(o => clean(o.w.title+" "+cname(o.w)+" "+(o.mov||"")+" "+(o.w.region||"")).includes(qq)).map(o => o.id)) : null; draw(); }, 200); };
   fit(); resize();
@@ -2079,6 +2106,7 @@ function treeView(){
 /* ============ table ============ */
 let TF = {q:"", sort:"year", dir:1, kind:"works", page:1};
 const PAGE = 400;
+// i18n-keys: Work | Composer | Year | Catalogue | Genre | Form | Min | Region | Movement | Sig | Rating | Born | Origin | Works | Heard
 const WCOLS = [
   {k:"mk", h:"", w:w => rec(w.id).s, cls:"nw", cell:w => { const r = rec(w.id); return `<span class="mk2${r.s>2 ? " love" : ""}">${MARKS[r.s]||""}</span>`; }},
   {k:"title", h:"Work", w:w => w.title.toLowerCase(), cls:"ti", cell:w => esc(w.title)},
@@ -2088,7 +2116,7 @@ const WCOLS = [
   {k:"trad", h:"Genre", w:w => w.tradition||"", cls:"nw", cell:w => TRADITIONS[w.tradition]||w.tradition||""},
   {k:"gen", h:"Form", w:w => w.thin ? "" : w.genre, cls:"nw", cell:w => w.thin ? "" : (GENRES[w.genre]||w.genre)},
   {k:"mins", h:"Min", w:w => w.mins||0, cls:"nw", cell:w => w.mins ? String(w.mins) : ""},
-  {k:"reg", h:"Region", w:w => w.region||"", cls:"nw", cell:w => esc(w.region||"")},
+  {k:"reg", h:"Region", w:w => w.region||"", cls:"nw", cell:w => esc(w.region ? t(w.region) : "")},
   {k:"mov", h:"Movement", w:w => (w.movement||"").toLowerCase(), cls:"nw", cell:w => esc(w.movement||"")},
   {k:"sig", h:"Sig", w:w => w.sig||0, cls:"nw", cell:w => `<span title="${SIGL[w.sig]||""}">${dots(w.sig)}</span>`},
   {k:"rate", h:"Rating", w:w => rec(w.id).r||0, cls:"nw", cell:w => { const r = rec(w.id).r||0; return r ? "★".repeat(r) : ""; }}
@@ -2105,26 +2133,26 @@ function tableView(){
   const isW = TF.kind==="works", cols = isW ? WCOLS : CCOLS;
   if(!cols.some(c => c.k===TF.sort)){ TF.sort = isW ? "year" : "born"; TF.dir = 1; }
   const qq = clean(TF.q);
-  let rows = isW ? chrono.filter(w => !qq || clean(w.title+" "+cname(w)+" "+(w.movement||"")+" "+(w.region||"")+" "+(w.year||"")+" "+(w.cat||"")+" "+(GENRES[w.genre]||"")+" "+(TRADITIONS[w.tradition]||"")+" "+(w.themes||[]).join(" ")).includes(qq))
+  let rows = isW ? chrono.filter(w => !qq || clean(w.title+" "+cname(w)+" "+(w.movement||"")+" "+(w.region||"")+" "+(w.year||"")+" "+(w.cat||"")+" "+(GENRES[w.genre]||"")+" "+(TRADITIONS[w.tradition]||"")+" "+(EN.G[w.genre]||"")+" "+(EN.T[w.tradition]||"")+" "+(w.themes||[]).join(" ")).includes(qq))
                  : DB.composers.filter(c => !qq || clean(c.name+" "+(c.origin||"")+" "+(c.life||"")+" "+(c.sigWhy||"")).includes(qq));
   const col = cols.find(c => c.k===TF.sort);
   rows = rows.slice().sort((x,y) => { const a = col.w(x), b = col.w(y); const c = (typeof a==="number" && typeof b==="number") ? a-b : String(a).localeCompare(String(b)); return (c||0)*TF.dir || String(isW ? x.title : x.name).localeCompare(String(isW ? y.title : y.name)); });
   const shown = rows.slice(0, TF.page*PAGE);
   const arrow = k => TF.sort===k ? `<span class="ar">${TF.dir>0 ? "▲" : "▼"}</span>` : "";
-  const inner = `<div class="hero"><h1>Table</h1><span class="sub">every work and composer, sortable and searchable</span></div>
-  <div class="tbar ui"><button class="chip ${isW ? "on" : ""}" data-kind="works">Works</button><button class="chip ${!isW ? "on" : ""}" data-kind="composers">Composers</button>
-    <input type="search" id="tq" placeholder="Search ${isW ? "title, composer, catalogue, movement, region, theme" : "name, origin"}…" value="${esc(TF.q)}"></div>
-  <div class="tcount">${rows.length.toLocaleString()} ${isW ? "works" : "composers"}${qq ? " matching" : ""} · showing ${shown.length.toLocaleString()}</div>
-  <div class="tw"><table class="grid"><thead><tr>${cols.map(c => `<th data-k="${c.k}">${c.h}${arrow(c.k)}</th>`).join("")}</tr></thead>
+  const inner = `<div class="hero"><h1>${t("Table")}</h1><span class="sub">${t("every work and composer, sortable and searchable")}</span></div>
+  <div class="tbar ui"><button class="chip ${isW ? "on" : ""}" data-kind="works">${t("Works")}</button><button class="chip ${!isW ? "on" : ""}" data-kind="composers">${t("Composers")}</button>
+    <input type="search" id="tq" placeholder="${esc(isW ? t("Search title, composer, catalogue, movement, region, theme…") : t("Search name, origin…"))}" value="${esc(TF.q)}"></div>
+  <div class="tcount">${isW ? (qq ? t.n("{n} work matching", "{n} works matching", rows.length) : t.n("{n} work", "{n} works", rows.length)) : (qq ? t.n("{n} composer matching", "{n} composers matching", rows.length) : t.n("{n} composer", "{n} composers", rows.length))} · ${t("showing {n}", {n: FMT.number(shown.length)})}</div>
+  <div class="tw"><table class="grid"><thead><tr>${cols.map(c => `<th data-k="${c.k}">${c.h ? t(c.h) : ""}${arrow(c.k)}</th>`).join("")}</tr></thead>
   <tbody>${shown.map(o => `<tr data-id="${esc(o.id)}">${cols.map(c => `<td class="${c.cls}">${c.cell(o)}</td>`).join("")}</tr>`).join("")}</tbody></table>
-  ${shown.length<rows.length ? `<button id="more" class="ui">Show ${Math.min(PAGE, rows.length-shown.length)} more of ${(rows.length-shown.length).toLocaleString()} remaining</button>` : ""}</div>`;
+  ${shown.length<rows.length ? `<button id="more" class="ui">${t("Show {n} more of {rest} remaining", {n: FMT.number(Math.min(PAGE, rows.length-shown.length)), rest: FMT.number(rows.length-shown.length)})}</button>` : ""}</div>`;
   app.innerHTML = shellHTML("table", inner); afterRender();
   document.querySelectorAll("[data-kind]").forEach(b => b.onclick = () => { TF.kind = b.dataset.kind; TF.page = 1; tableView(); });
   document.querySelectorAll("th[data-k]").forEach(th => th.onclick = () => { const k = th.dataset.k; if(TF.sort===k) TF.dir = -TF.dir; else { TF.sort = k; TF.dir = ["sig","rate","n","heard","mk","mins"].includes(k) ? -1 : 1; } TF.page = 1; tableView(); });
   document.querySelector("tbody").onclick = e => { const tr = e.target.closest("tr[data-id]"); if(!tr) return; location.hash = (isW ? "#/w/" : "#/c/")+tr.dataset.id; };
   const m = $("#more"); if(m) m.onclick = () => { TF.page++; tableView(); };
-  const q0 = $("#tq"); let t;
-  q0.oninput = e => { TF.q = e.target.value; TF.page = 1; clearTimeout(t); t = setTimeout(() => { tableView(); const el = $("#tq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 250); };
+  const q0 = $("#tq"); let tmr;
+  q0.oninput = e => { TF.q = e.target.value; TF.page = 1; clearTimeout(tmr); tmr = setTimeout(() => { tableView(); const el = $("#tq"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }, 250); };
 }
 
 /* ============ player: live Internet Archive resolution, multi-server failover ============ */
@@ -2179,28 +2207,28 @@ function setMediaSession(w, tn){
   navigator.mediaSession.setActionHandler("play", () => P.audio.play()); navigator.mediaSession.setActionHandler("pause", () => P.audio.pause());
   navigator.mediaSession.setActionHandler("previoustrack", prevTrack); navigator.mediaSession.setActionHandler("nexttrack", nextTrack);
 }
-function trySrc(t){
+function trySrc(trk){
   clearTimeout(P.watch);
-  if(P.srcIdx>=t.urls.length){ status("Stream stalled — use the links above"+(hasNext() ? "; skipping ahead…" : ".")); if(hasNext()) setTimeout(nextQueue, 1600); return; }
-  P.audio.src = t.urls[P.srcIdx]; P.audio.play().catch(()=>{});
-  P.watch = setTimeout(() => { if(P.audio.readyState<2){ P.srcIdx++; trySrc(t); } }, 12000);
+  if(P.srcIdx>=trk.urls.length){ status(hasNext() ? t("Stream stalled — use the links above; skipping ahead…") : t("Stream stalled — use the links above.")); if(hasNext()) setTimeout(nextQueue, 1600); return; }
+  P.audio.src = trk.urls[P.srcIdx]; P.audio.play().catch(()=>{});
+  P.watch = setTimeout(() => { if(P.audio.readyState<2){ P.srcIdx++; trySrc(trk); } }, 12000);
 }
 function loadTrack(k){
   if(k<0 || k>=P.tracks.length) return;
   P.ti = k; P.lt = null;
-  const t = P.tracks[k], w = P.cur.w;
-  P.curTrack = t; P.srcIdx = 0; trySrc(t);
-  $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`+(P.tracks.length>1 ? esc(" — "+t.name) : "");
-  $("#d-sub").textContent = cname(w)+" · "+P.cur.itemTitle+(P.tracks.length>1 ? ` · track ${k+1}/${P.tracks.length}` : "");
+  const trk = P.tracks[k], w = P.cur.w;
+  P.curTrack = trk; P.srcIdx = 0; trySrc(trk);
+  $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`+(P.tracks.length>1 ? esc(" — "+trk.name) : "");
+  $("#d-sub").textContent = cname(w)+" · "+P.cur.itemTitle+(P.tracks.length>1 ? " · " + t("track {k}/{n}", {k: k+1, n: P.tracks.length}) : "");
   document.querySelectorAll("#d-list li").forEach((li,n) => li.classList.toggle("on", n===k));
-  setMediaSession(w, P.tracks.length>1 ? w.title+" — "+t.name : w.title);
+  setMediaSession(w, P.tracks.length>1 ? w.title+" — "+trk.name : w.title);
   gymRender();
 }
 function prevTrack(){ if(P.audio.currentTime>4 || P.ti===0) P.audio.currentTime = 0; else loadTrack(P.ti-1); }
 function nextTrack(){ if(!P.stopAfter && P.ti<P.tracks.length-1) loadTrack(P.ti+1); else nextQueue(); }
 function nextQueue(){
   if(UQ.length){ const id = UQ.shift(); saveUQ(); P.queue.splice(P.qi+1, 0, id); P.qi++; loadWork(id); return; }   // Up next jumps ahead of the radio, which resumes after
-  if(hasNext()){ P.qi++; loadWork(P.queue[P.qi]); } else status("End of the queue — pick another stop on the timeline.");
+  if(hasNext()){ P.qi++; loadWork(P.queue[P.qi]); } else status(t("End of the queue — pick another stop on the timeline."));
 }
 /* ---------- Up next: a per-device listening queue ---------- */
 const hasNext = () => UQ.length>0 || P.qi<P.queue.length-1;
@@ -2209,8 +2237,8 @@ function saveUQ(){ try{ localStorage.setItem("cj-upnext", JSON.stringify(UQ)); }
 function renderUQ(){
   const box = $("#d-upnext"); if(!box) return;
   box.hidden = !UQ.length;
-  box.querySelector("summary").textContent = `Up next (${UQ.length})`;
-  $("#d-uq").innerHTML = UQ.map((id,i) => `<li><a href="#/w/${id}">${esc(byId[id].title)}</a> <span style="color:var(--mut)">— ${esc(cname(byId[id]))}</span> <button class="uq-x" data-uqx="${i}" title="Remove">✕</button></li>`).join("");
+  box.querySelector("summary").textContent = t('Up next ({n})', {n: UQ.length});
+  $("#d-uq").innerHTML = UQ.map((id,i) => `<li><a href="#/w/${id}">${esc(byId[id].title)}</a> <span style="color:var(--mut)">— ${esc(cname(byId[id]))}</span> <button class="uq-x" data-uqx="${i}" title="${esc(t('Remove'))}">✕</button></li>`).join("");
 }
 function enqueue(ids){
   ids = [].concat(ids).filter(id => byId[id]);
@@ -2218,7 +2246,7 @@ function enqueue(ids){
   const idle = $("#dock").hidden || P.qi<0;
   if(idle){ playQueue([ids[0]], 0); ids = ids.slice(1); }
   UQ.push(...ids); saveUQ();
-  status(idle ? (ids.length ? `Playing — ${ids.length} more up next.` : "") : `Added to Up next (${UQ.length}).`);
+  status(idle ? (ids.length ? t.n('Playing — {n} more up next.', 'Playing — {n} more up next.', ids.length) : "") : t('Added to Up next ({n}).', {n: UQ.length}));
 }
 function popListen(url){   // one named, reused window so the music keeps going while the catalogue is browsed
   const pw = window.open(url, "cj-listen", "popup,width=560,height=720");
@@ -2232,7 +2260,7 @@ async function loadWork(id){
   const gen = P.gen = (P.gen||0) + 1; if(SS) SS.cancel(); P.audio.pause();
   if(P.auto){ PS.last = id; psave(); }
   $("#d-title").innerHTML = `<a href="#/w/${w.id}">${esc(w.title)}</a>`;
-  $("#d-sub").textContent = cname(w)+" · finding a recording…";
+  $("#d-sub").textContent = t('{name} · finding a recording…', {name: cname(w)});
   $("#d-yt").href = LINKS(w)[0][1];
   $("#d-yt").onclick = e => { e.preventDefault(); P.audio.pause(); popListen(LINKS(w)[0][1]); };
   $("#d-tracks").hidden = true; status("");
@@ -2245,11 +2273,11 @@ async function loadWork(id){
       $("#d-sub").textContent = cname(w);
       const more = hasNext(), L = LINKS(w), st = $("#d-status");
       st.hidden = false;
-      st.innerHTML = `No free stream for this one. <button class="obtn" data-pop="0">▶ YouTube pop-up</button> <button class="obtn" data-pop="1">▶ Spotify pop-up</button>${more ? ` <span id="d-skip">· skipping ahead in 10 s</span>` : ""}`;
+      st.innerHTML = `${t('No free stream for this one.')} <button class="obtn" data-pop="0">${t('▶ YouTube pop-up')}</button> <button class="obtn" data-pop="1">${t('▶ Spotify pop-up')}</button>${more ? ` <span id="d-skip">${t('· skipping ahead in 10 s')}</span>` : ""}`;
       P.sk = more ? setTimeout(nextQueue, 10000) : 0;
       gymRender();
       st.querySelectorAll("[data-pop]").forEach(b => b.onclick = () => { clearTimeout(P.sk); popListen(L[+b.dataset.pop][1]); markHeard(id); refreshChip(id); refreshTracker(id);
-        status("Playing in the pop-up window — it stays open while you browse; the next pop-up reuses it."); });
+        status(t('Playing in the pop-up window — it stays open while you browse; the next pop-up reuses it.')); });
       return; }
     P.cur.itemTitle = it.title; P.tracks = it.tracks;
     markHeard(id); refreshChip(id); refreshTracker(id);
@@ -2260,7 +2288,7 @@ async function loadWork(id){
     it.tracks.forEach((t,k) => { const tn = clean(t.name); let hit = 0; toks.forEach(x => { if(tn.includes(x)) hit++; }); const sc = toks.length ? hit/toks.length : 0; if(sc>bs){ bs = sc; bi = k; } });
     P.stopAfter = bs>=0.4 && it.tracks.length>6;
     loadTrack(bs>=0.4 ? bi : 0);
-  }catch(e){ status("Couldn't reach the Internet Archive from here — use the links on the work's page to listen."); $("#d-sub").textContent = cname(w); }
+  }catch(e){ status(t("Couldn't reach the Internet Archive from here — use the links on the work's page to listen.")); $("#d-sub").textContent = cname(w); }
 }
 function playQueue(list, start){ P.auto = false; P.cap = 0; P.queue = list; P.qi = start; loadWork(P.queue[P.qi]); }
 P.audio.addEventListener("playing", () => { clearTimeout(P.watch); status(""); $("#d-play").textContent = "⏸"; });
@@ -2300,38 +2328,38 @@ async function wakeOn(on){
 }
 const wakePref = () => { try{ return localStorage.getItem("cj.wake")==="1"; }catch(e){ return false; } };
 document.addEventListener("visibilitychange", () => { if(!document.hidden && !$("#gym").hidden && wakePref()) wakeOn(true); });
-const gymSync = () => !canSync() ? "this device only — tap to sync" : syncState==="err" ? "⚠ sync paused — tap" : syncState==="idle" ? "✓ synced" + (GD.on ? " to Drive" : "") : "… saving";
+const gymSync = () => !canSync() ? t('this device only — tap to sync') : syncState==="err" ? t('⚠ sync paused — tap') : syncState==="idle" ? (GD.on ? t('✓ synced to Drive') : t('✓ synced')) : t('… saving');
 let GSTARTS = [];
 function gymStarts(){
   const un = l => l.filter(w => !isHeard(w.id)).map(w => w.id);
   const c = nextStop(), ji = Math.max(0, journey.findIndex(w => w.composer===c.id));
   const dw = dailyPick(), out = [];
-  if(dw) out.push(["Today's piece: " + dw.title, [dw.id]]);
-  const aq = autoQueue(); if(aq.length) out.push(["Autoplay" + (PS.last && aq.indexOf(PS.last)>0 ? " (resume)" : ""), aq, true]);
-  out.push(["This week's mix", weeklyMix()]);
-  out.push(["Classical journey, from " + c.name, un(journey.slice(ji))]);
-  if(JT!=="classical") out.push([TRADITIONS[JT] + " journey", un(chrono.filter(w => w.tradition===JT))]);
+  if(dw) out.push([t("Today's piece: {title}", {title: dw.title}), [dw.id]]);
+  const aq = autoQueue(); if(aq.length) out.push([PS.last && aq.indexOf(PS.last)>0 ? t('Autoplay (resume)') : t('Autoplay'), aq, true]);
+  out.push([t("This week's mix"), weeklyMix()]);
+  out.push([t('Classical journey, from {name}', {name: c.name}), un(journey.slice(ji))]);
+  if(JT!=="classical") out.push([t('{genre} journey', {genre: TRADITIONS[JT]}), un(chrono.filter(w => w.tradition===JT))]);
   const want = DB.works.filter(w => wants(w.id)).sort((a,b) => rec(a.id).w - rec(b.id).w).map(w => w.id);
-  if(want.length) out.push(["My want-to-hear list", want]);
+  if(want.length) out.push([t('My want-to-hear list'), want]);
   const sug = suggestions(40).map(x => x.w.id);
-  if(sug.length) out.push(["Because you liked…", sug]);
-  out.push(["Shuffle unheard landmarks", un(DB.works.filter(w => w.sig===3)).sort(() => Math.random() - .5)]);
+  if(sug.length) out.push([t('Because you liked…'), sug]);
+  out.push([t('Shuffle unheard landmarks'), un(DB.works.filter(w => w.sig===3)).sort(() => Math.random() - .5)]);
   return out.filter(x => x[1].length);
 }
 function gymRender(){
   const g = $("#gym"); if(!g || g.hidden) return;
   const w = P.cur && P.cur.w, r = w ? rec(w.id) : null;
   const nid = UQ[0] || P.queue[P.qi+1], nostream = w && !P.tracks.length && !!$("#d-status [data-pop]");
-  const st = $("#d-status").hidden ? $("#d-sub").textContent : (nostream ? "No free stream — play it in a pop-up, or skip." : $("#d-status").textContent);
+  const st = $("#d-status").hidden ? $("#d-sub").textContent : (nostream ? t('No free stream — play it in a pop-up, or skip.') : $("#d-status").textContent);
   GSTARTS = gymStarts();
-  g.innerHTML = `<div class="g-top"><button id="g-x" aria-label="Close gym mode">✕</button><button id="g-sync" class="g-sync">${esc(gymSync())}</button>${"wakeLock" in navigator ? `<label class="g-wake"><input type="checkbox" id="g-wake"${wakePref() ? " checked" : ""}> keep screen on</label>` : ""}</div>`
+  g.innerHTML = `<div class="g-top"><button id="g-x" aria-label="${esc(t('Close gym mode'))}">✕</button><button id="g-sync" class="g-sync">${esc(gymSync())}</button>${"wakeLock" in navigator ? `<label class="g-wake"><input type="checkbox" id="g-wake"${wakePref() ? " checked" : ""}> ${t('keep screen on')}</label>` : ""}</div>`
   + (w ? `<div class="g-now"><div class="g-t">${esc(w.title)}</div><div class="g-s">${esc(cname(w))}${w.year ? " · " + esc(w.year) : ""}</div><div class="g-st">${esc(st)}</div></div>
-    ${nostream ? `<div class="g-pop"><button data-gpop="0">▶ YouTube pop-up</button><button data-gpop="1">▶ Spotify pop-up</button></div>` : `<div class="g-ctl"><button data-g="prev" aria-label="Previous track">⏮</button><button data-g="play" class="g-play" aria-label="Play or pause">${P.audio.paused ? "▶" : "⏸"}</button><button data-g="next" aria-label="Next track">⏭</button></div>`}
-    <button data-g="skip" class="g-skip">Next piece ⏩</button>
-    <div class="g-marks">${[[1,"✓ Heard"],[2,"✎ Studied"],[3,"♥ Loved"]].map(([n,l]) => `<button data-gs="${n}" class="${r.s>=n ? "on" : ""}">${l}</button>`).join("")}<button data-g="want" class="${r.w && !r.s ? "on" : ""}">☆ Want</button></div>
-    <div class="g-stars" role="group" aria-label="Rating">${[1,2,3,4,5].map(n => `<button data-gr="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${n} stars">★</button>`).join("")}</div>
-    <div class="g-up">${nid && byId[nid] ? "Up next: " + esc(byId[nid].title) + " — " + esc(cname(byId[nid])) : ""}</div>` : "")
-  + `<div class="g-start"><span class="lbl">${w ? "Switch to" : "Start listening"}</span>${GSTARTS.map((x,i) => `<button data-gq="${i}">${esc(x[0])} <small>· ${x[1].length}</small></button>`).join("")}</div>`;
+    ${nostream ? `<div class="g-pop"><button data-gpop="0">${t('▶ YouTube pop-up')}</button><button data-gpop="1">${t('▶ Spotify pop-up')}</button></div>` : `<div class="g-ctl"><button data-g="prev" aria-label="${esc(t('Previous track'))}">⏮</button><button data-g="play" class="g-play" aria-label="${esc(t('Play or pause'))}">${P.audio.paused ? "▶" : "⏸"}</button><button data-g="next" aria-label="${esc(t('Next track'))}">⏭</button></div>`}
+    <button data-g="skip" class="g-skip">${t('Next piece ⏩')}</button>
+    <div class="g-marks">${[[1,t('✓ Heard')],[2,t('✎ Studied')],[3,t('♥ Loved')]].map(([n,l]) => `<button data-gs="${n}" class="${r.s>=n ? "on" : ""}">${l}</button>`).join("")}<button data-g="want" class="${r.w && !r.s ? "on" : ""}">${t('☆ Want')}</button></div>
+    <div class="g-stars" role="group" aria-label="${esc(t('Rating'))}">${[1,2,3,4,5].map(n => `<button data-gr="${n}" class="${r.r>=n ? "on" : ""}" aria-label="${esc(t.n('{n} star', '{n} stars', n))}">★</button>`).join("")}</div>
+    <div class="g-up">${nid && byId[nid] ? t('Up next: {title} — {composer}', {title: esc(byId[nid].title), composer: esc(cname(byId[nid]))}) : ""}</div>` : "")
+  + `<div class="g-start"><span class="lbl">${w ? t('Switch to') : t('Start listening')}</span>${GSTARTS.map((x,i) => `<button data-gq="${i}">${esc(x[0])} <small>· ${x[1].length}</small></button>`).join("")}</div>`;
 }
 function openGym(){
   const g = $("#gym"); g.hidden = false; document.body.classList.add("gymon");
@@ -2375,17 +2403,18 @@ document.addEventListener("click", ev => {
   const listen = ev.target.closest("[data-listen]");
   if(listen){ const id = listen.dataset.listen; markHeard(id); refreshChip(id); refreshTracker(id); return; }
   const more = ev.target.closest(".more");
-  if(more){ const card = more.closest(".comp"); card.classList.toggle("expanded"); const n = card.querySelectorAll(".work").length-6; more.textContent = card.classList.contains("expanded") ? "Show fewer" : `+${n} more`; return; }
+  if(more){ const card = more.closest(".comp"); card.classList.toggle("expanded"); const n = card.querySelectorAll(".work").length-6; more.textContent = card.classList.contains("expanded") ? t('Show fewer') : t('+{n} more', {n}); return; }
   const ld = ev.target.closest(".l-done");
-  if(ld){ const box = ld.closest(".lesson"), t = box.dataset.l;
-    (t in ST.lessons) ? delete ST.lessons[t] : ST.lessons[t] = Date.now(); save();
-    box.classList.toggle("done", t in ST.lessons); ld.textContent = (t in ST.lessons) ? "✓ Learned" : "Mark as learned";
+  if(ld){ const box = ld.closest(".lesson"), lk = box.dataset.l;
+    (lk in ST.lessons) ? delete ST.lessons[lk] : ST.lessons[lk] = Date.now(); save();
+    box.classList.toggle("done", lk in ST.lessons); ld.textContent = (lk in ST.lessons) ? t('✓ Learned') : t('Mark as learned');
     const js = $("#jstats"); if(js) journeyStats(); return; }
 });
 function journeyStats(){
   const js = $("#jstats"); if(!js) return;
   const nW = chrono.filter(w => isHeard(w.id)).length;
-  js.innerHTML = `<b>${DB.composers.filter(compHeard).length}</b>/<b>${DB.composers.length}</b> composers · <b>${nW}</b>/<b>${journey.length}</b> works · <b>${Object.keys(ST.lessons).length}</b>/<b>${DB.lessons.length}</b> theory stops · <b>${fmtH(ST.sec)}</b> listened`;
+  const b = v => `<b>${v}</b>`;
+  js.innerHTML = t('{c}/{ct} composers · {w}/{wt} works · {l}/{lt} theory stops · {time} listened', {c: b(DB.composers.filter(compHeard).length), ct: b(DB.composers.length), w: b(nW), wt: b(journey.length), l: b(Object.keys(ST.lessons).length), lt: b(DB.lessons.length), time: b(fmtH(ST.sec))});
   const f = document.querySelector("#jbar .pfill i"); if(f) f.style.width = (100*nW/chrono.length)+"%";
 }
 
@@ -2417,7 +2446,7 @@ function route(){
   lastHash = h;
   if(h!=="#/tree") requestAnimationFrame(() => scrollTo(0, back ? SCROLL[h] : 0));
 }
-window.addEventListener("hashchange", route);
+window.addEventListener("hashchange", () => { if(BOOTED) route(); });
 document.addEventListener("keydown", e => {
   if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); openSearch(); return; }
   if(e.target.tagName==="TEXTAREA" || e.target.tagName==="INPUT" || e.target.tagName==="SELECT") { if(e.key==="Escape"){ const d = $("#dlg"); if(d) d.remove(); } return; }
@@ -2437,7 +2466,7 @@ document.addEventListener("keydown", e => {
   if(e.key==="ArrowLeft" && chrono[i-1]) location.hash = "#/w/"+chrono[i-1].id;
   if(e.key==="ArrowRight" && chrono[i+1]) location.hash = "#/w/"+chrono[i+1].id;
 });
-route();
+let BOOTED = false;
 // Let the maker's app portal know (same-origin localStorage) that this app is installed.
 try{
   const DM = ["standalone","minimal-ui","fullscreen","window-controls-overlay"];
@@ -2447,8 +2476,11 @@ try{
     localStorage.setItem(k, JSON.stringify(reg));
   }
 }catch(e){}
-bkInit(); cwInit();
-gdInit();
-renderUQ();
-initCloud();
+Promise.race([(window.appFont && appFont.ready) || Promise.resolve(), new Promise(r => setTimeout(r, 4000))]).then(() => {
+  localize(); BOOTED = true; route();
+  bkInit(); cwInit();
+  gdInit();
+  renderUQ();
+  initCloud();
+});
 </script>
